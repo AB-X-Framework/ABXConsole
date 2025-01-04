@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 @Configuration
-public class SecConfiguration  {
+public class SecConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -22,17 +22,16 @@ public class SecConfiguration  {
     }
 
 
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
-                .authorizeHttpRequests(authz -> {
-                    authz
-                            .requestMatchers("/utils/*")
-                            .anonymous();
-                });
+        http.authorizeHttpRequests(authz -> {
+            authz
+                    .requestMatchers("/utils/*")
+                    .permitAll()
+
+                    .anyRequest()
+                    .authenticated();
+        });
 
         return http.build();
     }

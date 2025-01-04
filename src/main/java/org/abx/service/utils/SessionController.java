@@ -1,0 +1,17 @@
+package org.abx.service.utils;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
+
+@RestController
+@RequestMapping("/sess")
+public class SessionController {
+
+    @GetMapping("/user")
+    public String getUser(Principal principal) {
+        return "Authenticated user: " + principal.getName();
+    }
+}
