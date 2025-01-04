@@ -1,4 +1,4 @@
-package org.abx.service.creds;
+package org.abx.service.creds.model;
 import java.util.Collection;
 
 import jakarta.persistence.Column;
@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import java.util.Collection;
 
 @Entity
 @Table(name = "user_account")

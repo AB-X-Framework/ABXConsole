@@ -1,4 +1,4 @@
-package org.abx.service.creds;
+package org.abx.service.creds.model;
 
 
 import java.util.Collection;
