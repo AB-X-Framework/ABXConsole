@@ -1,13 +1,13 @@
-package org.itcr.msc.thesis.abm;
+package org.abx.service.console;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ABMSprintBootEntry {
+public class ABXConsoleEntry {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ABMSprintBootEntry.class, args);
+		SpringApplication.run(ABXConsoleEntry.class, args);
 	}
 
 }
