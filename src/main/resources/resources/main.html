@@ -1,0 +1,248 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AB-X Framework</title>
+    <link rel="stylesheet" type="text/css" href="ui/themes/metro-green/easyui.css">
+    <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
+    <style media="screen">
+        #modelEditor {
+            position: absolute;
+            top: 37px;
+            right: 2px;
+            bottom: 2px;
+            left: 2px;
+        }
+
+        #setupEditor {
+            position: absolute;
+            top: 37px;
+            right: 2px;
+            bottom: 2px;
+            left: 2px;
+        }
+    </style>
+    <script type="text/javascript" src="ui/jquery.min.js"></script>
+    <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="ace/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="TextEditor.js"></script>
+    <script type="text/javascript" src="DualEditor.js"></script>
+    <script type="text/javascript" src="Framework.js"></script>
+    <script type="text/javascript" src="stomp/stomp.js"></script>
+    <script type="text/javascript" src="execution.ws.js"></script>
+    <script type="text/javascript" src="chart/chart.js"></script>
+    <script type="text/javascript" src="ChartSupport.js"></script>
+</head>
+<body style="  min-height: 100vh;margin: 0">
+<div class="easyui-tabs" style="width:100%;height:100%;" id="mainTabs">
+    <div title="Framework" style="padding:10px">
+        <div class="easyui-layout" id="wScript" style="width:100%;height:100%;">
+
+            <div data-options="region:'west',split:true,hideCollapsedContent:false" title="Workspace"
+                 style="width:300px;">
+                <div class="easyui-layout" style="width:100%;height:100%;">
+                    <div data-options="region:'north',split:false,hideCollapsedContent:false,collapsible:false"
+                         title="File"
+                         style="height:70px;width:300px;">
+                        <div class="easyui-panel" style="width:100%; height: 100%;">
+                            <a href="#" class="easyui-menubutton"
+                               data-options="menu:'#mm1',iconCls:'icon-edit'">File</a>
+                        </div>
+                        <div id="mm1" style="width:100px;">
+                            <div onclick="editorUX.newFolder()">New folder</div>
+                            <div onclick="editorUX.newFile()">New file</div>
+                            <div onclick="editorUX.saveFile()">Save</div>
+                            <div onclick="editorUX.saveFileAs()">Save as</div>
+                            <div onclick="editorUX.rename()">Rename</div>
+                            <div onclick="editorUX.delete()">Delete</div>
+                        </div>
+                    </div>
+
+                    <div data-options="region:'center'">
+                        <table title="Select model" id="fileSelector" class="easyui-treegrid"
+                               style="width:100%; height:100%; "
+
+                               data-options="
+                url: '/file/details',
+                fitColumns:true,
+                method: 'get',
+                onSelect: (id)=>editorUX.update(id),
+                rownumbers: false,
+                idField: 'id',
+                treeField: 'name'
+            ">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'name',width:100">Name</th>
+                                <th data-options="field:'size',width:30">Size</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div data-options="region:'south',split:true,hideCollapsedContent:false" title="Example Library"
+                         style="height: 300px;">
+                        <table id="exampleLib" class="easyui-treegrid"
+                               style="width:100%; height:100%; "
+                               data-options="
+                url: '/utils/details',
+                fitColumns:true,
+                method: 'get',
+                onSelect: (id)=>editorUX.showExample(id),
+                rownumbers: false,
+                idField: 'id',
+                treeField: 'name'
+            ">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'name',width:100">Name</th>
+                                <th data-options="field:'size',width:30">Size</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div data-options="region:'center'" class="align-right">
+                <div class="easyui-tabs" id="file" style="width:100%;height:100%;">
+                    <div title="Model" id="modelTitle" style="width:100%;height:100%;">
+                        <div id="modelEditor">println("What a wonderful world");</div>
+                    </div>
+
+                </div>
+            </div>
+            <div data-options="region:'east',split:true,hideCollapsedContent:false" title="Simulation"
+                 style="width:350px;">
+                <select class="easyui-combobox" style="width:100%;"
+                        label="Choose runner:"
+                        labelPosition="top">
+                    <option value="localhost">localhost</option>
+                </select>
+                <br/>
+                <br/>
+                <select class="easyui-combobox" id="optimizationLevel" style="width:100%;"
+                        label="Choose optimization level:"
+                        labelPosition="top">
+                    <option value="performance">Performance</option>
+                    <option value="standard" selected="selected">Standard</option>
+                </select>
+                <br/>
+                <br/>
+                <select class="easyui-combobox" id="simulationType" style="width:100%;"
+                        label="Choose execution type:"
+                        labelPosition="top">
+                    <option value="simulation">Run Simulation</option>
+                    <option value="evaluate">Evaluate</option>
+                    <option value="test">Execute Tests</option>
+                </select>
+                <br/>
+                <br/>
+                <br/>
+                <button class="easyui-linkbutton" id="simulate" onclick="editorUX.execute()"
+                        style="width: 90%">Execute
+                </button>
+                <br/><br/>
+
+            </div>
+        </div>
+    </div>
+    <div title="<span style='font-size:16px'>Execution</span>" style="padding:10px">
+        <div class="easyui-layout" id="wExecutions" style="width:100%;height:100%;">
+            <div data-options="region:'west',split:true,hideCollapsedContent:false" title="Control "
+                 style="width:350px; height: 100%">
+
+                <div class="easyui-panel" style="padding:5px; width: 100%">
+                    <select class="easyui-combobox" style="width:100%;"
+                            label="Choose runner:"
+                            labelPosition="top">
+                        <option value="localhost">localhost</option>
+                    </select>
+                </div>
+
+                <div class="easyui-panel" style="padding:5px; width: 100%">
+                    <div style="width: 90%; float: left" id="stepId"></div>
+                </div>
+                <div class="easyui-panel" style="padding:5px; width: 100%">
+                    <button class="easyui-linkbutton" onclick="editorUX.simulate()">Simulate</button>
+                    <button class="easyui-linkbutton" onclick="editorUX.step()">Step</button>
+                    <button class="easyui-linkbutton" onclick="editorUX.pause()">Pause</button>
+                    <button class="easyui-linkbutton" onclick="editorUX.stop()">Stop</button>
+                </div>
+                <div class="easyui-panel" style="padding:5px; width: 100%">
+                    <button class="easyui-linkbutton" style="width: 110px" onclick="editorUX.execWhile()">
+                        Execute while
+                    </button>
+                    <br>
+                    <br>
+                    <input class="easyui-textbox" id="execWhile" style="width:100%; ">
+                </div>
+                <div class="easyui-panel" style="padding:5px; width: 100%">
+                    <input class="easyui-switchbutton" checked label="UI enabled:" id="ui" labelWidth="120"
+                           tabindex="1">
+                    <input class="easyui-switchbutton" unchecked id="jpeg"
+                           data-options="onText:'JPEG',offText:'PNG'"
+                           style="width: 80px;">
+                    <br/>
+                    List of layer<br/>
+                    <div id="layers">
+                    </div>
+                    <br/>
+                    <input class="easyui-switchbutton" checked label="Charts enabled:" id="charts"
+                           labelWidth="120"
+                           tabindex="1"><br/>
+                </div>
+                <br/>
+
+
+                <button class="easyui-linkbutton" style="width: 150px" onclick="editorUX.evaluate()">Eval
+                    expression
+                </button>
+                <br/>
+                <br>
+                <input class="easyui-textbox" id="evaluate" style="width:100%; ">
+                <p>Result</p>
+                <div id="evalOutput"></div>
+
+            </div>
+
+
+            <div data-options="region:'center'" class="align-right">
+                <div class="easyui-layout" style="width:100%;height:100%">
+                    <div title="UI" data-options="region:'center'" style="padding:1px;">
+                        <div id="canvasParent" style="width:100%;height: 100%">
+                        </div>
+                    </div>
+
+                    <div title="Console Output" data-options="region:'south',split:true,hideCollapsedContent:false"
+                         style="height: 400px">
+                        <div class="easyui-layout" style="width: 100%;height: 100%;">
+                            <div data-options="region:'north'" style="height:35px;">
+                                <button class="easyui-linkbutton"
+                                        onclick="editorUX.clear()">Clear
+                                </button>
+                            </div>
+                            <div data-options="region:'center'">
+                                <div id="output" style="width: 100%;height: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div data-options="region:'east',split:true,hideCollapsedContent:false" title="Charts" style="width:700px;">
+                <select id="ChartsSelector" class="easyui-combobox" data-options="valueField:'value',textField:'text'"
+                        style="width:100%;">
+                </select>
+                <canvas id="CurrChart">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div title="<span style='font-size:16px'>Settings</span>" style="padding:10px">
+        This is the help content.
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+<script src="chart/chart.js"></script>
+
+<script>
+    var verticalLinePlugin = {
+        id: 'verticalLinePlugin',
+        beforeDatasetsDraw: function (chart) {
+            sp = chart;
+             xScale = chart.scales['x'];
+             yScale = chart.scales['y'];
+
+
+            // Get the x position for the maximum x-value
+            var xPos = xScale.getPixelForValue("Purple");
+
+            // Draw the line
+            chart.ctx.beginPath();
+            chart.ctx.moveTo(xPos, yScale.bottom);
+            chart.ctx.strokeStyle = '#ff0000';
+            chart.ctx.lineTo(xPos, yScale.top);
+            chart.ctx.stroke();
+        }
+    };
+
+    // Register the plugin
+    Chart.register(verticalLinePlugin);
+
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 1
+            }],
+            opt:[1,23]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: [verticalLinePlugin],
+        }
+    });
+</script>
