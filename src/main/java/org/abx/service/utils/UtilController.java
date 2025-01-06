@@ -4,7 +4,7 @@ package org.abx.service.utils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.service.creds.model.Role;
-import org.abx.service.creds.SetupDataLoader;
+import org.abx.service.creds.CredsDataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +20,7 @@ import java.util.HashSet;
 @RequestMapping("/utils")
 public class UtilController {
     @Autowired
-    private SetupDataLoader dataLoader;
+    private CredsDataLoader dataLoader;
     /**
      * @param message
      */

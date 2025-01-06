@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "org.abx.service.spring",
         "org.abx.service.utils",
         "org.abx.service.creds"})
-@EnableJpaRepositories(value={"org.abx.service.creds.dao"})
-@EntityScan(value = {"org.abx.service.creds.model"})
+//@EntityScan(value = {"org.abx.service.creds.model"})
 public class ABXConsoleEntry {
 
     public static void main(String[] args) {
