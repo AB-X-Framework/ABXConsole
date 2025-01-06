@@ -35,15 +35,18 @@ public class CredsDataSourceConfig {
     }
 
     @Bean(name = "primaryEntityManagerFactory")
+    @ConfigurationProperties(prefix = "spring.datasource.primary.jpa")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder builder,
             @Qualifier("primaryDataSource") DataSource dataSource) {
 
-
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.hbm2ddl.auto", "update"); // Ensures schema update
         return builder
                 .dataSource(dataSource)
                 .packages("org.abx.service.creds.model") // Your entity package
                 .persistenceUnit("primary")
+                .properties(properties)
                 .build();
     }
 
