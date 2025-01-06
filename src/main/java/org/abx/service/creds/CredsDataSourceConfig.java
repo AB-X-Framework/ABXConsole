@@ -3,6 +3,7 @@ package org.abx.service.creds;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -37,10 +38,11 @@ public class CredsDataSourceConfig {
     @ConfigurationProperties(prefix = "spring.datasource.creds.jpa")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("credsDataSource") DataSource dataSource) {
+            @Qualifier("credsDataSource") DataSource dataSource,
+            @Value("${spring.datasource.creds.hbm2ddl.auto}") String ddlAuto) {
 
         Map<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", "update"); // Ensures schema update
+        properties.put("hibernate.hbm2ddl.auto", ddlAuto); // Ensures schema update
         return builder
                 .dataSource(dataSource)
                 .packages("org.abx.service.creds.model") // Your entity package
