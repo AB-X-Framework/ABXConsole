@@ -14,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 @Configuration
+@EnableMethodSecurity(securedEnabled = true)
 public class SecConfiguration {
 
     @Bean
@@ -26,11 +27,9 @@ public class SecConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz -> {
             authz
-                    .requestMatchers("/utils/*")
-                    .permitAll()
 
                     .anyRequest()
-                    .authenticated();
+                    .permitAll();
         });
 
         return http.build();

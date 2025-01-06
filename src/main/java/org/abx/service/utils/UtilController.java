@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +27,6 @@ public class UtilController {
     /**
      * @param message
      */
-    @PreAuthorize("permitAll()")
     @GetMapping(path = "/print")
     public String print(@RequestParam("message")String message) {
         return "Your message "+message;
@@ -54,5 +54,19 @@ public class UtilController {
           return "Login failed "+e.getMessage();
       }
     }
+
+
+    @GetMapping(path = "/loggedPrint")
+    @PreAuthorize("isAuthenticated()")
+    public String loggedPrint(Principal p, @RequestParam("message")String message) {
+        return "Your message "+message+" "+p.getName();
+    }
+    @GetMapping(path = "/check")
+    @Secured({"ROLE_ADMIN22"})
+    public String check(Principal p) {
+        return "Your message + "+p.getName();
+    }
+
+
 
 }
