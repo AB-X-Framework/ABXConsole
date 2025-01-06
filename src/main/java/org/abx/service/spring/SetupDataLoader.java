@@ -57,7 +57,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("ROLE_USER", userPermissions);
 
         // == create initial user
-        createUserIfNotFound("test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminRole)));
+        createUserIfNotFound("test@test.com", "Test",  new ArrayList<>(Arrays.asList(adminRole)));
 
         alreadySetup = true;
     }
@@ -84,14 +84,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public User createUserIfNotFound(final String email, final String firstName, final String lastName, final String password, final Collection<Role> roles) {
-        User user = userRepository.findByEmail(email);
+    public User createUserIfNotFound(final String username, final String password, final Collection<Role> roles) {
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             user = new User();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
+            user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
-            user.setEmail(email);
         }
         user.setRoles(roles);
         user = userRepository.save(user);

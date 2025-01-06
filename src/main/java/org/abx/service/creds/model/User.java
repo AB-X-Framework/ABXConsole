@@ -21,11 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
+    private String username;
 
     @Column(length = 60)
     private String password;
@@ -42,28 +38,13 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String username) {
-        this.email = username;
+    public void setUsername(final String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -87,7 +68,7 @@ public class User {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((getEmail() == null) ? 0 : getEmail().hashCode());
+        result = (prime * result) + ((getUsername() == null) ? 0 : getUsername().hashCode());
         return result;
     }
 
@@ -103,7 +84,7 @@ public class User {
             return false;
         }
         final User user = (User) obj;
-        if (!getEmail().equals(user.getEmail())) {
+        if (!getUsername().equals(user.getUsername())) {
             return false;
         }
         return true;
@@ -114,9 +95,7 @@ public class User {
         final StringBuilder builder = new StringBuilder();
         builder.append("User [id=")
                 .append(id)
-                .append(", firstName=").append(firstName)
-                .append(", lastName=").append(lastName)
-                .append(", email=").append(email)
+                .append(", username=").append(username)
                 .append(", roles=").append(roles)
                 .append("]");
         return builder.toString();

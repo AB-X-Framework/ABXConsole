@@ -40,7 +40,7 @@ public class UtilController {
         roles.add(dataLoader.createRoleIfNotFound("ROLE_ADMIN",null));
         dataLoader.
                 createUserIfNotFound("abx@abx.com",
-                        "abx@abx.com", "abx@abx.com", "abx",roles);
+                         "abx",roles);
         return "User registered";
     }
     @GetMapping("/login")
