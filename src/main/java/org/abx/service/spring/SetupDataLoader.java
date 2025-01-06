@@ -1,10 +1,10 @@
 package org.abx.service.spring;
 
 
-import org.abx.service.creds.dao.PrivilegeRepository;
+import org.abx.service.creds.dao.PermissionRepository;
 import org.abx.service.creds.dao.RoleRepository;
 import org.abx.service.creds.dao.UserRepository;
-import org.abx.service.creds.model.Privilege;
+import org.abx.service.creds.model.Permission;
 import org.abx.service.creds.model.Role;
 import org.abx.service.creds.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private RoleRepository roleRepository;
 
     @Autowired
-    private PrivilegeRepository privilegeRepository;
+    private PermissionRepository permissionRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -46,15 +46,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
 
         // == create initial privileges
-        final Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
-        final Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-        final Privilege passwordPrivilege = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
+        final Permission readPermission = createPermissionIfNotFound("READ");
+        final Permission writePermission = createPermissionIfNotFound("WRITE");
+        final Permission passwordPermission = createPermissionIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
 
         // == create initial roles
-        final List<Privilege> adminPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
-        final List<Privilege> userPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege));
-        final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-        createRoleIfNotFound("ROLE_USER", userPrivileges);
+        final List<Permission> adminPermissions = new ArrayList<>(Arrays.asList(readPermission, writePermission, passwordPermission));
+        final List<Permission> userPermissions = new ArrayList<>(Arrays.asList(readPermission, passwordPermission));
+        final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPermissions);
+        createRoleIfNotFound("ROLE_USER", userPermissions);
 
         // == create initial user
         createUserIfNotFound("test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminRole)));
@@ -63,22 +63,22 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public Privilege createPrivilegeIfNotFound(final String name) {
-        Privilege privilege = privilegeRepository.findByName(name);
-        if (privilege == null) {
-            privilege = new Privilege(name);
-            privilege = privilegeRepository.save(privilege);
+    public Permission createPermissionIfNotFound(final String name) {
+        Permission permission = permissionRepository.findByName(name);
+        if (permission == null) {
+            permission = new Permission(name);
+            permission = permissionRepository.save(permission);
         }
-        return privilege;
+        return permission;
     }
 
     @Transactional
-    public Role createRoleIfNotFound(final String name, final Collection<Privilege> privileges) {
+    public Role createRoleIfNotFound(final String name, final Collection<Permission> permissions) {
         Role role = roleRepository.findByName(name);
         if (role == null) {
             role = new Role(name);
         }
-        role.setPrivileges(privileges);
+        role.setPermissions(permissions);
         role = roleRepository.save(role);
         return role;
     }

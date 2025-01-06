@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
 @Entity
-public class Privilege {
+public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,14 +18,14 @@ public class Privilege {
 
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
+    @ManyToMany(mappedBy = "permissions")
     private Collection<Role> roles;
 
-    public Privilege() {
+    public Permission() {
         super();
     }
 
-    public Privilege(final String name) {
+    public Permission(final String name) {
         super();
         this.name = name;
     }
@@ -72,7 +72,7 @@ public class Privilege {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Privilege other = (Privilege) obj;
+        Permission other = (Permission) obj;
         if (getName() == null) {
             if (other.getName() != null)
                 return false;
@@ -84,7 +84,7 @@ public class Privilege {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Privilege [name=").append(name).append("]").append("[id=").append(id).append("]");
+        builder.append("Permission [name=").append(name).append("]").append("[id=").append(id).append("]");
         return builder.toString();
     }
 }

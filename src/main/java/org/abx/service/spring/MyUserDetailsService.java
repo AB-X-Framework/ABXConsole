@@ -2,7 +2,7 @@ package org.abx.service.spring;
 
 
 import org.abx.service.creds.dao.UserRepository;
-import org.abx.service.creds.model.Privilege;
+import org.abx.service.creds.model.Permission;
 import org.abx.service.creds.model.Role;
 import org.abx.service.creds.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,27 +53,27 @@ public class MyUserDetailsService implements UserDetailsService {
     // UTIL
 
     private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
-        return getGrantedAuthorities(getPrivileges(roles));
+        return getGrantedAuthorities(getPermissions(roles));
     }
 
-    private List<String> getPrivileges(final Collection<Role> roles) {
-        final List<String> privileges = new ArrayList<>();
-        final List<Privilege> collection = new ArrayList<>();
+    private List<String> getPermissions(final Collection<Role> roles) {
+        final List<String> permissions = new ArrayList<>();
+        final List<Permission> collection = new ArrayList<>();
         for (final Role role : roles) {
-            privileges.add(role.getName());
-            collection.addAll(role.getPrivileges());
+            permissions.add(role.getName());
+            collection.addAll(role.getPermissions());
         }
-        for (final Privilege item : collection) {
-            privileges.add(item.getName());
+        for (final Permission item : collection) {
+            permissions.add(item.getName());
         }
 
-        return privileges;
+        return permissions;
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
+    private List<GrantedAuthority> getGrantedAuthorities(final List<String> permissions) {
         final List<GrantedAuthority> authorities = new ArrayList<>();
-        for (final String privilege : privileges) {
-            authorities.add(new SimpleGrantedAuthority(privilege));
+        for (final String permission : permissions) {
+            authorities.add(new SimpleGrantedAuthority(permission));
         }
         return authorities;
     }
