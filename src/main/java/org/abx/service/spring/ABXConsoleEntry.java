@@ -1,4 +1,4 @@
-package org.abx.service.console;
+package org.abx.service.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = {
+        "org.abx.service.spring",
         "org.abx.service.utils",
-        "org.abx.service.console",
-        "org.abx.service.spring"})
+        "org.abx.service.creds"})
 @EnableJpaRepositories(value={"org.abx.service.creds.dao"})
 @EntityScan(value = {"org.abx.service.creds.model"})
 public class ABXConsoleEntry {

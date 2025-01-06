@@ -1,4 +1,4 @@
-package org.abx.service.spring;
+package org.abx.service.creds;
 
 
 import org.abx.service.creds.dao.PermissionRepository;

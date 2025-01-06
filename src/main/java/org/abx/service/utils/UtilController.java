@@ -4,7 +4,7 @@ package org.abx.service.utils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.service.creds.model.Role;
-import org.abx.service.spring.SetupDataLoader;
+import org.abx.service.creds.SetupDataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/utils")
