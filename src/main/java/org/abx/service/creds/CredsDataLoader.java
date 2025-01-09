@@ -36,6 +36,14 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    public Permission CreateUser;
+    public Permission UseABX;
+
+
+    public Role Admin;
+    public Role User;
+
     // API
 
     @Override
@@ -46,18 +54,17 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
         }
 
         // == create initial privileges
-        final Permission readPermission = createPermissionIfNotFound("READ");
-        final Permission writePermission = createPermissionIfNotFound("WRITE");
-        final Permission passwordPermission = createPermissionIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
+        CreateUser = createPermissionIfNotFound("CreateUser");
+        UseABX = createPermissionIfNotFound("UseABX");
 
         // == create initial roles
-        final List<Permission> adminPermissions = new ArrayList<>(Arrays.asList(readPermission, writePermission, passwordPermission));
-        final List<Permission> userPermissions = new ArrayList<>(Arrays.asList(readPermission, passwordPermission));
-        final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPermissions);
-        createRoleIfNotFound("ROLE_USER", userPermissions);
+        final List<Permission> adminPermissions = new ArrayList<>(Arrays.asList(CreateUser, UseABX));
+        final List<Permission> userPermissions = new ArrayList<>(Arrays.asList(UseABX));
+        Admin = createRoleIfNotFound("ROLE_ADMIN", adminPermissions);
+        User = createRoleIfNotFound("ROLE_USER", userPermissions);
 
         // == create initial user
-        createUserIfNotFound("test@test.com", "Test",  new ArrayList<>(Arrays.asList(adminRole)));
+        createUserIfNotFound("test@test.com", "Test",  new ArrayList<>(Arrays.asList(Admin)));
 
         alreadySetup = true;
     }
