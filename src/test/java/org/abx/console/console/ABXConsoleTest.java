@@ -1,4 +1,4 @@
-package org.abx.service.console;
+package org.abx.console.console;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

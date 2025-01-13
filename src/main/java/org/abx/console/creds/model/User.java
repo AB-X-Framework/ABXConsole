@@ -1,4 +1,4 @@
-package org.abx.service.creds.model;
+package org.abx.console.creds.model;
 import java.util.Collection;
 
 import jakarta.persistence.Column;

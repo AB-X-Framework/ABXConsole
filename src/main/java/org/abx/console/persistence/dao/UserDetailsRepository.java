@@ -1,6 +1,6 @@
-package org.abx.service.persistence.dao;
+package org.abx.console.persistence.dao;
 
-import org.abx.service.persistence.model.UserDetail;
+import org.abx.console.persistence.model.UserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserDetailsRepository extends JpaRepository<UserDetail, Long> {

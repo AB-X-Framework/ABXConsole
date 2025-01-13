@@ -1,4 +1,4 @@
-package org.abx.service.persistence;
+package org.abx.console.persistence;
 
 public class PersistenceDataLoader {
 }

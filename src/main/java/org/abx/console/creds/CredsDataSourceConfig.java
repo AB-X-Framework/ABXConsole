@@ -1,4 +1,4 @@
-package org.abx.service.persistence;
+package org.abx.console.creds;
 
 
 import jakarta.persistence.EntityManagerFactory;
@@ -22,38 +22,38 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "org.abx.service.persistence.dao",
-        entityManagerFactoryRef = "persistenceEntityManagerFactory",
-        transactionManagerRef = "persistenceTransactionManager"
+        basePackages = "org.abx.console.creds.dao",
+        entityManagerFactoryRef = "credsEntityManagerFactory",
+        transactionManagerRef = "credsTransactionManager"
 )
-public class PersistenceSourceConfig {
+public class CredsDataSourceConfig {
 
-    @Bean(name = "persistenceDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.abx")
+    @Bean(name = "credsDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.creds")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "persistenceEntityManagerFactory")
-    @ConfigurationProperties(prefix = "spring.datasource.abx.jpa")
+    @Bean(name = "credsEntityManagerFactory")
+    @ConfigurationProperties(prefix = "spring.datasource.creds.jpa")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("persistenceDataSource") DataSource dataSource,
+            @Qualifier("credsDataSource") DataSource dataSource,
             @Value("${spring.datasource.creds.hbm2ddl.auto}") String ddlAuto) {
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", ddlAuto); // Ensures schema update
         return builder
                 .dataSource(dataSource)
-                .packages("org.abx.service.abx.model") // Your entity package
-                .persistenceUnit("abx")
+                .packages("org.abx.service.creds.model") // Your entity package
+                .persistenceUnit("creds")
                 .properties(properties)
                 .build();
     }
 
-    @Bean(name = "persistenceTransactionManager")
+    @Bean(name = "credsTransactionManager")
     public PlatformTransactionManager transactionManager(
-            @Qualifier("persistenceEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+            @Qualifier("credsEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

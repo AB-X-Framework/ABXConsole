@@ -1,10 +1,10 @@
-package org.abx.service.spring;
+package org.abx.console.spring;
 
 
-import org.abx.service.creds.dao.UserRepository;
-import org.abx.service.creds.model.Permission;
-import org.abx.service.creds.model.Role;
-import org.abx.service.creds.model.User;
+import org.abx.console.creds.dao.UserRepository;
+import org.abx.console.creds.model.Permission;
+import org.abx.console.creds.model.Role;
+import org.abx.console.creds.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
