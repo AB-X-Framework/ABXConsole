@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication(scanBasePackages = {
         "org.abx.service.spring",
         "org.abx.service.utils",
-        "org.abx.service.creds"})
+        "org.abx.service.creds",
+        "org.abx.service.controller"})
 //@EntityScan(value = {"org.abx.service.creds.model"})
 public class ABXConsoleEntry {
 

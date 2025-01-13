@@ -27,9 +27,12 @@ public class SecConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz -> {
             authz
-
+                    .requestMatchers("resources/**")
+                    .permitAll()
+                    .requestMatchers("session/**")
+                    .permitAll()
                     .anyRequest()
-                    .permitAll();
+                    .authenticated();
         });
 
         return http.build();
