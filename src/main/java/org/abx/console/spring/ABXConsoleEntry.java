@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {
         "org.abx.console.spring",
         "org.abx.console.utils",
-        "org.abx.console.persistence",
+        "org.abx.console.repository",
         "org.abx.console.creds",
         "org.abx.console.controller"})
 public class ABXConsoleEntry {
