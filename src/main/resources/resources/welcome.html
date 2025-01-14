@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AB-X Framework</title>
+    <link rel="stylesheet" type="text/css" href="ui/themes/metro-green/easyui.css">
+    <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
+    <style media="screen">
+        #modelEditor {
+            position: absolute;
+            top: 37px;
+            right: 2px;
+            bottom: 2px;
+            left: 2px;
+        }
+
+        #setupEditor {
+            position: absolute;
+            top: 37px;
+            right: 2px;
+            bottom: 2px;
+            left: 2px;
+        }
+    </style>
+    <script type="text/javascript" src="ui/jquery.min.js"></script>
+    <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="ace/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="TextEditor.js"></script>
+    <script type="text/javascript" src="DualEditor.js"></script>
+    <script type="text/javascript" src="Framework.js"></script>
+    <script type="text/javascript" src="stomp/stomp.js"></script>
+    <script type="text/javascript" src="execution.ws.js"></script>
+    <script type="text/javascript" src="chart/chart.js"></script>
+    <script type="text/javascript" src="ChartSupport.js"></script>
+</head>
+<body style="  min-height: 100vh;margin: 10px">
+
+<div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <div style="margin-bottom: 10px;">
+            <input id="username" class="easyui-textbox" style="width:100%;" data-options="prompt:'Username', iconCls:'icon-man'">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <input id="password" type="password" class="easyui-textbox" style="width:100%;" data-options="prompt:'Password', iconCls:'icon-lock'">
+        </div>
+        <div style="text-align: center;">
+            <a href="#" id="loginBtn" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="width: 100%;">Login</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
