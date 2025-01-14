@@ -27,7 +27,7 @@ jobs:
           servers: '[{"id": "github","configuration": {"httpHeaders": {"property": {"name": "Authorization","value": "Bearer ${{ secrets.GITHUB_TOKEN }}"}}}}]'
 
 
-      # Step 3: Verify GraalVM installation
-      - name: Compile and deploy ABXRunner
+      # Step 3: Compile and deploy ABX Console
+      - name: Compile and deploy ABX Console
         run: |
           mvn package
