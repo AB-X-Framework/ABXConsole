@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -37,7 +38,7 @@ public class CredsDataSourceConfig {
     @Bean(name = "credsEntityManagerFactory")
     @ConfigurationProperties(prefix = "spring.datasource.creds.jpa")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder builder,
+            @Qualifier("credsEntityManagerFactoryBuilder") EntityManagerFactoryBuilder builder,
             @Qualifier("credsDataSource") DataSource dataSource,
             @Value("${spring.datasource.creds.hbm2ddl.auto}") String ddlAuto) {
 
@@ -55,5 +56,11 @@ public class CredsDataSourceConfig {
     public PlatformTransactionManager transactionManager(
             @Qualifier("credsEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+
+    @Bean(name = "credsEntityManagerFactoryBuilder")
+    public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
+        return new EntityManagerFactoryBuilder(new HibernateJpaVendorAdapter(), new HashMap<>(), null);
     }
 }

@@ -90,7 +90,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
         return role;
     }
 
-    @Transactional(transactionManager = "credsTransactionManager")
+    @Transactional
     public User createUserIfNotFound(final String username, final String password, final Collection<Role> roles) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
