@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -37,15 +38,15 @@ public class PersistenceSourceConfig {
     @Bean(name = "persistenceEntityManagerFactory")
     @ConfigurationProperties(prefix = "spring.datasource.abx.jpa")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder builder,
+            @Qualifier("persistenceEntityManagerFactoryBuilder")  EntityManagerFactoryBuilder builder,
             @Qualifier("persistenceDataSource") DataSource dataSource,
-            @Value("${spring.datasource.creds.hbm2ddl.auto}") String ddlAuto) {
+            @Value("${spring.datasource.abx.hbm2ddl.auto}") String ddlAuto) {
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", ddlAuto); // Ensures schema update
         return builder
                 .dataSource(dataSource)
-                .packages("org.abx.service.abx.model") // Your entity package
+                .packages("org.abx.console.persistence.model") // Your entity package
                 .persistenceUnit("abx")
                 .properties(properties)
                 .build();
@@ -55,5 +56,10 @@ public class PersistenceSourceConfig {
     public PlatformTransactionManager transactionManager(
             @Qualifier("persistenceEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    @Bean(name = "persistenceEntityManagerFactoryBuilder")
+    public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
+        return new EntityManagerFactoryBuilder(new HibernateJpaVendorAdapter(), new HashMap<>(), null);
     }
 }

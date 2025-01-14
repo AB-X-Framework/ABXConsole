@@ -47,7 +47,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
     // API
 
     @Override
-    @Transactional
+    @Transactional(transactionManager = "credsTransactionManager")
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         if (alreadySetup) {
             return;
@@ -69,7 +69,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
         alreadySetup = true;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "credsTransactionManager")
     public Permission createPermissionIfNotFound(final String name) {
         Permission permission = permissionRepository.findByName(name);
         if (permission == null) {
@@ -79,7 +79,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
         return permission;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "credsTransactionManager")
     public Role createRoleIfNotFound(final String name, final Collection<Permission> permissions) {
         Role role = roleRepository.findByName(name);
         if (role == null) {
@@ -90,7 +90,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
         return role;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "credsTransactionManager")
     public User createUserIfNotFound(final String username, final String password, final Collection<Role> roles) {
         User user = userRepository.findByUsername(username);
         if (user == null) {

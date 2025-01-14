@@ -45,7 +45,7 @@ public class CredsDataSourceConfig {
         properties.put("hibernate.hbm2ddl.auto", ddlAuto); // Ensures schema update
         return builder
                 .dataSource(dataSource)
-                .packages("org.abx.service.creds.model") // Your entity package
+                .packages("org.abx.console.creds.model") // Your entity package
                 .persistenceUnit("creds")
                 .properties(properties)
                 .build();
