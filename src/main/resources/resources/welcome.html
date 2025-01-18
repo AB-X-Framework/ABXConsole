@@ -20,7 +20,7 @@
     <div data-options="region:'center'" style="text-align:center;">
         <div class="login-container" style="margin: 80px;">
             <h2>Login to ABX</h2>
-            <form id="loginForm" action="/session/login" method="post">
+            <div >
                 <div style="margin-bottom: 10px;">
                     <input id="username" class="easyui-textbox" name="username" style="width:100%;" data-options="prompt:'Username', iconCls:'icon-man'">
                 </div>
@@ -30,13 +30,33 @@
                 <div style="text-align: center;">
                     <a href="#" onclick="submitForm()" id="loginBtn" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="width: 100%;">Login</a>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 <script>
     function submitForm(){
-        $('#loginForm').form('submit');
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        // Send the data using an AJAX POST request
+        $.ajax({
+            url: '/session/login',  // URL to send the POST request to (make sure this is your server's login endpoint)
+            type: 'POST',
+            data: {
+                username: username,
+                password: password
+            },
+            success: function(response) {
+                // Handle success response (e.g., redirect or show a message)
+               document.location="/resources/main.html";
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                alert('Login failed: ' + error);
+                console.log(xhr.responseText);
+            }
+        });
     }
 </script>
 </body>
