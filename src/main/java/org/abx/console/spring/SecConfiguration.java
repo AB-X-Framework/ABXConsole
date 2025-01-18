@@ -43,11 +43,6 @@ public class SecConfiguration {
                                 response.sendRedirect("/resources/welcome.html");
                             }
                     );
-                    security.accessDeniedHandler(
-                            (request, response, accessDeniedException) -> {
-                                response.sendRedirect("/resources/welcome.html");
-                            }
-                    );
                 });
         return http.build();
     }
