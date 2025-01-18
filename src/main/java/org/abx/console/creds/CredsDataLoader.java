@@ -64,7 +64,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
         User = createRoleIfNotFound("ROLE_USER", userPermissions);
 
         // == create initial user
-        createUserIfNotFound("test@test.com", "Test",  new ArrayList<>(Arrays.asList(Admin)));
+        createUserIfNotFound("test@test.com", "test",  new ArrayList<>(Arrays.asList(Admin)));
 
         alreadySetup = true;
     }
