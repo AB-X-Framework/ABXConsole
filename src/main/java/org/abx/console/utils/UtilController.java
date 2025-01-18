@@ -43,7 +43,7 @@ public class UtilController {
     @GetMapping("/login")
     public String login(final HttpServletRequest request)  {
       try {
-          request.login("abx@abx.com", "abx");
+          request.login("test@abx.com", "test");
 
           return "Logged in"+request.getUserPrincipal().getName();
       }catch (ServletException e) {

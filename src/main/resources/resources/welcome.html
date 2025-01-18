@@ -30,6 +30,7 @@
                 <div style="text-align: center;">
                     <a href="#" onclick="submitForm()" id="loginBtn" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="width: 100%;">Login</a>
                 </div>
+                <div id="status"></div>
             </div>
         </div>
     </div>
@@ -48,13 +49,12 @@
                 password: password
             },
             success: function(response) {
+                if (response.logged){
+                    document.location="/resources/index.html";
+                }else {
+                    $("error").html(response.message);
+                }
                 // Handle success response (e.g., redirect or show a message)
-               document.location="/resources/main.html";
-            },
-            error: function(xhr, status, error) {
-                // Handle error response
-                alert('Login failed: ' + error);
-                console.log(xhr.responseText);
             }
         });
     }
