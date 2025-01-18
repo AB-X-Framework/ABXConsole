@@ -11,11 +11,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/session")
-@ResponseBody
 public class SessionController {
 
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login", produces = "application/json")
     @PreAuthorize("permitAll()")
     public String login(final HttpServletRequest request,
                             HttpServletResponse response,
