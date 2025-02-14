@@ -3,7 +3,6 @@ package org.abx.console.utils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.console.creds.model.Role;
 import org.abx.console.creds.CredsDataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -14,56 +13,53 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.HashSet;
 
 @RestController
 @RequestMapping("/utils")
 public class UtilController {
     @Autowired
     private CredsDataLoader dataLoader;
+
     /**
      * @param message
      */
     @GetMapping(path = "/print")
-    public String print(@RequestParam("message")String message) {
-        return "Your message "+message;
+    public String print(@RequestParam("message") String message) {
+        return "Your message " + message;
     }
 
 
     @GetMapping(path = "/register")
     public String register() {
-
-        HashSet<Role> roles = new HashSet<>();
-        roles.add(dataLoader.createRoleIfNotFound("ROLE_ADMIN",null));
         dataLoader.
-                createUserIfNotFound("abx@abx.com",
-                         "abx",roles);
+                createUserIfNotFound("admin@abx.com",
+                        "abx", "Admin");
         return "User registered";
     }
-    @GetMapping("/login")
-    public String login(final HttpServletRequest request)  {
-      try {
-          request.login("test@abx.com", "test");
 
-          return "Logged in"+request.getUserPrincipal().getName();
-      }catch (ServletException e) {
-          e.printStackTrace();
-          return "Login failed "+e.getMessage();
-      }
+    @GetMapping("/login")
+    public String login(final HttpServletRequest request) {
+        try {
+            request.login("admin@abx.com", "abx");
+            return "Logged in" + request.getUserPrincipal().getName();
+        } catch (ServletException e) {
+            e.printStackTrace();
+            return "Login failed " + e.getMessage();
+        }
     }
 
 
     @GetMapping(path = "/loggedPrint")
     @PreAuthorize("isAuthenticated()")
-    public String loggedPrint(Principal p, @RequestParam("message")String message) {
-        return "Your message "+message+" "+p.getName();
-    }
-    @GetMapping(path = "/check")
-    @Secured({"ROLE_ADMIN22"})
-    public String check(Principal p) {
-        return "Your message + "+p.getName();
+    public String loggedPrint(Principal p, @RequestParam("message") String message) {
+        return "Your message " + message + " " + p.getName();
     }
 
+    @GetMapping(path = "/check")
+    @Secured({"Admin"})
+    public String check(Principal p) {
+        return "Your message + " + p.getName();
+    }
 
 
 }

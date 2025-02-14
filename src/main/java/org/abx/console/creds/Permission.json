@@ -1,0 +1,8 @@
+{
+  "Admin": [
+    "UpdateRoles","CreateUser","UseABX","Repository"
+  ],
+  "User": [
+    "UseABX","Repository"
+  ]
+}

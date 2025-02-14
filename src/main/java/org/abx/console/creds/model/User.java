@@ -1,15 +1,10 @@
 package org.abx.console.creds.model;
-import java.util.Collection;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,9 +21,11 @@ public class User {
     @Column(length = 60)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    @Column(length = 60)
+    private String role;
+
+    @Column
+    private boolean enabled;
 
     public Long getId() {
         return id;
@@ -55,12 +52,12 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(final Collection<Role> roles) {
-        this.roles = roles;
+    public void setRole(final String role) {
+        this.role = role;
     }
 
 
@@ -96,9 +93,17 @@ public class User {
         builder.append("User [id=")
                 .append(id)
                 .append(", username=").append(username)
-                .append(", roles=").append(roles)
+                .append(", role=").append(role)
                 .append("]");
         return builder.toString();
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
 

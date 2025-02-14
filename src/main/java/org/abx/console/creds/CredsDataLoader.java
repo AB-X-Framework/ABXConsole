@@ -1,11 +1,7 @@
 package org.abx.console.creds;
 
 
-import org.abx.console.creds.dao.PermissionRepository;
-import org.abx.console.creds.dao.RoleRepository;
 import org.abx.console.creds.dao.UserRepository;
-import org.abx.console.creds.model.Permission;
-import org.abx.console.creds.model.Role;
 import org.abx.console.creds.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -27,22 +23,10 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PermissionRepository permissionRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-    public Permission CreateUser;
-    public Permission UseABX;
-
-
-    public Role Admin;
-    public Role User;
 
     // API
 
@@ -53,52 +37,22 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        // == create initial privileges
-        CreateUser = createPermissionIfNotFound("CreateUser");
-        UseABX = createPermissionIfNotFound("UseABX");
-
-        // == create initial roles
-        final List<Permission> adminPermissions = new ArrayList<>(Arrays.asList(CreateUser, UseABX));
-        final List<Permission> userPermissions = new ArrayList<>(Arrays.asList(UseABX));
-        Admin = createRoleIfNotFound("ROLE_ADMIN", adminPermissions);
-        User = createRoleIfNotFound("ROLE_USER", userPermissions);
-
         // == create initial user
-        createUserIfNotFound("test@abx.com", "test",  new ArrayList<>(Arrays.asList(Admin)));
-
+        createUserIfNotFound("admin@abx.com", "test",  "Admin");
         alreadySetup = true;
     }
 
-    @Transactional(transactionManager = "credsTransactionManager")
-    public Permission createPermissionIfNotFound(final String name) {
-        Permission permission = permissionRepository.findByName(name);
-        if (permission == null) {
-            permission = new Permission(name);
-            permission = permissionRepository.save(permission);
-        }
-        return permission;
-    }
-
-    @Transactional(transactionManager = "credsTransactionManager")
-    public Role createRoleIfNotFound(final String name, final Collection<Permission> permissions) {
-        Role role = roleRepository.findByName(name);
-        if (role == null) {
-            role = new Role(name);
-        }
-        role.setPermissions(permissions);
-        role = roleRepository.save(role);
-        return role;
-    }
 
     @Transactional
-    public User createUserIfNotFound(final String username, final String password, final Collection<Role> roles) {
+    public User createUserIfNotFound(final String username, final String password,
+                                     final String role) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             user = new User();
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
         }
-        user.setRoles(roles);
+        user.setRole(role);
         user = userRepository.save(user);
         return user;
     }
