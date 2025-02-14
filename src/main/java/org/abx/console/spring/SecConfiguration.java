@@ -43,6 +43,7 @@ public class SecConfiguration {
                                 response.sendRedirect("/resources/welcome.html");
                             }
                     );
+
                 });
         return http.build();
     }

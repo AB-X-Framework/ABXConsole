@@ -29,6 +29,6 @@ public class SessionController {
            status.put("error",e.getMessage());
         }
         return status.toString(1);
-    }z
+    }
 
 }
