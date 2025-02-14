@@ -10,10 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 @Component
 public class CredsDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -36,9 +32,8 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup) {
             return;
         }
-
         // == create initial user
-        createUserIfNotFound("admin@abx.com", "test",  "Admin");
+        createUserIfNotFound("admin@abx.com", "test", "Admin");
         alreadySetup = true;
     }
 
@@ -51,6 +46,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
             user = new User();
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
+            user.setEnabled(true);
         }
         user.setRole(role);
         user = userRepository.save(user);
