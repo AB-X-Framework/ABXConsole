@@ -1,6 +1,6 @@
 {
   "Admin": [
-    "UpdateRoles","CreateUser","UseABX","Repository"
+    "UpdateRole","CreateUser","UseABX","Repository"
   ],
   "User": [
     "UseABX","Repository"
