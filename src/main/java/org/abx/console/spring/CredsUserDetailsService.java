@@ -66,7 +66,7 @@ public class CredsUserDetailsService implements UserDetailsService {
     private void processAuthorities() throws Exception {
         JSONObject obj = new JSONObject(StreamUtils.readStream
                 (CredsUserDetailsService.class.getClassLoader().getResourceAsStream
-                ("org/abx/console/creds/Permissions.json")));
+                ("org/abx/console/creds/Permission.json")));
         authoritiesPerRole = new HashMap<>();
         for (String role : obj.keySet()) {
             JSONArray permissions = obj.getJSONArray(role);
