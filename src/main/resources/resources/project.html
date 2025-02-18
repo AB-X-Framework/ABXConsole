@@ -11,7 +11,9 @@
   <script>
     $(document).ready(function() {
       loadLeftPanel(()=>{
-        $('#account').linkbutton({toggle: true, selected: true});
+
+        $('#section').accordion('select', 'Projects');
+        $('#newProject').linkbutton({toggle: true, selected: true});
       });
     });
   </script>
