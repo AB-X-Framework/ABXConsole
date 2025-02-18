@@ -6,3 +6,9 @@ $.get({
         }
     }
 });
+
+function loadLeftPanel() {
+    $('#panel').load('leftpanel.html', function() {
+        $.parser.parse('#panel'); // Re-initialize EasyUI components
+    });
+}
