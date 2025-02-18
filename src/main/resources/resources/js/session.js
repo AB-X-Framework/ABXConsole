@@ -12,3 +12,7 @@ function loadLeftPanel() {
         $.parser.parse('#panel'); // Re-initialize EasyUI components
     });
 }
+
+function navigateTo(url){
+    window.location.href = url;
+}
