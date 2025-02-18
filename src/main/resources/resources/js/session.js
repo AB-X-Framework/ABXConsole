@@ -7,9 +7,12 @@ $.get({
     }
 });
 
-function loadLeftPanel() {
+function loadLeftPanel(after) {
     $('#panel').load('leftpanel.html', function() {
         $.parser.parse('#panel'); // Re-initialize EasyUI components
+        if (after !== undefined) {
+            after();
+        }
     });
 }
 

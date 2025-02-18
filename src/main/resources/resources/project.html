@@ -10,7 +10,9 @@
   <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
   <script>
     $(document).ready(function() {
-      loadLeftPanel();
+      loadLeftPanel(()=>{
+        $('#account').linkbutton({toggle: true, selected: true});
+      });
     });
   </script>
 </head>
