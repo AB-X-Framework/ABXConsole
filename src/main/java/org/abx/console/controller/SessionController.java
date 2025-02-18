@@ -17,7 +17,6 @@ public class SessionController {
     @RequestMapping(value = "/login", produces = "application/json")
     @PreAuthorize("permitAll()")
     public String login(final HttpServletRequest request,
-                            HttpServletResponse response,
                             @RequestParam String username,
                             @RequestParam String password) throws ServletException, IOException {
        JSONObject status = new JSONObject();

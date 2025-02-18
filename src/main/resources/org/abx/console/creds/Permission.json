@@ -1,0 +1,8 @@
+{
+  "Admin": [
+    "UserManagement","UseABX","Repository"
+  ],
+  "User": [
+    "UseABX","Repository"
+  ]
+}

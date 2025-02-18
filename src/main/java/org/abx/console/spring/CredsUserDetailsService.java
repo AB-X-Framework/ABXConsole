@@ -2,9 +2,10 @@ package org.abx.console.spring;
 
 
 import org.abx.console.creds.dao.UserRepository;
-import org.abx.console.creds.model.Permission;
-import org.abx.console.creds.model.Role;
 import org.abx.console.creds.model.User;
+import org.abx.util.StreamUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,18 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 @Service("userDetailsService")
 @Transactional
 public class CredsUserDetailsService implements UserDetailsService {
 
+    private HashMap<String, Collection<GrantedAuthority>> authoritiesPerRole;
     @Autowired
     private UserRepository userRepository;
 
 
-    public CredsUserDetailsService() {
+    public CredsUserDetailsService() throws Exception{
         super();
+        processAuthorities();
     }
 
     // API
@@ -39,11 +43,14 @@ public class CredsUserDetailsService implements UserDetailsService {
             if (user == null) {
                 throw new UsernameNotFoundException("No user found with username: " + username);
             }
+            if (!user.isEnabled()) {
+                throw new UsernameNotFoundException("No username: " + username + " is disabled.");
+            }
 
             return new org.springframework.security.core.userdetails.User(user.getUsername(),
                     user.getPassword(),
                     true, true, true, true
-                    , getAuthorities(user.getRoles()));
+                    , getAuthorities(user.getRole()));
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,28 +58,28 @@ public class CredsUserDetailsService implements UserDetailsService {
 
     // UTIL
 
-    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
-        return getGrantedAuthorities(getPermissions(roles));
+    private Collection<GrantedAuthority> getAuthorities(String role) {
+        return authoritiesPerRole.get(role);
     }
 
-    private List<String> getPermissions(final Collection<Role> roles) {
-        final List<String> permissions = new ArrayList<>();
-        final List<Permission> collection = new ArrayList<>();
-        for (final Role role : roles) {
-            permissions.add(role.getName());
-            collection.addAll(role.getPermissions());
-        }
-        for (final Permission item : collection) {
-            permissions.add(item.getName());
+
+    private void processAuthorities() throws Exception {
+        JSONObject obj = new JSONObject(StreamUtils.readStream
+                (CredsUserDetailsService.class.getClassLoader().getResourceAsStream
+                ("org/abx/console/creds/Permission.json")));
+        authoritiesPerRole = new HashMap<>();
+        for (String role : obj.keySet()) {
+            JSONArray permissions = obj.getJSONArray(role);
+            authoritiesPerRole.put(role, getGrantedAuthorities(permissions));
         }
 
-        return permissions;
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(final List<String> permissions) {
+
+    private List<GrantedAuthority> getGrantedAuthorities(final JSONArray permissions) {
         final List<GrantedAuthority> authorities = new ArrayList<>();
-        for (final String permission : permissions) {
-            authorities.add(new SimpleGrantedAuthority(permission));
+        for (int i = 0; i < permissions.length(); i++) {
+            authorities.add(new SimpleGrantedAuthority(permissions.getString(i)));
         }
         return authorities;
     }
