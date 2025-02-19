@@ -40,7 +40,7 @@ public class SecConfiguration {
                 }).exceptionHandling(security -> {
                     security.authenticationEntryPoint(
                             (request, response, authException) -> {
-                                response.sendRedirect("/resources/welcome.html");
+                                response.sendRedirect("/resources/Welcome.html");
                             }
                     );
 
