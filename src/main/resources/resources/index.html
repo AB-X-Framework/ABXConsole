@@ -10,7 +10,10 @@
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
         $(document).ready(function() {
-            loadLeftPanel();
+            loadLeftPanel(()=>{
+                $('#section').accordion('select', 'Settings');
+                $('#account').linkbutton({toggle: true, selected: true});
+            });
         });
     </script>
 </head>
@@ -22,7 +25,7 @@
     <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;" id="panel"></div>
 
     <!-- Right (Content) Panel -->
-    <div data-options="region:'center',title:'Dashboard'" style="padding:5px;">
+    <div data-options="region:'center',title:'Settings'" style="padding:5px;">
         <div id="contentArea">
             <h3>Welcome</h3>
             <p>Select a page from the left menu.</p>

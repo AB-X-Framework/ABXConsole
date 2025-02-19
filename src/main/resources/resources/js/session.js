@@ -1,3 +1,4 @@
+$.get({
     url: '/session/isLoggedIn',
     success: function(data) {
         if (!data) {
