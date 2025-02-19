@@ -1,8 +1,8 @@
 {
   "Admin": [
-    "UserManagement","UseABX","Repository"
+    "UserManagement","UseABX","Repository","Persistence","Dashboard"
   ],
   "User": [
-    "UseABX","Repository"
+    "UseABX","Repository","Persistence","Dashboard"
   ]
 }

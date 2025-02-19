@@ -17,33 +17,23 @@ public class SessionController {
     @RequestMapping(value = "/login", produces = "application/json")
     @PreAuthorize("permitAll()")
     public String login(final HttpServletRequest request,
-                            @RequestParam String username,
-                            @RequestParam String password) throws ServletException, IOException {
-       JSONObject status = new JSONObject();
-       try {
+                        @RequestParam String username,
+                        @RequestParam String password) {
+        JSONObject status = new JSONObject();
+        try {
             request.login(username, password);
-            status.put("logged",true);
+            status.put("logged", true);
         } catch (ServletException e) {
             e.printStackTrace();
-           status.put("logged",false);
-           status.put("error",e.getMessage());
+            status.put("logged", false);
+            status.put("error", e.getMessage());
         }
         return status.toString(1);
     }
 
-
-
     @RequestMapping(value = "/isLoggedIn", produces = "application/json")
     @PreAuthorize("permitAll()")
-    public boolean login(final HttpServletRequest request) throws Exception {
-        try {
-            if (request.getUserPrincipal().getName()!=null){
-                return true;
-            }else {
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
+    public boolean isLoggedIn(final HttpServletRequest request) {
+        return request.getUserPrincipal() != null && request.getUserPrincipal().getName() != null;
     }
 }

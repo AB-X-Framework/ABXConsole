@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AB-X Framework: Services</title>
+  <link rel="stylesheet" type="text/css" href="ui/themes/metro-green/easyui.css">
+  <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
+  <script type="text/javascript" src="ui/jquery.min.js"></script>
+  <script type="text/javascript" src="js/session.js"></script>
+  <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      loadLeftPanel();
+    });
+  </script>
+</head>
+<body style="  min-height: 100vh;margin: 0">
+
+<!-- Main Layout -->
+<div class="easyui-layout" style="width:100%;height:100%;">
+
+  <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;" id="panel"></div>
+
+  <!-- Right (Content) Panel -->
+  <div data-options="region:'center',title:'Services'" style="padding:5px;">
+    <div id="contentArea">
+      <h3>Services</h3>
+      <p>Select a page from the left menu.</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
