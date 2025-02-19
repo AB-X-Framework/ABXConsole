@@ -31,4 +31,19 @@ public class SessionController {
         return status.toString(1);
     }
 
+
+
+    @RequestMapping(value = "/isLoggedIn", produces = "application/json")
+    @PreAuthorize("permitAll()")
+    public boolean login(final HttpServletRequest request) throws Exception {
+        try {
+            if (request.getUserPrincipal().getName()!=null){
+                return true;
+            }else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
