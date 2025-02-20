@@ -1,21 +1,35 @@
 $.get({
     url: '/session/isLoggedIn',
-    success: function(data) {
+    success: function (data) {
         if (!data) {
-            window.location.href = '/resources/welcome.html';
+            window.location.href = '/resources/Welcome.html';
         }
     }
 });
 
 function loadLeftPanel(after) {
-    $('#panel').load('LeftPanel.html', function() {
+    $('#panel').load('LeftPanel.html', function () {
         $.parser.parse('#panel'); // Re-initialize EasyUI components
-        if (after !== undefined) {
-            after();
-        }
+        $.get({
+            url: "dashboards/dashboards",
+            success: function (data) {
+                if (after !== undefined) {
+                    after();
+                }
+            }
+        });
     });
 }
 
-function navigateTo(url){
+function navigateTo(url) {
     window.location.href = url;
+}
+
+function logout() {
+    $.get({
+        url: '/session/logout',
+        success: function (data) {
+            window.location.href = '/resources/Welcome.html';
+        }
+    });
 }

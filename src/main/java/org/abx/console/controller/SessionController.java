@@ -19,6 +19,7 @@ public class SessionController {
     public String login(final HttpServletRequest request,
                         @RequestParam String username,
                         @RequestParam String password) {
+
         JSONObject status = new JSONObject();
         try {
             request.login(username, password);
@@ -35,5 +36,12 @@ public class SessionController {
     @PreAuthorize("permitAll()")
     public boolean isLoggedIn(final HttpServletRequest request) {
         return request.getUserPrincipal() != null && request.getUserPrincipal().getName() != null;
+    }
+
+    @RequestMapping(value = "/logout", produces = "application/json")
+    @PreAuthorize("permitAll()")
+    public boolean logout(final HttpServletRequest request ) throws ServletException {
+        request.logout();
+        return true;
     }
 }

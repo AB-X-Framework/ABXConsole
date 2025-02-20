@@ -4,11 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping("/dashboards")
 public class DashboardController {
 
     @GetMapping(value = "/dashboards", produces = "application/json")
-    @PreAuthorize("dashboard")
+    @PreAuthorize("Dashboard")
     public String login() {
         JSONArray jsonDashboards = new JSONArray();
         JSONObject jsonDashboard = new JSONObject();

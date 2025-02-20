@@ -8,6 +8,16 @@
     <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
     <script type="text/javascript" src="ui/jquery.min.js"></script>
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+    <script>
+        $.get({
+            url: '/session/isLoggedIn',
+            success: function(data) {
+                if (data) {
+                    window.location.href = '/resources/NewDashboard.html';
+                }
+            }
+        });
+    </script>
 </head>
 <body style="height: 100vh; margin: 0px;">
 
