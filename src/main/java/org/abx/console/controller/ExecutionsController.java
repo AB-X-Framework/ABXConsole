@@ -20,7 +20,7 @@ public class ExecutionsController {
         JSONObject jsonExecution = new JSONObject();
         jsonExecutions.put(jsonExecution);
         jsonExecution.put("id", 1);
-        jsonExecution.put("name", "hello");
+        jsonExecution.put("name", "Working session");
         return jsonExecutions.toString();
     }
 }

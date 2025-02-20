@@ -19,7 +19,7 @@ public class ProjectsController {
         JSONObject jsonExecution = new JSONObject();
         jsonExecutions.put(jsonExecution);
         jsonExecution.put("id", 1);
-        jsonExecution.put("name", "hello");
+        jsonExecution.put("name", "Great Project");
         return jsonExecutions.toString();
     }
 }

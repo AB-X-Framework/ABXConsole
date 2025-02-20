@@ -18,7 +18,7 @@ public class DashboardsController {
         JSONObject jsonDashboard = new JSONObject();
         jsonDashboards.put(jsonDashboard);
         jsonDashboard.put("id", 1);
-        jsonDashboard.put("name", "hello");
+        jsonDashboard.put("name", "Beauty dashboard");
         return jsonDashboards.toString();
     }
 }
