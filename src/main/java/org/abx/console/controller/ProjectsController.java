@@ -4,18 +4,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/execs")
-public class ExecutionsController {
+@RequestMapping("/projects")
+public class ProjectsController {
 
-    @GetMapping(value = "/execs", produces = "application/json")
-    @Secured("Execution")
-    public String executions(final HttpServletRequest request) {
+    @GetMapping(value = "/projects", produces = "application/json")
+    @Secured("UseABX")
+    public String projects(final HttpServletRequest request) {
         JSONArray jsonExecutions = new JSONArray();
         JSONObject jsonExecution = new JSONObject();
         jsonExecutions.put(jsonExecution);
