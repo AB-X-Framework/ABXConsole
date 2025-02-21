@@ -19,12 +19,13 @@ public class UserController {
     private ProjectsController projectsController;
 
     @RequestMapping(value = "/menu", produces = "application/json")
-    @Secured({"Dashboard","Execution"})
+    @Secured({"UseABX"})
     public String menu(final HttpServletRequest request) {
+        String user = request.getUserPrincipal().getName();
         JSONObject jsonMenu = new JSONObject();
-        jsonMenu.put("dashboards",dashboardController.dashboards(request));
-        jsonMenu.put("execs",executionsController.executions(request));
-        jsonMenu.put("execs",projectsController.projects(request));
+        jsonMenu.put("dashboards", dashboardController.getDashboards(user));
+        jsonMenu.put("execs", executionsController.getExecutions(user));
+        jsonMenu.put("projects", projectsController.getProjects(user));
         return jsonMenu.toString();
     }
 }

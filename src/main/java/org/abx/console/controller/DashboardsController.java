@@ -12,13 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class DashboardsController {
 
     @RequestMapping(value = "/dashboards", produces = "application/json")
-    @Secured("Dashboard")
+    @Secured("UseABX")
     public String dashboards(final HttpServletRequest request) {
+        return getDashboards(request.getUserPrincipal().getName()).toString();
+    }
+
+    protected JSONArray getDashboards(String user) {
         JSONArray jsonDashboards = new JSONArray();
         JSONObject jsonDashboard = new JSONObject();
         jsonDashboards.put(jsonDashboard);
         jsonDashboard.put("id", 1);
         jsonDashboard.put("name", "Beauty dashboard");
-        return jsonDashboards.toString();
+        return jsonDashboards;
     }
 }
