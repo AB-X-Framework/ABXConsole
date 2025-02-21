@@ -21,7 +21,7 @@ public class UserController {
 
     @RequestMapping(value = "/menu", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({"UseABX"})
-    public String menu(final HttpServletRequest request) {
+    public String menu(final HttpServletRequest request) throws Exception{
         String user = request.getUserPrincipal().getName();
         JSONObject jsonMenu = new JSONObject();
         jsonMenu.put("dashboards", dashboardController.getDashboards(user));
