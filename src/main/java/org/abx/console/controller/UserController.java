@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     private ProjectsController projectsController;
 
-    @RequestMapping(value = "/menu", produces =  MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/menu", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({"UseABX"})
     public String menu(final HttpServletRequest request) {
         String user = request.getUserPrincipal().getName();
