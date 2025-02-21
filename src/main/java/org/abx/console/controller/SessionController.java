@@ -3,6 +3,7 @@ package org.abx.console.controller;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionController {
 
 
-    @RequestMapping(value = "/login", produces = "application/json")
+    @RequestMapping(value = "/login", produces =  MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("permitAll()")
     public String login(final HttpServletRequest request,
                         @RequestParam String username,
@@ -30,13 +31,13 @@ public class SessionController {
         return status.toString(1);
     }
 
-    @RequestMapping(value = "/isLoggedIn", produces = "application/json")
+    @RequestMapping(value = "/isLoggedIn", produces =  MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("permitAll()")
     public boolean isLoggedIn(final HttpServletRequest request) {
         return request.getUserPrincipal() != null && request.getUserPrincipal().getName() != null;
     }
 
-    @RequestMapping(value = "/logout", produces = "application/json")
+    @RequestMapping(value = "/logout", produces =  MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("permitAll()")
     public boolean logout(final HttpServletRequest request ) throws ServletException {
         request.logout();

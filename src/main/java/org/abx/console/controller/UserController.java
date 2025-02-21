@@ -3,6 +3,7 @@ package org.abx.console.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class UserController {
     @Autowired
     private ProjectsController projectsController;
 
-    @RequestMapping(value = "/menu", produces = "application/json")
+    @RequestMapping(value = "/menu", produces =  MediaType.APPLICATION_JSON_VALUE)
     @Secured({"UseABX"})
     public String menu(final HttpServletRequest request) {
         String user = request.getUserPrincipal().getName();
