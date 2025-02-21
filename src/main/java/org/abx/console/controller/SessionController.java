@@ -24,7 +24,6 @@ public class SessionController {
             request.login(username, password);
             status.put("logged", true);
         } catch (ServletException e) {
-            e.printStackTrace();
             status.put("logged", false);
             status.put("error", e.getMessage());
         }
