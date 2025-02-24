@@ -62,7 +62,7 @@
                 if (response.logged){
                     document.location="/resources/NewDashboard.html";
                 }else {
-                    $("error").html(response.message);
+                    $("#status").html(response.error);
                 }
                 // Handle success response (e.g., redirect or show a message)
             }

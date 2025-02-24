@@ -26,7 +26,7 @@ public class SessionController {
             status.put("logged", true);
         } catch (ServletException e) {
             status.put("logged", false);
-            status.put("error", e.getMessage());
+            status.put("error", "Invalid credentials.");
         }
         return status.toString(1);
     }
