@@ -7,23 +7,25 @@ $.get({
     }
 });
 
-function hideNotes(){
+function hideNotes() {
     $('#notes').hide();
     $('#main').resize()
 }
 
-function showNotes(note){
+function showNotes(note) {
     $('#notes').show();
     $('#main').resize();
     $('#note').html(note)
 }
-function parseEntries(entries) {
+
+function parseEntries(url, entries) {
     function parseEntry(entry) {
         return '<div style="margin-bottom:5px;">\n' +
             ' <a href="#"  class="easyui-linkbutton"\n' +
             ' style="width: 100%; text-align: left;"\n' +
-            ' onclick="navigateTo(\'NewDashboard.html\')">' + entry.name + '</a>\n      ' +
-            '  </div>';
+            ' onclick="navigateTo(\''+
+            url+entry.id+
+            '\')">' + entry.name + '</a>\n</div>';
     }
 
     let result = "";
@@ -40,12 +42,12 @@ function loadLeftPanel(after) {
         $.get({
             url: "/user/menu",
             success: function (menuData) {
-                if (menuData.error){
+                if (menuData.error) {
                     showNotes(menuData.message);
-                }else {
-                    $('#Dashboards').append(parseEntries(menuData.dashboards));
-                    $('#Projects').append(parseEntries(menuData.projects));
-                    $('#Executions').append(parseEntries(menuData.execs));
+                } else {
+                    $('#Dashboards').append(parseEntries("Dashboard.html?id=", menuData.dashboards));
+                    $('#Projects').append(parseEntries("Dashboard.html?id=",menuData.projects));
+                    $('#Executions').append(parseEntries("Dashboard.html?id=",menuData.execs));
                 }
                 $.parser.parse('#panel'); // Re-initialize EasyUI components
                 if (after !== undefined) {
