@@ -7,6 +7,16 @@ $.get({
     }
 });
 
+function hideNotes(){
+    $('#notes').hide();
+    $('#main').resize()
+}
+
+function showNotes(note){
+    $('#notes').show();
+    $('#main').resize();
+    $('#note').html(note)
+}
 function parseEntries(entries) {
     function parseEntry(entry) {
         return '<div style="margin-bottom:5px;">\n' +
@@ -29,9 +39,14 @@ function loadLeftPanel(after) {
         $.get({
             url: "/user/menu",
             success: function (menuData) {
-                $('#Dashboards').append(parseEntries(menuData.dashboards));
-                $('#Projects').append(parseEntries(menuData.projects));
-                $('#Executions').append(parseEntries(menuData.execs));
+                if (menuData.error){
+                    showNotes(menuData.message);
+                }else {
+                    $('#Dashboards').append(parseEntries(menuData.dashboards));
+                    $('#Projects').append(parseEntries(menuData.projects));
+                    $('#Executions').append(parseEntries(menuData.execs));
+
+                }
                 $.parser.parse('#panel'); // Re-initialize EasyUI components
                 if (after !== undefined) {
                     after();

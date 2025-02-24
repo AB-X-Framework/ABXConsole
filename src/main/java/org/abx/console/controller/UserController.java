@@ -1,6 +1,7 @@
 package org.abx.console.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.abx.console.spring.CustomErrorController;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,11 +23,15 @@ public class UserController {
     @RequestMapping(value = "/menu", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({"UseABX"})
     public String menu(final HttpServletRequest request) throws Exception{
-        String user = request.getUserPrincipal().getName();
-        JSONObject jsonMenu = new JSONObject();
-        jsonMenu.put("dashboards", dashboardController.getDashboards(user));
-        jsonMenu.put("execs", executionsController.getExecutions(user));
-        jsonMenu.put("projects", projectsController.getProjects(user));
-        return jsonMenu.toString();
+        try {
+            String user = request.getUserPrincipal().getName();
+            JSONObject jsonMenu = new JSONObject();
+            jsonMenu.put("dashboards", dashboardController.getDashboards(user));
+            jsonMenu.put("execs", executionsController.getExecutions(user));
+            jsonMenu.put("projects", projectsController.getProjects(user));
+            return jsonMenu.toString();
+        }catch (Exception e){
+            return CustomErrorController.error("Cannot get user information",e);
+        }
     }
 }
