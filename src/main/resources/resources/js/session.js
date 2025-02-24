@@ -35,6 +35,7 @@ function parseEntries(entries) {
 }
 
 function loadLeftPanel(after) {
+    hideNotes();
     $('#panel').load('LeftPanel.html', function () {
         $.get({
             url: "/user/menu",
@@ -45,7 +46,6 @@ function loadLeftPanel(after) {
                     $('#Dashboards').append(parseEntries(menuData.dashboards));
                     $('#Projects').append(parseEntries(menuData.projects));
                     $('#Executions').append(parseEntries(menuData.execs));
-
                 }
                 $.parser.parse('#panel'); // Re-initialize EasyUI components
                 if (after !== undefined) {
