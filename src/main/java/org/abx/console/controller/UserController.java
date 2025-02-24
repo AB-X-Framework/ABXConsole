@@ -26,12 +26,16 @@ public class UserController {
         try {
             String user = request.getUserPrincipal().getName();
             JSONObject jsonMenu = new JSONObject();
-            jsonMenu.put("dashboards", dashboardController.getDashboards(user));
+            JSONObject jsonDashboards =  dashboardController.getDashboards(user);
+            if (jsonDashboards.has("error")){
+                return jsonDashboards.toString();
+            }
+            jsonMenu.put("dashboards",jsonDashboards.get("dashboards"));
             jsonMenu.put("execs", executionsController.getExecutions(user));
             jsonMenu.put("projects", projectsController.getProjects(user));
             return jsonMenu.toString();
         }catch (Exception e){
-            return CustomErrorController.error("Cannot get user information",e);
+            return CustomErrorController.errorString("Cannot get user information");
         }
     }
 }

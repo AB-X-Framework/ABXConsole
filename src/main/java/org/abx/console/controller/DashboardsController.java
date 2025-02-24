@@ -1,6 +1,7 @@
 package org.abx.console.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
 import org.abx.services.ServiceRequest;
 import org.abx.services.ServicesClient;
@@ -31,10 +32,15 @@ public class DashboardsController {
         return getDashboards(request.getUserPrincipal().getName()).toString();
     }
 
-    protected JSONArray getDashboards(String username) throws Exception {
+    protected JSONObject getDashboards(String username) throws Exception {
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence"));
-        return servicesClient.get("persistence",
-                "/persistence/dashboards").jwt(token).process().asJSONArray();
+        JSONObject result = new JSONObject();
+        try {
+            return result.put("dashboards", servicesClient.get("persistence",
+                    "/persistence/dashboards").jwt(token).process().asJSONArray());
+        }catch (Exception e){
+            return CustomErrorController.error("Cannot collect user dashboards.");
+        }
     }
 }

@@ -15,10 +15,13 @@ public class CustomErrorController implements ErrorController {
         return "redirect:/resources/Welcome.html";
     }
 
-    public static String error(String message, Throwable e){
+    public static JSONObject error(String message){
         JSONObject obj = new JSONObject();
         obj.put("error",true);
-        obj.put("message", message+": "+e.getMessage());
-        return obj.toString();
+        obj.put("message", message);
+        return obj;
+    }
+    public static String errorString(String message){
+        return error(message).toString();
     }
 }
