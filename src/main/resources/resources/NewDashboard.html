@@ -15,6 +15,18 @@
                 $('#NewDashboard').linkbutton({toggle: true, selected: true});
             });
         });
+
+        function createDashboard(){
+            $.post({
+                "url":"/dashboards/dashboards",
+                "data": { "name": $('#name').textbox('getValue') },
+                "success": function(response) {
+                    if (response.error){
+                        showNotes(response.message)
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body style="  min-height: 100vh;margin: 0">
@@ -25,19 +37,19 @@
     <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;" id="panel"></div>
 
     <!-- Right (Content) Panel -->
-    <div data-options="region:'center',title:'Settings'" style="padding:5px;">
+    <div data-options="region:'center',title:'Create a new dashboard'" style="padding:5px;">
         <div id="contentArea">
             <h2>Create new Dashboard</h2>
 
             <div style="margin-bottom:20px">
-                <input class="easyui-textbox" label="Dashboard name:" labelPosition="top"
+                <input class="easyui-textbox" id="name" label="Dashboard name:" labelPosition="top"
                        data-options="prompt:'Enter a your dashboard name'"
                        style="width:400px;">
             </div>
 
 
             <div>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="createDashboard()"
                    style="width:200px;height:32px">Create Dashboard</a>
             </div>
         </div>
@@ -45,7 +57,7 @@
 
     <div data-options="region:'south',split:true,collapsible:false" style="height:40px;padding:1px;" id="notes">
         <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="hideNotes()"></a>
-        <span id="note">HELLO</span>
+        <span id="note"></span>
     </div>
 
 </div>
