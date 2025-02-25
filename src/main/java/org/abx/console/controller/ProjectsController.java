@@ -73,4 +73,22 @@ public class ProjectsController {
             return CustomErrorController.errorString("Cannot get dashboard data for project "+projectId);
         }
     }
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteProject(HttpServletRequest request,
+                                  @PathVariable long projectId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        String token = JWTUtils.generateToken(username, privateKey, 60,
+                List.of("Persistence"));
+        JSONObject result = new JSONObject();
+        try {
+            boolean success= servicesClient.delete("persistence",
+                    "/persistence/projects/"+projectId).jwt(token).process().asBoolean();
+            result.put("success",success);
+            return result.toString();
+        }catch (Exception e){
+            return CustomErrorController.errorString("Cannot get projectId data for "+projectId);
+        }
+    }
 }

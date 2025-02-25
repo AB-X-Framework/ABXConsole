@@ -76,7 +76,7 @@ public class DashboardsController {
 
     @Secured("Persistence")
     @DeleteMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String createDashboard(HttpServletRequest request,
+    public String deleteDashboard(HttpServletRequest request,
                                    @PathVariable long dashboardId) throws Exception {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
@@ -88,7 +88,7 @@ public class DashboardsController {
             result.put("success",success);
             return result.toString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot get dashboard data for"+dashboardId);
+            return CustomErrorController.errorString("Cannot get dashboard data for "+dashboardId);
         }
     }
 
