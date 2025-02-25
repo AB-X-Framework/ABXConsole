@@ -1,11 +1,14 @@
 package org.abx.console.spring;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jdk.jfr.StackTrace;
 import org.json.JSONObject;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.io.IOException;
 
 @Controller
 public class CustomErrorController implements ErrorController {
@@ -15,13 +18,19 @@ public class CustomErrorController implements ErrorController {
         return "redirect:/resources/Welcome.html";
     }
 
-    public static JSONObject error(String message){
+    @GetMapping("/favicon.ico")
+    public void redirectFavicon(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/resources/favicon.ico");
+    }
+
+    public static JSONObject error(String message) {
         JSONObject obj = new JSONObject();
-        obj.put("error",true);
+        obj.put("error", true);
         obj.put("message", message);
         return obj;
     }
-    public static String errorString(String message){
+
+    public static String errorString(String message) {
         return error(message).toString();
     }
 }

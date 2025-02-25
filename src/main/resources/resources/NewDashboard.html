@@ -18,13 +18,13 @@
 
         function createDashboard(){
             $.post({
-                "url":"/dashboards/dashboards",
+                "url":"/rest/dashboards",
                 "data": { "name": $('#name').textbox('getValue') },
                 "success": function(response) {
                     if (response.error){
                         showNotes(response.message)
                     }else{
-                        navigateTo(`Dashboard.html?id=${response.id}`)
+                        navigateTo(`DashboardDetails.html?id=${response.id}`)
                     }
                 }
             });

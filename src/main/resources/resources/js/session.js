@@ -40,12 +40,12 @@ function loadLeftPanel(after) {
     hideNotes();
     $('#panel').load('LeftPanel.html', function () {
         $.get({
-            url: "/user/menu",
+            url: "/rest/menu",
             success: function (menuData) {
                 if (menuData.error) {
                     showNotes(menuData.message);
                 } else {
-                    $('#Dashboards').append(parseEntries("Dashboard.html?id=", menuData.dashboards));
+                    $('#Dashboards').append(parseEntries("DashboardDetails.html?id=", menuData.dashboards));
                     $('#Projects').append(parseEntries("Dashboard.html?id=",menuData.projects));
                     $('#Executions').append(parseEntries("Dashboard.html?id=",menuData.execs));
                 }

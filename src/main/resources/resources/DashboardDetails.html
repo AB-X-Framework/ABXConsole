@@ -14,7 +14,7 @@
             loadLeftPanel(()=>{
                 $('#Section').accordion('select', 'Dashboards');
                 $(`#Dashboard-${id}`).linkbutton({toggle: true, selected: true});
-                $.get(`/dashboards/dashboards/${id}`,(dashboardData)=>{
+                $.get(`/rest/dashboards/${id}`,(dashboardData)=>{
                     if (dashboardData.error){
                         showNotes(dashboardData.message)
                     }else {
@@ -28,7 +28,7 @@
                 if (r) {
                     $.ajax({
                         "type": "DELETE",
-                        "url":`/dashboards/dashboards/${id}`,
+                        "url":`/rest/dashboards/${id}`,
                         "success": function(response) {
                             if (response.error){
                                 showNotes(response.message)

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/dashboards")
+@RequestMapping("/rest")
 public class DashboardsController {
 
     @Value("${jwt.private}")
