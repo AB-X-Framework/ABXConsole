@@ -21,11 +21,11 @@ function showNotes(note) {
 function parseEntries(url, entries) {
     function parseEntry(entry) {
         return '<div style="margin-bottom:5px;">\n' +
-            ' <a href="#"  class="easyui-linkbutton"\n' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="Dashboard-${entry.id}" `+
             ' style="width: 100%; text-align: left;"\n' +
-            ' onclick="navigateTo(\''+
-            url+entry.id+
-            '\')">' + entry.name + '</a>\n</div>';
+            ` onclick="navigateTo('${url+entry.id}')"> ` +
+             entry.name + '</a>\n</div>';
     }
 
     let result = "";

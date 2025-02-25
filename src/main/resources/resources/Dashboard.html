@@ -9,27 +9,62 @@
     <script type="text/javascript" src="js/session.js"></script>
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
+        let id =  new URLSearchParams(window.location.search).get("id");
         $(document).ready(function() {
             loadLeftPanel(()=>{
                 $('#Section').accordion('select', 'Dashboards');
-                $('#NewDashboard').linkbutton({toggle: true, selected: true});
+                $(`#Dashboard-${id}`).linkbutton({toggle: true, selected: true});
+                $.get(`/dashboards/dashboards/${id}`,(dashboardData)=>{
+                    if (dashboardData.error){
+                        showNotes(dashboardData.message)
+                    }else {
+                        $('#DashboardName').panel('setTitle', `Dashboard ${dashboardData.name}`);
+                    }
+                });
             });
         });
+        function deleteDashboard(){
+            $.messager.confirm('Confirm', 'Are you sure you want to delete?', function(r) {
+                if (r) {
+                    $.delete({
+                        "url":`/dashboards/dashboards/${id}`,
+                        "success": function(response) {
+                            if (response.error){
+                                showNotes(response.message)
+                            }else {
+                                navigateTo("NewDashboard.html");
+                            }
+                        }
+                    });
+                }
+            });
+        }
     </script>
 </head>
 <body style="  min-height: 100vh;margin: 0">
 
 <!-- Main Layout -->
-<div class="easyui-layout" style="width:100%;height:100%;">
+<div class="easyui-layout" id="main" style="width:100%;height:100%;">
 
     <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;" id="panel"></div>
 
     <!-- Right (Content) Panel -->
-    <div data-options="region:'center',title:'Settings'" style="padding:5px;">
-        <div id="contentArea">
-            <h3>Welcome</h3>
-            <p>Select a page from the left menu.</p>
+    <div data-options="region:'center',title:'Dashboard'" id="DashboardName" style="padding:5px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Dashboard Content</h3>
+            <div>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="createDashboard()"
+                   style="width:100px">Edit</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteDashboard()"
+                   style="width:100px">Delete</a>
+            </div>
         </div>
+    </div>
+
+
+    <div data-options="region:'south',split:true,collapsible:false" style="height:40px;padding:1px;" id="notes">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="hideNotes()"></a>
+        <span id="note"></span>
     </div>
 
 </div>

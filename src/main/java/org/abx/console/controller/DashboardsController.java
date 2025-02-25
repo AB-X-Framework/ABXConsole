@@ -58,4 +58,39 @@ public class DashboardsController {
             return CustomErrorController.error("Cannot collect user dashboards.");
         }
     }
+
+    @Secured("Persistence")
+    @GetMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getDashboard(HttpServletRequest request,
+                               @PathVariable long dashboardId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        String token = JWTUtils.generateToken(username, privateKey, 60,
+                List.of("Persistence"));
+        JSONObject result = new JSONObject();
+        try {
+            return servicesClient.get("persistence",
+                    "/persistence/dashboards/"+dashboardId).jwt(token).process().asString();
+        }catch (Exception e){
+            return CustomErrorController.errorString("Cannot get dashboard data for"+dashboardId);
+        }
+    }
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String createDashboard(HttpServletRequest request,
+                                   @PathVariable long dashboardId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        String token = JWTUtils.generateToken(username, privateKey, 60,
+                List.of("Persistence"));
+        JSONObject result = new JSONObject();
+        try {
+            boolean success= servicesClient.delete("persistence",
+                    "/persistence/dashboards/"+dashboardId).jwt(token).process().asBoolean();
+            result.put("success",success);
+            return result.toString();
+        }catch (Exception e){
+            return CustomErrorController.errorString("Cannot get dashboard data for"+dashboardId);
+        }
+    }
+
 }
