@@ -66,7 +66,6 @@ public class DashboardsController {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence"));
-        JSONObject result = new JSONObject();
         try {
             return servicesClient.get("persistence",
                     "/persistence/dashboards/"+dashboardId).jwt(token).process().asString();
