@@ -88,7 +88,7 @@ public class ProjectsController {
             result.put("success",success);
             return result.toString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot get projectId data for "+projectId);
+            return CustomErrorController.errorString("Cannot get project data for "+projectId);
         }
     }
 }
