@@ -23,6 +23,8 @@
                 "success": function(response) {
                     if (response.error){
                         showNotes(response.message)
+                    }else{
+                        navigateTo(`Dashboard.html?id=${response.id}`)
                     }
                 }
             });

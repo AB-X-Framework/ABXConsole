@@ -26,7 +26,8 @@
         function deleteDashboard(){
             $.messager.confirm('Confirm', 'Are you sure you want to delete?', function(r) {
                 if (r) {
-                    $.delete({
+                    $.ajax({
+                        "type": "DELETE",
                         "url":`/dashboards/dashboards/${id}`,
                         "success": function(response) {
                             if (response.error){
