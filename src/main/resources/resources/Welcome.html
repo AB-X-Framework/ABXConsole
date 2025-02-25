@@ -13,7 +13,7 @@
             url: '/session/isLoggedIn',
             success: function(data) {
                 if (data) {
-                    window.location.href = '/resources/NewDashboard.html';
+                    window.location.href = 'Dashboard.html';
                 }
             }
         });
@@ -60,7 +60,7 @@
             },
             success: function(response) {
                 if (response.logged){
-                    document.location="/resources/NewDashboard.html";
+                    document.location="/resources/Dashboard.html";
                 }else {
                     $("#status").html(response.error);
                 }
