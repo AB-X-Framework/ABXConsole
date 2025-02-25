@@ -57,4 +57,21 @@ public class ProjectsController {
             return CustomErrorController.errorString("Cannot create "+name+" project."+e.getMessage());
         }
     }
+
+
+    @Secured("Persistence")
+    @GetMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getProject(HttpServletRequest request,
+                               @PathVariable long projectId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        String token = JWTUtils.generateToken(username, privateKey, 60,
+                List.of("Persistence"));
+        JSONObject result = new JSONObject();
+        try {
+            return servicesClient.get("persistence",
+                    "/persistence/projects/"+projectId).jwt(token).process().asString();
+        }catch (Exception e){
+            return CustomErrorController.errorString("Cannot get dashboard data for project "+projectId);
+        }
+    }
 }
