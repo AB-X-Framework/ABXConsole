@@ -32,7 +32,11 @@ public class UserController {
             }
             jsonMenu.put("dashboards",jsonDashboards.get("dashboards"));
             jsonMenu.put("execs", executionsController.getExecutions(user));
-            jsonMenu.put("projects", projectsController.getProjects(user));
+            JSONObject jsonProjects =  projectsController.getProjects(user);
+            if (jsonProjects.has("error")){
+                return jsonProjects.toString();
+            }
+            jsonMenu.put("projects",jsonProjects.get("projects"));
             return jsonMenu.toString();
         }catch (Exception e){
             return CustomErrorController.errorString("Cannot get user information");

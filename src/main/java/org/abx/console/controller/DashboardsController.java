@@ -41,7 +41,7 @@ public class DashboardsController {
         JSONObject result = new JSONObject();
         try {
             return result.put("id", servicesClient.post("persistence",
-                    "/persistence/dashboards").jwt(token).addPart("name",name).process().asLong()).toString();
+                    "/persistence/dashboards").jwt(token).addPart("dashboardName",name).process().asLong()).toString();
         }catch (Exception e){
             return CustomErrorController.errorString("Cannot create "+name+" dashboard."+e.getMessage());
         }

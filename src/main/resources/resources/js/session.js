@@ -18,14 +18,14 @@ function showNotes(note) {
     $('#note').html(note)
 }
 
-function parseEntries(url, entries) {
+function parseEntries(url, entryId, entryName, entries) {
     function parseEntry(entry) {
         return '<div style="margin-bottom:5px;">\n' +
             ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="Dashboard-${entry.id}" `+
+            ` id="Dashboard-${entry[entryId]}" `+
             ' style="width: 100%; text-align: left;"\n' +
-            ` onclick="navigateTo('${url+entry.id}')"> ` +
-             entry.name + '</a>\n</div>';
+            ` onclick="navigateTo('${url+entry[entryId]}')"> ` +
+             entry[entryName] + '</a>\n</div>';
     }
 
     let result = "";
@@ -45,9 +45,12 @@ function loadLeftPanel(after) {
                 if (menuData.error) {
                     showNotes(menuData.message);
                 } else {
-                    $('#Dashboards').append(parseEntries("DashboardDetails.html?id=", menuData.dashboards));
-                    $('#Projects').append(parseEntries("Dashboard.html?id=",menuData.projects));
-                    $('#Executions').append(parseEntries("Dashboard.html?id=",menuData.execs));
+                    $('#Dashboards').append(
+                        parseEntries("DashboardDetails.html?id=", "dashboardId","dashboardName",menuData.dashboards));
+                    $('#Projects').append(
+                        parseEntries("Dashboard.html?id=","projectId","projectName",menuData.projects));
+                    $('#Executions').append(
+                        parseEntries("Dashboard.html?id=","execId","execName",menuData.execs));
                 }
                 $.parser.parse('#panel'); // Re-initialize EasyUI components
                 if (after !== undefined) {
