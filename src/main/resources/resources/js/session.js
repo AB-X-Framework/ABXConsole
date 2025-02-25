@@ -22,7 +22,7 @@ function parseEntries(url, entryId, entryName, entries) {
     function parseEntry(entry) {
         return '<div style="margin-bottom:5px;">\n' +
             ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="Dashboard-${entry[entryId]}" `+
+            ` id="${entryId}-${entry[entryId]}" `+
             ' style="width: 100%; text-align: left;"\n' +
             ` onclick="navigateTo('${url+entry[entryId]}')"> ` +
              entry[entryName] + '</a>\n</div>';
@@ -48,7 +48,7 @@ function loadLeftPanel(after) {
                     $('#Dashboards').append(
                         parseEntries("DashboardDetails.html?id=", "dashboardId","dashboardName",menuData.dashboards));
                     $('#Projects').append(
-                        parseEntries("Dashboard.html?id=","projectId","projectName",menuData.projects));
+                        parseEntries("ProjectDetails.html?id=","projectId","projectName",menuData.projects));
                     $('#Executions').append(
                         parseEntries("Dashboard.html?id=","execId","execName",menuData.execs));
                 }

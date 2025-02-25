@@ -12,28 +12,28 @@
         let id =  new URLSearchParams(window.location.search).get("id");
         $(document).ready(function() {
             loadLeftPanel(()=>{
-                $('#Section').accordion('select', 'Dashboards');
-                $(`#dashboardId-${id}`).linkbutton({toggle: true, selected: true});
-                $.get(`/rest/dashboards/${id}`,(dashboardData)=>{
-                    if (dashboardData.error){
-                        showNotes(dashboardData.message)
+                $('#Section').accordion('select', 'Projects');
+                $(`#projectId-${id}`).linkbutton({toggle: true, selected: true});
+                $.get(`/rest/projects/${id}`,(projectData)=>{
+                    if (projectData.error){
+                        showNotes(projectData.message)
                     }else {
-                        $('#DashboardName').panel('setTitle', `Dashboard ${dashboardData.name}`);
+                        $('#ProjectName').panel('setTitle', `Project ${projectData.name}`);
                     }
                 });
             });
         });
-        function deleteDashboard(){
+        function deleteProject(){
             $.messager.confirm('Confirm', 'Are you sure you want to delete?', function(r) {
                 if (r) {
                     $.ajax({
                         "type": "DELETE",
-                        "url":`/rest/dashboards/${id}`,
+                        "url":`/rest/projects/${id}`,
                         "success": function(response) {
                             if (response.error){
                                 showNotes(response.message)
                             }else {
-                                navigateTo("Dashboard.html");
+                                navigateTo("Project.html");
                             }
                         }
                     });
@@ -50,13 +50,13 @@
     <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;" id="panel"></div>
 
     <!-- Right (Content) Panel -->
-    <div data-options="region:'center',title:'Dashboard'" id="DashboardName" style="padding:5px;">
+    <div data-options="region:'center',title:'Project'" id="ProjectName" style="padding:5px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3>Dashboard Content</h3>
+            <h3>Project Content</h3>
             <div>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="createDashboard()"
+                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="createProject()"
                    style="width:100px">Edit</a>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteDashboard()"
+                <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteProject()"
                    style="width:100px">Delete</a>
             </div>
         </div>
