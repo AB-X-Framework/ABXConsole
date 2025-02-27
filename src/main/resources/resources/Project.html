@@ -21,18 +21,36 @@
             });
         });
 
+        function getProjectData(){
+            return {"projectData":{"name": $('#name').textbox('getValue')}};
+        }
         function handleProject() {
-            $.post({
-                "url": "/rest/projects",
-                "data": {"name": $('#name').textbox('getValue')},
-                "success": function (response) {
-                    if (response.error) {
-                        showNotes(response.message)
-                    } else {
-                        navigateTo(`ProjectDetails.html?id=${response.id}`)
+            if (actionType=="edit"){
+                $.ajax({
+                    type: "PUT",
+                    "url": `/rest/projects/${urlParams.get("id")}`,
+                    "data": getProjectData(),
+                    "success": function (response) {
+                        if (response.error) {
+                            showNotes(response.message)
+                        } else {
+                            navigateTo(`ProjectDetails.html?id=${response.id}`)
+                        }
                     }
-                }
-            });
+                });
+            }else {
+                $.post({
+                    "url": "/rest/projects",
+                    "data": getProjectData(),
+                    "success": function (response) {
+                        if (response.error) {
+                            showNotes(response.message)
+                        } else {
+                            navigateTo(`ProjectDetails.html?id=${response.id}`)
+                        }
+                    }
+                });
+            }
         }
 
         function editProject(){

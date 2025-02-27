@@ -45,16 +45,16 @@ public class ProjectsController {
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured("UseABX")
     public String createProject(HttpServletRequest request,
-                                  @RequestParam String name) throws Exception {
+                                  @RequestParam String projectData) throws Exception {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence"));
         JSONObject result = new JSONObject();
         try {
             return result.put("id", servicesClient.post("persistence",
-                    "/persistence/projects").jwt(token).addPart("projectName",name).process().asLong()).toString();
+                    "/persistence/projects").jwt(token).addPart("projectData",projectData).process().asLong()).toString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot create "+name+" project."+e.getMessage());
+            return CustomErrorController.errorString("Cannot create "+new JSONObject(projectData).getString("name")+" project."+e.getMessage());
         }
     }
 
@@ -85,6 +85,26 @@ public class ProjectsController {
         try {
             boolean success= servicesClient.delete("persistence",
                     "/persistence/projects/"+projectId).jwt(token).process().asBoolean();
+            result.put("success",success);
+            return result.toString();
+        }catch (Exception e){
+            return CustomErrorController.errorString("Cannot get project data for "+projectId);
+        }
+    }
+
+    @Secured("Persistence")
+    @PutMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateProject(HttpServletRequest request,
+                                @PathVariable long projectId,
+                                @RequestParam String projectData) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        String token = JWTUtils.generateToken(username, privateKey, 60,
+                List.of("Persistence"));
+        JSONObject result = new JSONObject();
+        try {
+            boolean success= servicesClient.put("persistence",
+                    "/persistence/projects/"+projectId).addPart("projectData",projectData).
+                    jwt(token).process().asBoolean();
             result.put("success",success);
             return result.toString();
         }catch (Exception e){
