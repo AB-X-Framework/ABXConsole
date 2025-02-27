@@ -55,6 +55,7 @@
 
         function editProject(){
             $("#Title").text("Edit project");
+            $("#ProjectAction").text("Edit project");
             $.get({
                 "url": `/rest/projects/${urlParams.get("id")}`,
                 "success": function (response) {
@@ -95,7 +96,7 @@
             </div>
             <br/>
             <div>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="handleProject()"
+                <a href="#" class="easyui-linkbutton" id="ProjectAction" iconCls="icon-ok" onclick="handleProject()"
                    style="width:200px">Create Project</a>
             </div>
         </div>
