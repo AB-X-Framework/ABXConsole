@@ -23,6 +23,9 @@
                 });
             });
         });
+        function editProject(){
+            navigateTo(`Project.html?actionType=edit&id=${id}`);
+        }
         function deleteProject(){
             $.messager.confirm('Confirm', 'Are you sure you want to delete?', function(r) {
                 if (r) {
@@ -54,7 +57,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h3>Project Content</h3>
             <div>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="createProject()"
+                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="editProject()"
                    style="width:100px">Edit</a>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteProject()"
                    style="width:100px">Delete</a>

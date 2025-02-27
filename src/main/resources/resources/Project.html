@@ -9,14 +9,19 @@
     <script type="text/javascript" src="js/session.js"></script>
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let actionType = urlParams.get("actionType");
         $(document).ready(function () {
             loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
                 $('#NewProject').linkbutton({toggle: true, selected: true});
+                if (actionType=="edit"){
+                   editProject();
+                }
             });
         });
 
-        function createProject() {
+        function handleProject() {
             $.post({
                 "url": "/rest/projects",
                 "data": {"name": $('#name').textbox('getValue')},
@@ -28,6 +33,20 @@
                     }
                 }
             });
+        }
+
+        function editProject(){
+            $("#Title").text("Edit project");
+            $.get({
+                "url": `/rest/projects/${urlParams.get("id")}`,
+                "success": function (response) {
+                    if (response.error) {
+                        showNotes(response.message)
+                    } else {
+                        $('#name').textbox('setValue',response.projectName);
+                    }
+                }
+            })
         }
     </script>
 </head>
@@ -42,7 +61,7 @@
     <!-- Right (Content) Panel -->
     <div data-options="region:'center',title:'Create a new project'" style="padding:5px;">
         <div id="contentArea">
-            <h2>Create new Project</h2>
+            <h2 id="Title">Create new Project</h2>
 
             <div style="margin-bottom:20px">
                 <input class="easyui-textbox" id="name" label="Project name:" labelPosition="top"
@@ -58,7 +77,7 @@
             </div>
             <br/>
             <div>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="createProject()"
+                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="handleProject()"
                    style="width:200px">Create Project</a>
             </div>
         </div>
