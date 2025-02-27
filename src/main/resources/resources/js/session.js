@@ -73,3 +73,14 @@ function logout() {
         }
     });
 }
+
+class Repository {
+    static counter;
+
+    static addRepository() {
+        $.get("/resources/Repository.html", function(data) {
+            $("#RepositoryPlaceHolder").append(data);
+            $.parser.parse('#RepositoryPlaceHolder');
+        });
+    }
+}
