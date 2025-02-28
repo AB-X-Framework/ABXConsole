@@ -20,7 +20,7 @@ public class CustomErrorController implements ErrorController {
 
     @GetMapping("/favicon.ico")
     public void redirectFavicon(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/resources/favicon.ico");
+        response.sendRedirect("/resources/icons/favicon.ico");
     }
 
     public static JSONObject error(String message) {
