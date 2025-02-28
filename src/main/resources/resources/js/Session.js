@@ -99,28 +99,40 @@ class Repository {
             if (i in Repository.removed) {
                 continue;
             }
-            let repo = {};
-            repos.push(repo);
-            repo.creds={};
-            repo.name = $(`#Repo${i}-name`).textbox("getValue");
-            repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
-            repo.url = $(`#Repo${i}-URL`).textbox("getValue");
-            repo.branch = $(`#Repo${i}-branch`).textbox("getValue");
-            if (repo.engine === "Git"){
-                let credsType = $(`#Repo${i}-creds`).combobox("getValue");
-                if (credsType!== "public"){
-                    repo.creds.type= credsType;
-                    if (credsType==="username"){
-                        repo.creds.username =  $(`#Repo${i}-username`).textbox("getValue");
-                        repo.creds.password =  $(`#Repo${i}-password`).passwordbox("getValue");
-                    }else{
-                        repo.creds.ssh =  $(`#Repo${i}-ssh`).textbox("getValue");
-                    }
-                }
-                repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
-            }
+
+            repos.push(collectRepoData(i));
         }
         return repos;
+    }
+
+    static checkRepo(repoId){
+        $.post({
+            "url":"/repo/verify",
+            "data":collectRepoData()
+        })
+    }
+
+    static collectRepoData(repoId){
+        let repo = {};
+        repo.creds={};
+        repo.name = $(`#Repo${i}-name`).textbox("getValue");
+        repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
+        repo.url = $(`#Repo${i}-URL`).textbox("getValue");
+        repo.branch = $(`#Repo${i}-branch`).textbox("getValue");
+        if (repo.engine === "Git"){
+            let credsType = $(`#Repo${i}-creds`).combobox("getValue");
+            if (credsType!== "public"){
+                repo.creds.type= credsType;
+                if (credsType==="username"){
+                    repo.creds.username =  $(`#Repo${i}-username`).textbox("getValue");
+                    repo.creds.password =  $(`#Repo${i}-password`).passwordbox("getValue");
+                }else{
+                    repo.creds.ssh =  $(`#Repo${i}-ssh`).textbox("getValue");
+                }
+            }
+            repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
+        }
+        return repo;
     }
 
 }
