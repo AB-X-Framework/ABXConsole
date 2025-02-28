@@ -75,12 +75,20 @@ function logout() {
 }
 
 class Repository {
-    static counter;
+    static counter=0;
 
+    static removed=[];
+
+    static removeRepository(id){
+        $(`#Repo${id}-panel`).hide();
+        Repository.removed.push(id);
+    }
     static addRepository() {
         $.get("/resources/Repository.html", function(data) {
-            $("#RepositoryPlaceHolder").append(data);
+            $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID",Repository.counter));
+            Repository.counter+=1;
             $.parser.parse('#RepositoryPlaceHolder');
         });
     }
+
 }
