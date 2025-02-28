@@ -107,7 +107,7 @@ class Repository {
 
     static checkRepo(repoId){
         $.post({
-            "url":"/repo/verify",
+            "url":"/repo/validate",
             "data":collectRepoData()
         })
     }
