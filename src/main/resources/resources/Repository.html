@@ -1,4 +1,9 @@
 <div id="RepoREPOID-panel">
+    <input class="easyui-textbox" id="RepoREPOID-name"
+           labelWidth="150" label="Repository name:" labelPosition="left"
+           data-options="prompt:'Enter a your repository name'"
+           style="width:600px;">
+    <br/>
     <select class="easyui-combobox" id="TypeRepoREPOID-type" name="state"
             label="Credential Type:" labelWidth="150" labelPosition="left"
             data-options="onChange: onChangeTypeRepoREPOID"
@@ -8,11 +13,8 @@
     </select>
 
     <br/>
-    <input class="easyui-textbox" id="RepoREPOID-name"
-           labelWidth="150" label="Repository name:" labelPosition="left"
-           data-options="prompt:'Enter a your repository name'"
-           style="width:600px;">
-    <div id="LocalRepoREPOID-panel">
+
+    <div id="LocalRepoREPOID-panel" style="display:none;">
         Warning: Local repos will are not backed up.
     </div>
     <div id="GitRepoREPOID-panel">
@@ -27,9 +29,9 @@
                 label="Credential Type:" labelWidth="150" labelPosition="left"
                 data-options="onChange: onChangeRepoREPOID"
                 style="width:500px;">
-            <option value="Password">Username & Password</option>
-            <option value="SSH">SSH Key</option>
-            <option value="Public">Public</option>
+            <option value="username">Username & Password</option>
+            <option value="ssh">SSH Key</option>
+            <option value="public">Public</option>
         </select>
         <br/>
         <div id="RepoREPOID-password-div">
@@ -60,35 +62,36 @@
            style="width:200px">Check Credentials</a>
         <br/>
         <br/>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="Repository.removeRepository(REPOID)"
-           style="width:200px">Remove Repository</a>
-        <br/>
-        <br/>
 
-        <script>
-            function onChangeTypeRepoREPOID(newValue) {
-                if (newValue === "Git") {
-                    $("#GitRepoREPOID-panel").show();
-                    $("#LocalRepoREPOID-panel").hide();
-                } else {
-                    $("#GitRepoREPOID-panel").hide();
-                    $("#LocalRepoREPOID-panel").show();
-                }
-            }
-
-            function onChangeRepoREPOID(newValue) {
-                if (newValue === "Public") {
-                    $("#RepoREPOID-ssh-div").hide();
-                    $("#RepoREPOID-password-div").hide();
-                } else if (newValue === "SSH") {
-                    $("#RepoREPOID-ssh-div").show();
-                    $("#RepoREPOID-password-div").hide();
-                } else {
-
-                    $("#RepoREPOID-password-div").show();
-                    $("#RepoREPOID-ssh-div").hide();
-                }
-            }
-        </script>
     </div>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="Repository.removeRepository(REPOID)"
+       style="width:200px">Remove Repository</a>
+    <br/>
+    <br/>
+
+    <script>
+        function onChangeTypeRepoREPOID(newValue) {
+            if (newValue === "Git") {
+                $("#GitRepoREPOID-panel").show();
+                $("#LocalRepoREPOID-panel").hide();
+            } else {
+                $("#GitRepoREPOID-panel").hide();
+                $("#LocalRepoREPOID-panel").show();
+            }
+        }
+
+        function onChangeRepoREPOID(newValue) {
+            if (newValue === "Public") {
+                $("#RepoREPOID-ssh-div").hide();
+                $("#RepoREPOID-password-div").hide();
+            } else if (newValue === "SSH") {
+                $("#RepoREPOID-ssh-div").show();
+                $("#RepoREPOID-password-div").hide();
+            } else {
+
+                $("#RepoREPOID-password-div").show();
+                $("#RepoREPOID-ssh-div").hide();
+            }
+        }
+    </script>
 </div>

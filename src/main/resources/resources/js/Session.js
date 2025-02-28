@@ -22,10 +22,10 @@ function parseEntries(url, entryId, entryName, entries) {
     function parseEntry(entry) {
         return '<div style="margin-bottom:5px;">\n' +
             ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="${entryId}-${entry[entryId]}" `+
+            ` id="${entryId}-${entry[entryId]}" ` +
             ' style="width: 100%; text-align: left;"\n' +
-            ` onclick="navigateTo('${url+entry[entryId]}')"> ` +
-             entry[entryName] + '</a>\n</div>';
+            ` onclick="navigateTo('${url + entry[entryId]}')"> ` +
+            entry[entryName] + '</a>\n</div>';
     }
 
     let result = "";
@@ -46,11 +46,11 @@ function loadLeftPanel(after) {
                     showNotes(menuData.message);
                 } else {
                     $('#Dashboards').append(
-                        parseEntries("DashboardDetails.html?id=", "dashboardId","dashboardName",menuData.dashboards));
+                        parseEntries("DashboardDetails.html?id=", "dashboardId", "dashboardName", menuData.dashboards));
                     $('#Projects').append(
-                        parseEntries("ProjectDetails.html?id=","projectId","projectName",menuData.projects));
+                        parseEntries("ProjectDetails.html?id=", "projectId", "projectName", menuData.projects));
                     $('#Executions').append(
-                        parseEntries("Dashboard.html?id=","execId","execName",menuData.execs));
+                        parseEntries("Dashboard.html?id=", "execId", "execName", menuData.execs));
                 }
                 $.parser.parse('#panel'); // Re-initialize EasyUI components
                 if (after !== undefined) {
@@ -75,29 +75,52 @@ function logout() {
 }
 
 class Repository {
-    static counter=0;
+    static counter = 0;
 
-    static removed=[];
+    static removed = [];
 
-    static removeRepository(id){
+    static removeRepository(id) {
         $(`#Repo${id}-panel`).hide();
         Repository.removed.push(id);
     }
+
     static addRepository() {
-        $.get("/resources/Repository.html", function(data) {
-            $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID",Repository.counter));
-            Repository.counter+=1;
-            $.parser.parse('#RepositoryPlaceHolder');
+        $.get("/resources/Repository.html", function (data) {
+            $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID", Repository.counter));
+            $.parser.parse(`#Repo${Repository.counter}-panel`);
+            Repository.counter += 1;
         });
     }
 
-    static getRepositories(){
-        for (let i = 0; i< Repository.counter;++i){
-            if (i in Repository.removed){
+    static getRepositories() {
+        let repos =[];
+        for (let i = 0; i < Repository.counter; ++i) {
+
+            if (i in Repository.removed) {
                 continue;
             }
-            console.log($(`#TypeRepo${i}-type`).combobox("getValue"));
+            let repo = {};
+            repos.push(repo);
+            repo.creds={};
+            repo.name = $(`#Repo${i}-name`).textbox("getValue");
+            repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
+            repo.url = $(`#Repo${i}-URL`).textbox("getValue");
+            repo.branch = $(`#Repo${i}-branch`).textbox("getValue");
+            if (repo.engine === "Git"){
+                let credsType = $(`#Repo${i}-creds`).combobox("getValue");
+                if (credsType!== "public"){
+                    repo.creds.type= credsType;
+                    if (credsType==="username"){
+                        repo.creds.username =  $(`#Repo${i}-username`).textbox("getValue");
+                        repo.creds.password =  $(`#Repo${i}-password`).passwordbox("getValue");
+                    }else{
+                        repo.creds.ssh =  $(`#Repo${i}-ssh`).textbox("getValue");
+                    }
+                }
+                repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
+            }
         }
+        return repos;
     }
 
 }
