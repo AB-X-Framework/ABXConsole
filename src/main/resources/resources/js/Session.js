@@ -91,4 +91,13 @@ class Repository {
         });
     }
 
+    static getRepositories(){
+        for (let i = 0; i< Repository.counter;++i){
+            if (i in Repository.removed){
+                continue;
+            }
+            console.log($(`#TypeRepo${i}-type`).combobox("getValue"));
+        }
+    }
+
 }
