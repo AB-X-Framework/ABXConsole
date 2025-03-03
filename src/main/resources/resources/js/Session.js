@@ -106,6 +106,7 @@ class Repository {
     }
 
     static checkRepo(repoId){
+        $(`#Repo${repoId}-status`).html("Checking credentials.");
         $.post({
             "url":"/rest/repo/validate",
             "data":{"repoData":JSON.stringify(Repository.collectRepoData(repoId))},
