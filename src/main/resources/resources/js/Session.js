@@ -84,7 +84,7 @@ class Repository {
         Repository.removed.push(id);
     }
 
-    static addRepository() {
+    static addRepo() {
         $.get("/resources/Repository.html", function (data) {
             $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID", Repository.counter));
             $.parser.parse(`#Repo${Repository.counter}-panel`);
@@ -92,7 +92,7 @@ class Repository {
         });
     }
 
-    static getRepositories() {
+    static getRepos() {
         let repos =[];
         for (let i = 0; i < Repository.counter; ++i) {
             if (i in Repository.removed) {
