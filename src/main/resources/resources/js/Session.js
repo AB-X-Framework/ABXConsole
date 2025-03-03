@@ -95,7 +95,6 @@ class Repository {
     static getRepositories() {
         let repos =[];
         for (let i = 0; i < Repository.counter; ++i) {
-
             if (i in Repository.removed) {
                 continue;
             }
@@ -109,7 +108,7 @@ class Repository {
     static checkRepo(repoId){
         $.post({
             "url":"/repo/validate",
-            "data":Repository.collectRepoData(repoId);
+            "data":{"repoData":JSON.stringify(Repository.collectRepoData(repoId))
         })
     }
 

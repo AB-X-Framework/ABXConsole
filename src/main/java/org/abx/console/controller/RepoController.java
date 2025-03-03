@@ -28,9 +28,9 @@ public class RepoController {
     @PostMapping(value = "/repo/validate", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured("UseABX")
     public String validateCreds(HttpServletRequest request,
-            @RequestParam String url, @RequestParam String branch,
-            @RequestParam String engine,   @RequestParam String creds) throws Exception {
+            @RequestParam String repoData) throws Exception {
 
+        JSONObject jsonRepoData = new JSONObject(repoData);
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Repository"));
@@ -38,10 +38,11 @@ public class RepoController {
         try {
             return result.put("id", servicesClient.post("repository",
                     "/repository/validate").jwt(token).
-                    addPart("url",url).
-                    addPart("branch",branch).
-                    addPart("engine",engine).
-                    addPart("creds",creds).process().asBoolean()).toString();
+                    addPart("url",jsonRepoData.getString("url")).
+                    addPart("branch",jsonRepoData.getString("branch")).
+                    addPart("engine",jsonRepoData.getString("engine")).
+                    addPart("creds",jsonRepoData.getString("creds")).
+                    process().asBoolean()).toString();
         }catch (Exception e){
             return CustomErrorController.errorString("Cannot validate repository."+e.getMessage());
         }
