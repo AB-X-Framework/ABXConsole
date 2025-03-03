@@ -130,7 +130,7 @@ class Repository {
                     repo.creds.ssh =  $(`#Repo${repoId}-ssh`).textbox("getValue");
                 }
             }
-            repo.engine = $(`#TypeRepo$repoIdi}-type`).combobox("getValue");
+            repo.engine = $(`#TypeRepo${repoIdi}-type`).combobox("getValue");
         }
         return repo;
     }
