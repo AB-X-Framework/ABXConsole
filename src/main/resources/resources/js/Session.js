@@ -99,8 +99,9 @@ class Repository {
             if (i in Repository.removed) {
                 continue;
             }
-
-            repos.push(collectRepoData(i));
+            let repo = Repository.collectRepoData(i);
+            repo.name = $(`#Repo${repoId}-name`).textbox("getValue");
+            repos.push(repo);
         }
         return repos;
     }
@@ -108,29 +109,28 @@ class Repository {
     static checkRepo(repoId){
         $.post({
             "url":"/repo/validate",
-            "data":collectRepoData()
+            "data":Repository.collectRepoData(repoId);
         })
     }
 
     static collectRepoData(repoId){
         let repo = {};
         repo.creds={};
-        repo.name = $(`#Repo${i}-name`).textbox("getValue");
-        repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
-        repo.url = $(`#Repo${i}-URL`).textbox("getValue");
-        repo.branch = $(`#Repo${i}-branch`).textbox("getValue");
+        repo.engine = $(`#TypeRepo${repoId}-type`).combobox("getValue");
+        repo.url = $(`#Repo${repoId}-URL`).textbox("getValue");
+        repo.branch = $(`#Repo${repoId}-branch`).textbox("getValue");
         if (repo.engine === "Git"){
             let credsType = $(`#Repo${i}-creds`).combobox("getValue");
             if (credsType!== "public"){
                 repo.creds.type= credsType;
                 if (credsType==="username"){
-                    repo.creds.username =  $(`#Repo${i}-username`).textbox("getValue");
-                    repo.creds.password =  $(`#Repo${i}-password`).passwordbox("getValue");
+                    repo.creds.username =  $(`#Repo${repoId}-username`).textbox("getValue");
+                    repo.creds.password =  $(`#Repo${repoId}-password`).passwordbox("getValue");
                 }else{
-                    repo.creds.ssh =  $(`#Repo${i}-ssh`).textbox("getValue");
+                    repo.creds.ssh =  $(`#Repo${repoId}-ssh`).textbox("getValue");
                 }
             }
-            repo.engine = $(`#TypeRepo${i}-type`).combobox("getValue");
+            repo.engine = $(`#TypeRepo$repoIdi}-type`).combobox("getValue");
         }
         return repo;
     }
