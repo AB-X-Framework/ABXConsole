@@ -36,7 +36,7 @@ public class RepoController {
                 List.of("Repository"));
         JSONObject result = new JSONObject();
         try {
-            return result.put("id", servicesClient.post("repository",
+            return result.put("valid", servicesClient.post("repository",
                     "/repository/validate").jwt(token).
                     addPart("url",jsonRepoData.getString("url")).
                     addPart("branch",jsonRepoData.getString("branch")).

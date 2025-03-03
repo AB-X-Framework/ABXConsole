@@ -107,9 +107,20 @@ class Repository {
 
     static checkRepo(repoId){
         $.post({
-            "url":"/repo/validate",
-            "data":{"repoData":JSON.stringify(Repository.collectRepoData(repoId))
-        })
+            "url":"/rest/repo/validate",
+            "data":{"repoData":JSON.stringify(Repository.collectRepoData(repoId))},
+            "success": function (response) {
+                if (response.error) {
+                    showNotes(response.message)
+                } else {
+                    if (response.valid){
+                        $(`#Repo${repoId}-status`).html("Repository credentails are valid.");
+                    }else {
+                        $(`#Repo${repoId}-status`).html("Repository credentails are invalid.");
+                    }
+                }
+            }
+        });
     }
 
     static collectRepoData(repoId){
@@ -119,7 +130,7 @@ class Repository {
         repo.url = $(`#Repo${repoId}-URL`).textbox("getValue");
         repo.branch = $(`#Repo${repoId}-branch`).textbox("getValue");
         if (repo.engine === "Git"){
-            let credsType = $(`#Repo${i}-creds`).combobox("getValue");
+            let credsType = $(`#Repo${repoId}-creds`).combobox("getValue");
             if (credsType!== "public"){
                 repo.creds.type= credsType;
                 if (credsType==="username"){
@@ -129,7 +140,7 @@ class Repository {
                     repo.creds.ssh =  $(`#Repo${repoId}-ssh`).textbox("getValue");
                 }
             }
-            repo.engine = $(`#TypeRepo${repoIdi}-type`).combobox("getValue");
+            repo.engine = $(`#TypeRepo${repoId}-type`).combobox("getValue");
         }
         return repo;
     }
