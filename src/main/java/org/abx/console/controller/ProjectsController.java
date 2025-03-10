@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
 import org.abx.services.ServicesClient;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,11 +50,15 @@ public class ProjectsController {
         String username = request.getUserPrincipal().getName();
         if (true){
             JSONObject error = CustomErrorController.error("Invalid project");
-            error.put("type", "repository");
+            error.put("type", "repos");
+            JSONArray errors = new JSONArray();
+
             JSONObject jsonRepo = new JSONObject();
+            errors.put(jsonRepo);
             jsonRepo.put("id", 0);
             jsonRepo.put("error", "Not valid credentials");
-            error.put("repository", "Invalid project");
+            error.put("repos",errors);
+            return error.toString();
         }
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence","Repository"));

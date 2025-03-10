@@ -116,9 +116,9 @@ class Repository {
                     showNotes(response.message)
                 } else {
                     if (response.valid){
-                        $(`#Repo${repoId}-status`).html("Repository credentails are valid.");
+                        $(`#Repo${repoId}-status`).html("Repository credentials are valid.");
                     }else {
-                        $(`#Repo${repoId}-status`).html("Repository credentails are invalid.");
+                        $(`#Repo${repoId}-status`).html("Repository credentials are invalid.");
                     }
                 }
             }

@@ -21,6 +21,16 @@
             });
         });
 
+        function handleProjectError(response){
+            showNotes(response.message)
+            if (response.type==="repos"){
+                console.log(response.repos)
+                for (repoError of response.repos) {
+                    console.log(repoError.id);
+                    $(`#Repo${repoError.id}-status`).html(repoError.error);
+                }
+            }
+        }
         function getProjectData(){
             let projectData = JSON.stringify({
                 "name": $('#name').textbox('getValue'),
@@ -35,7 +45,7 @@
                     "data": getProjectData(),
                     "success": function (response) {
                         if (response.error) {
-                            showNotes(response.message)
+                            handleProjectError(response);
                         } else {
                             navigateTo(`ProjectDetails.html?id=${urlParams.get("id")}`)
                         }
@@ -47,7 +57,7 @@
                     "data": getProjectData(),
                     "success": function (response) {
                         if (response.error) {
-                            showNotes(response.message)
+                            handleProjectError(response);
                         } else {
                             navigateTo(`ProjectDetails.html?id=${response.id}`)
                         }
