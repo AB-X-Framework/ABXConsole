@@ -9,7 +9,7 @@
             data-options="onChange: onChangeTypeRepoREPOID"
             style="width:500px;">
         <option value="git">Git</option>
-        <option value="Local">Local</option>
+        <option value="local">Local</option>
     </select>
 
     <br/>
@@ -57,14 +57,15 @@
                labelWidth="150" label="Branch:" labelPosition="left"
                data-options="prompt:'Empty for default branch'"
                style="width:600px;">
-        <br/>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-man" onclick="Repository.checkRepo(REPOID)"
-           style="width:200px">Check Credentials</a>
-        <span id="RepoREPOID-status"></span>
-        <br/>
-        <br/>
+
 
     </div>
+    <br/>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-man" onclick="Repository.checkRepo(REPOID)"
+       style="width:200px">Check Credentials</a>
+    <span id="RepoREPOID-status"></span>
+    <br/>
+    <br/>
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="Repository.removeRepository(REPOID)"
        style="width:200px">Remove Repository</a>
     <br/>
