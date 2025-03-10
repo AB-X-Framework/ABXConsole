@@ -47,8 +47,16 @@ public class ProjectsController {
     public String createProject(HttpServletRequest request,
                                   @RequestParam String projectData) throws Exception {
         String username = request.getUserPrincipal().getName();
+        if (true){
+            JSONObject error = CustomErrorController.error("Invalid project");
+            error.put("type", "repository");
+            JSONObject jsonRepo = new JSONObject();
+            jsonRepo.put("id", 0);
+            jsonRepo.put("error", "Not valid credentials");
+            error.put("repository", "Invalid project");
+        }
         String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("Persistence"));
+                List.of("Persistence","Repository"));
         JSONObject result = new JSONObject();
         try {
             return result.put("id", servicesClient.post("persistence",
