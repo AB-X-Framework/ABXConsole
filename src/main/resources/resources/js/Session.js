@@ -127,23 +127,24 @@ class Repository {
 
     static collectRepoData(repoId){
         let repo = {};
-        repo.creds={};
+        let creds={};
         repo.engine = $(`#TypeRepo${repoId}-type`).combobox("getValue");
         repo.url = $(`#Repo${repoId}-URL`).textbox("getValue");
         repo.branch = $(`#Repo${repoId}-branch`).textbox("getValue");
         if (repo.engine === "Git"){
             let credsType = $(`#Repo${repoId}-creds`).combobox("getValue");
             if (credsType!== "public"){
-                repo.creds.type= credsType;
+                creds.type= credsType;
                 if (credsType==="username"){
-                    repo.creds.username =  $(`#Repo${repoId}-username`).textbox("getValue");
-                    repo.creds.password =  $(`#Repo${repoId}-password`).passwordbox("getValue");
+                    creds.username =  $(`#Repo${repoId}-username`).textbox("getValue");
+                    creds.password =  $(`#Repo${repoId}-password`).passwordbox("getValue");
                 }else{
-                    repo.creds.ssh =  $(`#Repo${repoId}-ssh`).textbox("getValue");
+                    creds.ssh =  $(`#Repo${repoId}-ssh`).textbox("getValue");
                 }
             }
             repo.engine = $(`#TypeRepo${repoId}-type`).combobox("getValue");
         }
+        repo.creds = JSON.stringify(creds);
         return repo;
     }
 
