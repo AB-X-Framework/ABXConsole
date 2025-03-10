@@ -22,7 +22,9 @@
         });
 
         function getProjectData(){
-            let projectData = JSON.stringify({"name": $('#name').textbox('getValue')});
+            let projectData = JSON.stringify({
+                "name": $('#name').textbox('getValue'),
+                "repos":Repository.getRepos()});
             return {"projectData":projectData};
         }
         function handleProject() {

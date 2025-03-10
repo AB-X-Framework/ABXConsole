@@ -99,7 +99,8 @@ class Repository {
                 continue;
             }
             let repo = Repository.collectRepoData(i);
-            repo.name = $(`#Repo${repoId}-name`).textbox("getValue");
+            repo.id = i;
+            repo.name = $(`#Repo${i}-name`).textbox("getValue");
             repos.push(repo);
         }
         return repos;
