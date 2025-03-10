@@ -41,7 +41,7 @@ public class RepoController {
                     addPart("url",jsonRepoData.getString("url")).
                     addPart("branch",jsonRepoData.getString("branch")).
                     addPart("engine",jsonRepoData.getString("engine")).
-                    addPart("creds",jsonRepoData.getJSONObject("creds").toString()).
+                    addPart("creds",jsonRepoData.getString("creds")).
                     process().asBoolean()).toString();
         }catch (Exception e){
             return CustomErrorController.errorString("Cannot validate repository."+e.getMessage());

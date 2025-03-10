@@ -60,7 +60,7 @@ public class ProjectsController {
                     addPart("url", jsonRepoData.getString("url")).
                     addPart("branch", jsonRepoData.getString("branch")).
                     addPart("engine", jsonRepoData.getString("engine")).
-                    addPart("creds", jsonRepoData.getJSONObject("creds").toString()).
+                    addPart("creds", jsonRepoData.getString("creds")).
                     process().asBoolean();
             if (!valid) {
                 JSONObject error = CustomErrorController.error("Invalid project");
