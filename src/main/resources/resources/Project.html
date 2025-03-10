@@ -24,9 +24,7 @@
         function handleProjectError(response){
             showNotes(response.message)
             if (response.type==="repos"){
-                console.log(response.repos)
                 for (repoError of response.repos) {
-                    console.log(repoError.id);
                     $(`#Repo${repoError.id}-status`).html(repoError.error);
                 }
             }
