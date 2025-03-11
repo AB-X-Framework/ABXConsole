@@ -69,7 +69,7 @@ public class ProjectsController {
                 JSONObject jsonRepo = new JSONObject();
                 errors.put(jsonRepo);
                 jsonRepo.put("id", jsonRepoData.getInt("id"));
-                jsonRepo.put("error", "Invalid credentials");
+                jsonRepo.put("error", "Repository credentials are invalid.");
                 error.put("repos", errors);
                 return error.toString();
             }

@@ -98,6 +98,7 @@ class Repository {
             if (i in Repository.removed) {
                 continue;
             }
+            $(`#Repo${i}-status`).html("");
             let repo = Repository.collectRepoData(i);
             repo.id = i;
             repo.name = $(`#Repo${i}-name`).textbox("getValue");
