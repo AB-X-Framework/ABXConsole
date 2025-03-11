@@ -19,6 +19,11 @@
                         showNotes(projectData.message)
                     }else {
                         $('#ProjectName').panel('setTitle', `Project ${projectData.projectName}`);
+                        let reposHtml = "";
+                        for (repo of projectData.repos){
+                            reposHtml +=repo.repoName;
+                        }
+                        $("#repos").html(reposHtml);
                     }
                 });
             });
@@ -62,6 +67,10 @@
                 <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteProject()"
                    style="width:100px">Delete</a>
             </div>
+        </div>
+        <div>
+            <h3>Repositories</h3>
+            <div id="repos"></div>
         </div>
     </div>
 
