@@ -9,38 +9,40 @@
     <script type="text/javascript" src="js/Session.js"></script>
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
-        let id =  new URLSearchParams(window.location.search).get("id");
-        $(document).ready(function() {
-            loadLeftPanel(()=>{
+        let id = new URLSearchParams(window.location.search).get("id");
+        $(document).ready(function () {
+            loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
                 $(`#projectId-${id}`).linkbutton({toggle: true, selected: true});
-                $.get(`/rest/projects/${id}`,(projectData)=>{
-                    if (projectData.error){
+                $.get(`/rest/projects/${id}`, (projectData) => {
+                    if (projectData.error) {
                         showNotes(projectData.message)
-                    }else {
-                        $('#ProjectName').panel('setTitle', `Project ${projectData.projectName}`);
+                    } else {
+                        $('#ProjectName').html( `Project ${projectData.projectName}`);
                         let reposHtml = "";
-                        for (repo of projectData.repos){
-                            reposHtml +=`<div>${repo.engine} repo ${repo.repoName}.</div><br/>`;
+                        for (repo of projectData.repos) {
+                            reposHtml += `<div>${repo.engine} repo ${repo.repoName}.</div><br/>`;
                         }
                         $("#repos").html(reposHtml);
                     }
                 });
             });
         });
-        function editProject(){
+
+        function editProject() {
             navigateTo(`Project.html?actionType=edit&id=${id}`);
         }
-        function deleteProject(){
-            $.messager.confirm('Confirm', 'Are you sure you want to delete?', function(r) {
+
+        function deleteProject() {
+            $.messager.confirm('Confirm', 'Are you sure you want to delete?', function (r) {
                 if (r) {
                     $.ajax({
                         "type": "DELETE",
-                        "url":`/rest/projects/${id}`,
-                        "success": function(response) {
-                            if (response.error){
+                        "url": `/rest/projects/${id}`,
+                        "success": function (response) {
+                            if (response.error) {
                                 showNotes(response.message)
-                            }else {
+                            } else {
                                 navigateTo("Project.html");
                             }
                         }
@@ -55,23 +57,35 @@
 <!-- Main Layout -->
 <div class="easyui-layout" id="main" style="width:100%;height:100%;">
 
-    <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;" id="panel"></div>
+    <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;"
+         id="panel"></div>
 
     <!-- Right (Content) Panel -->
-    <div data-options="region:'center',title:'Project'" id="ProjectName" style="padding:5px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3>Project Content</h3>
-            <div>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="editProject()"
-                   style="width:100px">Edit</a>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteProject()"
-                   style="width:100px">Delete</a>
+    <div data-options="region:'center'" style="padding:2px;">
+        <div id="tabs" class="easyui-tabs" style="width:100%;height:100%;">
+            <div title="Projects">
+                <div style="padding:2px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 id="ProjectName">Project Content</h2>
+                        <div>
+                            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="editProject()"
+                               style="width:100px">Edit</a>
+                            <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteProject()"
+                               style="width:100px">Delete</a>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Repositories</h3>
+                        <div id="repos"></div>
+                    </div>
+                </div>
+            </div>
+            <div title="Files" id="files">
+                <p>Files content goes here.</p>
             </div>
         </div>
-        <div>
-            <h3>Repositories</h3>
-            <div id="repos"></div>
-        </div>
+
+
     </div>
 
 
