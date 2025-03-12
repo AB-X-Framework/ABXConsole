@@ -21,7 +21,7 @@
                         $('#ProjectName').panel('setTitle', `Project ${projectData.projectName}`);
                         let reposHtml = "";
                         for (repo of projectData.repos){
-                            reposHtml +=repo.repoName;
+                            reposHtml +=`<div>repo ${repo.repoName}</div><br/>`;
                         }
                         $("#repos").html(reposHtml);
                     }
