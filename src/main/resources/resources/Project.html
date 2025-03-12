@@ -64,6 +64,15 @@
             }
         }
 
+        function processRepos(repos){
+            for (repo of repos){
+                Repository.addRepo((repoId)=> {
+                    $(`#Repo${repoId}-name`).textbox("setValue", repo.repoName);
+                    $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");
+                });
+            }
+        }
+
         function editProject(){
             $("#Title").text("Edit project");
             $("#ProjectAction").text("Edit project");
@@ -74,6 +83,7 @@
                         showNotes(response.message)
                     } else {
                         $('#name').textbox('setValue',response.projectName);
+                        processRepos(response.repos);
                     }
                 }
             })

@@ -84,12 +84,18 @@ class Repository {
         Repository.removed.push(id);
     }
 
-    static addRepo() {
+    static addRepo(after) {
         $.get("/resources/Repository.html", function (data) {
-            $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID", Repository.counter));
+            const currRepo = Repository.counter;
+            $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID", currRepo));
             $.parser.parse(`#Repo${Repository.counter}-panel`);
+            if (typeof after !== "undefined"){
+                after(currRepo);
+            }
             Repository.counter += 1;
+
         });
+
     }
 
     static getRepos() {
@@ -129,7 +135,7 @@ class Repository {
     static collectRepoData(repoId){
         let repo = {};
         let creds={};
-        repo.engine = $(`#TypeRepo${repoId}-type`).combobox("getValue");
+        repo.engine = $(`#TypeRepo${repoId}-engine`).combobox("getValue");
         repo.url = $(`#Repo${repoId}-URL`).textbox("getValue");
         repo.branch = $(`#Repo${repoId}-branch`).textbox("getValue");
         if (repo.engine === "Git"){
