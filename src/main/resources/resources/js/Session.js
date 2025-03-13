@@ -47,7 +47,7 @@ function parseEntries(type, entryId, entryName, entries) {
                 ' <a href="#"  class="easyui-linkbutton" ' +
                 ` id="details-${entryId}-${entry[entryId]}" ` +
                 ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-                ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
+                ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
                 'Details </a>\n</div>' +
                 '<div style="margin-bottom:5px;">' +
             ' <a href="#"  class="easyui-linkbutton" ' +
