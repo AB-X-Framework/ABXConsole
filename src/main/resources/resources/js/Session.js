@@ -25,7 +25,19 @@ function parseEntries(url, entryId, entryName, entries) {
             ` id="${entryId}-${entry[entryId]}" ` +
             ' style="width: 100%; text-align: left;"\n' +
             ` onclick="navigateTo('${url + entry[entryId]}')"> ` +
-            entry[entryName] + '</a>\n</div>';
+            entry[entryName] + '</a>\n</div>'+
+            '<div style="margin-bottom:5px;">' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="edit-${entryId}-${entry[entryId]}" ` +
+            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+            ` onclick="navigateTo('${url + entry[entryId]}')"> ` +
+             'Editor </a>\n</div>'+
+            '<div style="margin-bottom:5px;">' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="edit-${entryId}-${entry[entryId]}" ` +
+            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+            ` onclick="navigateTo('${url + entry[entryId]}')"> ` +
+            'Commit </a>\n</div>';
     }
 
     let result = "";
