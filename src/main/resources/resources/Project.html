@@ -8,72 +8,57 @@
     <script type="text/javascript" src="ui/jquery.min.js"></script>
     <script type="text/javascript" src="js/Session.js"></script>
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
-    <script >
+    <script>
         let urlParams = new URLSearchParams(window.location.search);
-        let actionType = urlParams.get("actionType");
         $(document).ready(function () {
             loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
                 $('#NewProject').linkbutton({toggle: true, selected: true});
-                if (actionType=="edit"){
-                   editProject();
-                }
             });
         });
 
-        function handleProjectError(response){
+        function handleProjectError(response) {
             showNotes(response.message)
-            if (response.type==="repos"){
+            if (response.type === "repos") {
                 for (repoError of response.repos) {
                     $(`#Repo${repoError.id}-status`).html(repoError.error);
                 }
             }
         }
-        function getProjectData(){
+
+        function getProjectData() {
             let projectData = JSON.stringify({
                 "name": $('#name').textbox('getValue'),
-                "repos":Repository.getRepos()});
-            return {"projectData":projectData};
-        }
-        function handleProject() {
-            if (actionType=="edit"){
-                $.ajax({
-                    type: "PUT",
-                    "url": `/rest/projects/${urlParams.get("id")}`,
-                    "data": getProjectData(),
-                    "success": function (response) {
-                        if (response.error) {
-                            handleProjectError(response);
-                        } else {
-                            navigateTo(`ProjectDetails.html?id=${urlParams.get("id")}`)
-                        }
-                    }
-                });
-            }else {
-                $.post({
-                    "url": "/rest/projects",
-                    "data": getProjectData(),
-                    "success": function (response) {
-                        if (response.error) {
-                            handleProjectError(response);
-                        } else {
-                            navigateTo(`ProjectDetails.html?id=${response.id}`)
-                        }
-                    }
-                });
-            }
+                "repos": Repository.getRepos()
+            });
+            return {"projectData": projectData};
         }
 
-        function processRepos(repos){
-            for (repo of repos){
-                Repository.addRepo((repoId)=> {
+        function handleProject() {
+            $.post({
+                "url": "/rest/projects",
+                "data": getProjectData(),
+                "success": function (response) {
+                    if (response.error) {
+                        handleProjectError(response);
+                    } else {
+                        navigateTo(`ProjectDetails.html?id=${response.id}`)
+                    }
+                }
+            });
+
+        }
+
+        function processRepos(repos) {
+            for (repo of repos) {
+                Repository.addRepo((repoId) => {
                     $(`#Repo${repoId}-name`).textbox("setValue", repo.repoName);
                     $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");
                 });
             }
         }
 
-        function editProject(){
+        function editProject() {
             $("#Title").text("Edit project");
             $("#ProjectAction").text("Edit project");
             $.get({
@@ -82,7 +67,7 @@
                     if (response.error) {
                         showNotes(response.message)
                     } else {
-                        $('#name').textbox('setValue',response.projectName);
+                        $('#name').textbox('setValue', response.projectName);
                         processRepos(response.repos);
                     }
                 }

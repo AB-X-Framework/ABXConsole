@@ -18,10 +18,10 @@
                     if (projectData.error) {
                         showNotes(projectData.message)
                     } else {
-                        $('#ProjectName').html( `Project ${projectData.projectName}`);
+                        $('#name').textbox("setValue", projectData.projectName);
                         let reposHtml = "";
                         for (repo of projectData.repos) {
-                            reposHtml += `<div>${repo.engine} repo ${repo.repoName}.</div><br/>`;
+                            reposHtml += `<div>${capitalizeFirstLetter(repo.engine)} repo ${repo.repoName}.</div><br/>`;
                         }
                         $("#repos").html(reposHtml);
                     }
@@ -63,25 +63,40 @@
     <!-- Right (Content) Panel -->
     <div data-options="region:'center'" style="padding:2px;">
         <div id="tabs" class="easyui-tabs" style="width:100%;height:100%;">
-            <div title="Details">
+            <div title="Basic">
                 <div style="padding:2px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 id="ProjectName">Project Content</h2>
-                        <div>
-                            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="editProject()"
-                               style="width:100px">Edit</a>
-                            <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteProject()"
-                               style="width:100px">Delete</a>
-                        </div>
+                    <h2 id="ProjectName">Project Details</h2>
+
+                    <div style="margin-bottom:10px">
+                        <input class="easyui-textbox" id="name" label="Project name:" labelPosition="top"
+                               data-options="prompt:'Enter a your project name'"
+                               style="width:400px;">
                     </div>
-                    <div>
-                        <h3>Repositories</h3>
-                        <div id="repos"></div>
+                    <div style="margin-bottom:20px">
+                        <a href="#" class="easyui-linkbutton" id="ProjectAction" iconCls="icon-ok"
+                           onclick="RenameProject()"
+                           style="width:200px">Rename Project</a>
                     </div>
+
+                    <h2 >Delete Project</h2>
+
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteProject()"
+                       style="width:200px;">Delete</a>
+
                 </div>
             </div>
-            <div title="Editor" id="files">
-                <p>Files content goes here.</p>
+            <div title="Repositories" id="repositories">
+                <div>
+                    <h3>Repositories</h3>
+                    <div id="repos"></div>
+                </div>
+            </div>
+
+            <div title="Enrollment" id="enrollment">
+                <div>
+                    <h3>Repositories</h3>
+                    <div id="repos"></div>
+                </div>
             </div>
         </div>
 

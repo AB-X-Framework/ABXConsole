@@ -6,7 +6,9 @@ $.get({
         }
     }
 });
-
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 function hideNotes() {
     $('#notes').hide();
     $('#main').resize()
