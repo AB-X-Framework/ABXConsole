@@ -29,8 +29,19 @@
             });
         });
 
-        function editProject() {
-            navigateTo(`Project.html?actionType=edit&id=${id}`);
+        function RenameProject() {
+            $.ajax({
+                "method":"PATCH",
+                "url": `/rest/projects/${projectId}/name`,
+                "data": {"projectName":$('#name').textbox('getValue')},
+                "success": function (response) {
+                    if (response.error) {
+                        handleProjectError(response);
+                    } else {
+                        location.reload()
+                    }
+                }
+            });
         }
 
         function deleteProject() {
@@ -38,7 +49,7 @@
                 if (r) {
                     $.ajax({
                         "type": "DELETE",
-                        "url": `/rest/projects/${id}`,
+                        "url": `/rest/projects/${projectId}`,
                         "success": function (response) {
                             if (response.error) {
                                 showNotes(response.message)

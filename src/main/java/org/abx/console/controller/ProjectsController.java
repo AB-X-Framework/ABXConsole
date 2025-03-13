@@ -119,22 +119,25 @@ public class ProjectsController {
     }
 
     @Secured("Persistence")
-    @PutMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateProject(HttpServletRequest request,
+    @PatchMapping(value = "/projects/{projectId}/name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateProjectName(HttpServletRequest request,
                                 @PathVariable long projectId,
-                                @RequestParam String projectData) throws Exception {
+                                @RequestParam String projectName) throws Exception {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence"));
         JSONObject result = new JSONObject();
         try {
-            boolean success = servicesClient.put("persistence",
-                            "/persistence/projects/" + projectId).addPart("projectData", projectData).
+            boolean success = servicesClient.patch("persistence",
+                            "/persistence/projects/" + projectId+"/name").addPart("projectName", projectName).
                     jwt(token).process().asBoolean();
+            if (!success){
+                return CustomErrorController.errorString("Cannot update project name for " + projectId);
+            }
             result.put("success", success);
             return result.toString();
         } catch (Exception e) {
-            return CustomErrorController.errorString("Cannot get project data for " + projectId);
+            return CustomErrorController.errorString("Cannot update project name for " + projectId);
         }
     }
 }
