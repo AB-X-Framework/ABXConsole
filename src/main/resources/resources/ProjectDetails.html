@@ -13,7 +13,7 @@
         $(document).ready(function () {
             loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
-                $(`#projectId-${id}`).linkbutton({toggle: true, selected: true});
+                $(`#details-projectId-${id}`).linkbutton({toggle: true, selected: true});
                 $.get(`/rest/projects/${id}`, (projectData) => {
                     if (projectData.error) {
                         showNotes(projectData.message)

@@ -35,24 +35,41 @@ function parseEntries(type, entryId, entryName, entries) {
             break;
     }
     function parseEntry(entry) {
-        return '<div style="margin-bottom:5px;">\n' +
+        let entryText= '<div style="margin-bottom:5px;">\n' +
             ' <a href="#"  class="easyui-linkbutton" ' +
             ` id="${entryId}-${entry[entryId]}" ` +
             ' style="width: 100%; text-align: left;"\n' +
-            ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
-            entry[entryName] + '</a>\n</div>'+
-            '<div style="margin-bottom:5px;">' +
+            ` onclick="navigateTo('${details + entry[entryId]}')"> `+
+
+            entry[entryName] + '</a>\n</div>' ;
+        if (typeof id !== "undefined" && entry[entryId] == id) {
+            entryText+= '<div style="margin-bottom:5px;">' +
+                ' <a href="#"  class="easyui-linkbutton" ' +
+                ` id="details-${entryId}-${entry[entryId]}" ` +
+                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+                ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
+                'Details </a>\n</div>' +
+                '<div style="margin-bottom:5px;">' +
             ' <a href="#"  class="easyui-linkbutton" ' +
             ` id="editor-${entryId}-${entry[entryId]}" ` +
             ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
             ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
-             'Editor </a>\n</div>'+
+            'Editor </a>\n</div>' +
             '<div style="margin-bottom:5px;">' +
             ' <a href="#"  class="easyui-linkbutton" ' +
             ` id="commit-${entryId}-${entry[entryId]}" ` +
             ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
             ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
-            'Commit </a>\n</div>';
+            'Commit </a>\n</div>' +
+            '<div style="margin-bottom:5px;">' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="commit-${entryId}-${entry[entryId]}" ` +
+            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+            ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
+            'Executions </a>';
+        }
+        entryText+="\n</div>";
+        return entryText;
     }
 
     let result = "";
