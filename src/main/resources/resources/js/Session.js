@@ -18,6 +18,7 @@ function showNotes(note) {
     $('#note').html(note)
 }
 
+
 function parseEntries(type, entryId, entryName, entries) {
     let details;
     let editor;
@@ -29,9 +30,10 @@ function parseEntries(type, entryId, entryName, entries) {
             commit = "DashboardCommit.html?id=";
             break;
         case "project":
-            details = "ProjectDetails.html?id=";
-            editor = "ProjectEditor.html?id=";
-            commit = "ProjectCommit.html?id=";
+            details = "ProjectDetails.html?projectId=";
+            editor = "ProjectEditor.html?projectId=";
+            commit = "ProjectCommit.html?projectId=";
+            execution = "ProjectCommit.html?projectId=";
             break;
     }
     function parseEntry(entry) {
@@ -42,7 +44,8 @@ function parseEntries(type, entryId, entryName, entries) {
             ` onclick="navigateTo('${details + entry[entryId]}')"> `+
 
             entry[entryName] + '</a>\n</div>' ;
-        if (typeof id !== "undefined" && entry[entryId] == id) {
+
+        if (type  == "project" && typeof projectId !== "undefined" && entry[entryId] == projectId) {
             entryText+= '<div style="margin-bottom:5px;">' +
                 ' <a href="#"  class="easyui-linkbutton" ' +
                 ` id="details-${entryId}-${entry[entryId]}" ` +
@@ -50,23 +53,23 @@ function parseEntries(type, entryId, entryName, entries) {
                 ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
                 'Details </a>\n</div>' +
                 '<div style="margin-bottom:5px;">' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="editor-${entryId}-${entry[entryId]}" ` +
-            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
-            'Editor </a>\n</div>' +
-            '<div style="margin-bottom:5px;">' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="commit-${entryId}-${entry[entryId]}" ` +
-            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
-            'Commit </a>\n</div>' +
-            '<div style="margin-bottom:5px;">' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="commit-${entryId}-${entry[entryId]}" ` +
-            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
-            'Executions </a>';
+                ' <a href="#"  class="easyui-linkbutton" ' +
+                ` id="editor-${entryId}-${entry[entryId]}" ` +
+                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+                ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
+                'Editor </a>\n</div>' +
+                '<div style="margin-bottom:5px;">' +
+                ' <a href="#"  class="easyui-linkbutton" ' +
+                ` id="commit-${entryId}-${entry[entryId]}" ` +
+                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+                ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
+                'Commit </a>\n</div>' +
+                '<div style="margin-bottom:5px;">' +
+                ' <a href="#"  class="easyui-linkbutton" ' +
+                ` id="commit-${entryId}-${entry[entryId]}" ` +
+                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+                ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
+                'Executions </a>';
         }
         entryText+="\n</div>";
         return entryText;
@@ -75,6 +78,54 @@ function parseEntries(type, entryId, entryName, entries) {
     let result = "";
     for (let entry of entries) {
         //debugger;
+        result += parseEntry(entry);
+    }
+    return result;
+}
+
+function parseProjectEntries( entries) {
+    function parseEntry(entry) {
+        let entryId = entry["projectId"];
+        let entryText= '<div style="margin-bottom:5px;">\n' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="${entryId}-${entry[entryId]}" ` +
+            ' style="width: 100%; text-align: left;"\n' +
+            ` onclick="navigateTo('ProjectDetails.html?projectId=${entryId}')"> `+
+
+            entry["projectName"] + '</a>\n</div>' ;
+
+        if (typeof projectId !== "undefined" && entryId == projectId) {
+            entryText+= '<div style="margin-bottom:5px;">' +
+                ' <a href="#"  class="easyui-linkbutton" ' +
+                ` id="details-projectId-${entryId}" ` +
+                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+                ` onclick="navigateTo('ProjectDetails.html?projectId=${ entryId}')"> ` +
+                'Details </a>\n</div>' +
+                '<div style="margin-bottom:5px;">' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="editor-projectId-${entryId}" ` +
+            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+            ` onclick="navigateTo('ProjectEditor.html?projectId=${entryId}')"> ` +
+            'Editor </a>\n</div>' +
+            '<div style="margin-bottom:5px;">' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="commit-projectId-${entryId}" ` +
+            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+            ` onclick="navigateTo('ProjectCommit.html?projectId=${entryId}')"> ` +
+            'Commit </a>\n</div>' +
+            '<div style="margin-bottom:5px;">' +
+            ' <a href="#"  class="easyui-linkbutton" ' +
+            ` id="executions-projectId-${entryId}" ` +
+            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
+            ` onclick="navigateTo('ProjectExecutions.html?projectId=${entryId}')"> ` +
+            'Executions </a>';
+        }
+        entryText+="\n</div>";
+        return entryText;
+    }
+
+    let result = "";
+    for (let entry of entries) {
         result += parseEntry(entry);
     }
     return result;
@@ -91,8 +142,7 @@ function loadLeftPanel(after) {
                 } else {
                     $('#Dashboards').append(
                         parseEntries("dashboard", "dashboardId", "dashboardName", menuData.dashboards));
-                    $('#Projects').append(
-                        parseEntries("project", "projectId", "projectName", menuData.projects));
+                    $('#Projects').append( parseProjectEntries( menuData.projects));
                     $('#Executions').append(
                         parseEntries("Dashboard.html?id=", "execId", "execName", menuData.execs));
                 }

@@ -9,12 +9,12 @@
     <script type="text/javascript" src="js/Session.js"></script>
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
-        let id = new URLSearchParams(window.location.search).get("id");
+        let projectId = new URLSearchParams(window.location.search).get("projectId");
         $(document).ready(function () {
             loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
-                $(`#editor-projectId-${id}`).linkbutton({toggle: true, selected: true});
-                $.get(`/rest/projects/${id}`, (projectData) => {
+                $(`#editor-projectId-${projectId}`).linkbutton({toggle: true, selected: true});
+                $.get(`/rest/projects/${projectId}`, (projectData) => {
                     if (projectData.error) {
                         showNotes(projectData.message)
                     } else {
