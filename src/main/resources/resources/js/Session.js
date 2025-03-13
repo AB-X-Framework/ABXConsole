@@ -18,25 +18,40 @@ function showNotes(note) {
     $('#note').html(note)
 }
 
-function parseEntries(url, entryId, entryName, entries) {
+function parseEntries(type, entryId, entryName, entries) {
+    let details;
+    let editor;
+    let commit;
+    switch (type){
+        case "dashboard":
+            details = "DashboardDetails.html?id=";
+            editor = "DashboardEditor.html?id=";
+            commit = "DashboardCommit.html?id=";
+            break;
+        case "project":
+            details = "ProjectDetails.html?id=";
+            editor = "ProjectEditor.html?id=";
+            commit = "ProjectCommit.html?id=";
+            break;
+    }
     function parseEntry(entry) {
         return '<div style="margin-bottom:5px;">\n' +
             ' <a href="#"  class="easyui-linkbutton" ' +
             ` id="${entryId}-${entry[entryId]}" ` +
             ' style="width: 100%; text-align: left;"\n' +
-            ` onclick="navigateTo('${url + entry[entryId]}')"> ` +
+            ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
             entry[entryName] + '</a>\n</div>'+
             '<div style="margin-bottom:5px;">' +
             ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="edit-${entryId}-${entry[entryId]}" ` +
+            ` id="editor-${entryId}-${entry[entryId]}" ` +
             ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('${url + entry[entryId]}')"> ` +
+            ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
              'Editor </a>\n</div>'+
             '<div style="margin-bottom:5px;">' +
             ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="edit-${entryId}-${entry[entryId]}" ` +
+            ` id="commit-${entryId}-${entry[entryId]}" ` +
             ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('${url + entry[entryId]}')"> ` +
+            ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
             'Commit </a>\n</div>';
     }
 
@@ -58,9 +73,9 @@ function loadLeftPanel(after) {
                     showNotes(menuData.message);
                 } else {
                     $('#Dashboards').append(
-                        parseEntries("DashboardDetails.html?id=", "dashboardId", "dashboardName", menuData.dashboards));
+                        parseEntries("dashboard", "dashboardId", "dashboardName", menuData.dashboards));
                     $('#Projects').append(
-                        parseEntries("ProjectDetails.html?id=", "projectId", "projectName", menuData.projects));
+                        parseEntries("project", "projectId", "projectName", menuData.projects));
                     $('#Executions').append(
                         parseEntries("Dashboard.html?id=", "execId", "execName", menuData.execs));
                 }

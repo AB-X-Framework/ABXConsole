@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AB-X Framework</title>
+    <link rel="stylesheet" type="text/css" href="ui/themes/metro-green/easyui.css">
+    <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
+    <script type="text/javascript" src="ui/jquery.min.js"></script>
+    <script type="text/javascript" src="js/Session.js"></script>
+    <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+    <script>
+        let id = new URLSearchParams(window.location.search).get("id");
+        $(document).ready(function () {
+            loadLeftPanel(() => {
+                $('#Section').accordion('select', 'Projects');
+                $(`#editor-projectId-${id}`).linkbutton({toggle: true, selected: true});
+                $.get(`/rest/projects/${id}`, (projectData) => {
+                    if (projectData.error) {
+                        showNotes(projectData.message)
+                    } else {
+                        $('#ProjectName').html( `Project ${projectData.projectName}`);
+                        let reposHtml = "";
+                        for (repo of projectData.repos) {
+                            reposHtml += `<div>${repo.engine} repo ${repo.repoName}.</div><br/>`;
+                        }
+                        $("#repos").html(reposHtml);
+                    }
+                });
+            });
+        });
+
+        function editProject() {
+            navigateTo(`Project.html?actionType=edit&id=${id}`);
+        }
+
+        function deleteProject() {
+            $.messager.confirm('Confirm', 'Are you sure you want to delete?', function (r) {
+                if (r) {
+                    $.ajax({
+                        "type": "DELETE",
+                        "url": `/rest/projects/${id}`,
+                        "success": function (response) {
+                            if (response.error) {
+                                showNotes(response.message)
+                            } else {
+                                navigateTo("Project.html");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</head>
+<body style="  min-height: 100vh;margin: 0">
+
+<!-- Main Layout -->
+<div class="easyui-layout" id="main" style="width:100%;height:100%;">
+
+    <div data-options="region:'west',split:true,collapsible:true,title:'Menu'" style="width:150px;padding:1px;"
+         id="panel"></div>
+
+    <!-- Right (Content) Panel -->
+    <div data-options="region:'center'" style="padding:2px;">
+        <div class="easyui-layout" id="editor" style="width:100%;height:100%;">
+            <div data-options="region:'west',split:true,collapsible:true,title:'Files'" style="width:200px;padding:1px;"
+                 id="files"></div>
+            <div data-options="region:'center'" style="padding:1px;"
+                 id="files"></div>
+        </div>
+
+
+
+    </div>
+
+
+    <div data-options="region:'south',split:true,collapsible:false" style="height:40px;padding:1px;" id="notes">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="hideNotes()"></a>
+        <span id="note"></span>
+    </div>
+
+</div>
+</body>
+</html>
