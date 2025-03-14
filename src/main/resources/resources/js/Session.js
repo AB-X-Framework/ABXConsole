@@ -47,15 +47,15 @@ class MenuPanel {
         '<div style="margin-bottom:5px;"> ' +
         '<a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;"';
 
-    static parseDashboardEntries(entryId, entryName, entries) {
+    static parseDashboardEntries( entryName, entries) {
         let details = "DashboardDetails.html?id=";
         let editor = "DashboardEditor.html?id=";
         let commit = "DashboardCommit.html?id=";
 
         function parseEntry(entry) {
+            let entryId = entry.dashboardId;
             let entryText = MenuPanel.defaultButtonHtml +
-                ` id="${entryId}-${entry[entryId]}" ` +
-                ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
+                ` onclick="navigateTo('${details + entryId}')"> ` +
                 entry[entryName] + '</a>\n</div>';
 
             entryText += "\n</div>";
@@ -72,9 +72,8 @@ class MenuPanel {
 
     static parseProjectEntries(entries) {
         function parseEntry(entry) {
-            let entryId = entry["projectId"];
+            let entryId = entry.projectId;
             let entryText = MenuPanel.parentButtonHtml +
-                ` id="${entryId}-${entry[entryId]}" ` +
                 ` onclick="navigateTo('ProjectDetails.html?projectId=${entryId}')"> ` +
                 entry["projectName"] + '</a>\n</div>';
             if (typeof projectId !== "undefined" && entryId == projectId) {
@@ -116,7 +115,7 @@ class MenuPanel {
                         showNotes(menuData.message);
                     } else {
                         $('#Dashboards').append(
-                            MenuPanel.parseDashboardEntries("dashboardId", "dashboardName", menuData.dashboards));
+                            MenuPanel.parseDashboardEntries( "dashboardName", menuData.dashboards));
                         $('#Projects').append(MenuPanel.parseProjectEntries(menuData.projects));
                     }
                     $.parser.parse('#panel'); // Re-initialize EasyUI components
