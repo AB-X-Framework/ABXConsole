@@ -3,6 +3,7 @@ package org.abx.console.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
+import org.abx.services.ServiceRequest;
 import org.abx.services.ServiceResponse;
 import org.abx.services.ServicesClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +36,21 @@ public class GatewayController {
 
     private final int init = "/gateway/".length();
 
+    private byte[] getRequestBody(HttpServletRequest request) throws IOException {
+        try (InputStream inputStream = request.getInputStream();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            return outputStream.toByteArray();
+        }
+    }
+
     @RequestMapping(value = "/**")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<byte[]> gateway(final HttpServletRequest request) throws Exception{
+    public ResponseEntity<byte[]> gateway(final HttpServletRequest request) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         if (request.getUserPrincipal() == null) {
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json"); // Change as needed
@@ -54,7 +70,7 @@ public class GatewayController {
 
         int serviceDelim = url.indexOf("/");
         String serviceName = url.substring(0, serviceDelim);
-        String serviceReq = url.substring(serviceDelim );
+        String serviceReq = url.substring(serviceDelim);
         String queryString = request.getQueryString();
         if (queryString != null) {
             serviceReq += "?" + queryString;
@@ -62,18 +78,25 @@ public class GatewayController {
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 authorities);
 
+
         try {
-            ServiceResponse sr = servicesClient.withJWT(token).
-                    create(request.getMethod(), serviceName, serviceReq).process();
-            List<String> contentType = sr.headers().get(HttpHeaders.CONTENT_TYPE);
+            ServiceRequest req = servicesClient.withJWT(token).
+                    create(request.getMethod(), serviceName, serviceReq);
+            switch (request.getMethod()) {
+                case "POST":
+                case "PUT":
+                case "PATCH":
+                    req.setBody(getRequestBody(request));
+            }
+            ServiceResponse res = req.process();
+            List<String> contentType = res.headers().get(HttpHeaders.CONTENT_TYPE);
             if (contentType != null) {
                 for (String value : contentType) {
                     headers.add(HttpHeaders.CONTENT_TYPE, value);
                 }
             }
-            String data = sr.asString();
             // Set custom content type (e.g., PDF, JSON, or any other MIME type)
-            return new ResponseEntity<>(sr.asByteArray(), headers, HttpStatus.resolve(sr.statusCode()));
+            return new ResponseEntity<>(res.asByteArray(), headers, HttpStatus.resolve(res.statusCode()));
         } catch (Exception e) {
             return new ResponseEntity<>(
                     CustomErrorController.errorString(e.getMessage()).getBytes(),
