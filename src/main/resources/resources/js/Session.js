@@ -39,6 +39,7 @@ function parseEntries(type, entryId, entryName, entries) {
             break;
     }
     function parseEntry(entry) {
+        let defaultButtonHtml =  '<div style="margin-bottom:5px;"> <a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;"';
         let entryText= '<div style="margin-bottom:5px;">\n' +
             ' <a href="#"  class="easyui-linkbutton" ' +
             ` id="${entryId}-${entry[entryId]}" ` +
@@ -48,28 +49,21 @@ function parseEntries(type, entryId, entryName, entries) {
             entry[entryName] + '</a>\n</div>' ;
 
         if (type  == "project" && typeof projectId !== "undefined" && entry[entryId] == projectId) {
-            entryText+= '<div style="margin-bottom:5px;">' +
-                ' <a href="#"  class="easyui-linkbutton" ' +
+            entryText+= defaultButtonHtml+
                 ` id="details-${entryId}-${entry[entryId]}" ` +
-                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
                 ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
                 'Details </a>\n</div>' +
-                '<div style="margin-bottom:5px;">' +
-                ' <a href="#"  class="easyui-linkbutton" ' +
+                defaultButtonHtml +
                 ` id="editor-${entryId}-${entry[entryId]}" ` +
-                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
                 ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
                 'Editor </a>\n</div>' +
-                '<div style="margin-bottom:5px;">' +
-                ' <a href="#"  class="easyui-linkbutton" ' +
+                defaultButtonHtml +
                 ` id="commit-${entryId}-${entry[entryId]}" ` +
                 ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
                 ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
                 'Commit </a>\n</div>' +
-                '<div style="margin-bottom:5px;">' +
-                ' <a href="#"  class="easyui-linkbutton" ' +
+                defaultButtonHtml+
                 ` id="commit-${entryId}-${entry[entryId]}" ` +
-                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
                 ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
                 'Executions </a>';
         }
