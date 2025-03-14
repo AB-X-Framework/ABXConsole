@@ -121,17 +121,17 @@ public class ProjectsController {
     @Secured("Persistence")
     @PatchMapping(value = "/projects/{projectId}/name", produces = MediaType.APPLICATION_JSON_VALUE)
     public String updateProjectName(HttpServletRequest request,
-                                    @PathVariable long projectId,
-                                    @RequestParam String projectName) throws Exception {
+                                @PathVariable long projectId,
+                                @RequestParam String projectName) throws Exception {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence"));
         JSONObject result = new JSONObject();
         try {
             boolean success = servicesClient.patch("persistence",
-                            "/persistence/projects/" + projectId + "/name").addPart("projectName", projectName).
+                            "/persistence/projects/" + projectId+"/name").addPart("projectName", projectName).
                     jwt(token).process().asBoolean();
-            if (!success) {
+            if (!success){
                 return CustomErrorController.errorString("Cannot update project name for " + projectId);
             }
             result.put("success", success);
@@ -144,7 +144,7 @@ public class ProjectsController {
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repos/{repoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteRepository(HttpServletRequest request,
-                                   @PathVariable long projectId,
+                                @PathVariable long projectId,
                                    @PathVariable long repoId) throws Exception {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
@@ -152,7 +152,7 @@ public class ProjectsController {
         JSONObject result = new JSONObject();
         try {
             boolean success = servicesClient.delete("persistence",
-                    "/persistence/projects/" + projectId + "/repos/" + repoId).jwt(token).process().asBoolean();
+                    "/persistence/projects/" + projectId+"/repos/"+repoId).jwt(token).process().asBoolean();
             result.put("success", success);
             return result.toString();
         } catch (Exception e) {

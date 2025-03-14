@@ -71,6 +71,7 @@ public class GatewayController {
                     headers.add(HttpHeaders.CONTENT_TYPE, value);
                 }
             }
+            String data = sr.asString();
             // Set custom content type (e.g., PDF, JSON, or any other MIME type)
             return new ResponseEntity<>(sr.asByteArray(), headers, HttpStatus.resolve(sr.statusCode()));
         } catch (Exception e) {

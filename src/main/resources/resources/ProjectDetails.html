@@ -23,7 +23,7 @@
             MenuPanel.loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
                 $(`#details-projectId-${projectId}`).linkbutton({toggle: true, selected: true});
-                $.get(`/rest/projects/${projectId}`, (projectData) => {
+                $.get(`/gateway/persistence/persistence/projects/${projectId}`, (projectData) => {
                     if (projectData.error) {
                         showNotes(projectData.message)
                     } else {
