@@ -11,6 +11,14 @@
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
         let projectId = new URLSearchParams(window.location.search).get("projectId");
+        function processRepos(repos) {
+            for (repo of repos) {
+                Repository.addRepo((repoId) => {
+                    $(`#Repo${repoId}-name`).textbox("setValue", repo.repoName);
+                    $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");
+                });
+            }
+        }
         $(document).ready(function () {
             MenuPanel.loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
@@ -20,11 +28,8 @@
                         showNotes(projectData.message)
                     } else {
                         $('#name').textbox("setValue", projectData.projectName);
-                        let reposHtml = "";
-                        for (repo of projectData.repos) {
-                            reposHtml += `<div>${capitalizeFirstLetter(repo.engine)} repo ${repo.repoName}.</div><br/>`;
-                        }
-                        $("#repos").html(reposHtml);
+                        processRepos(projectData.repos);
+
                     }
                 });
             });
@@ -99,9 +104,12 @@
             </div>
             <div title="Repositories" id="repositories">
                 <div style="padding:2px;">
+                    <h2>Project Repositories</h2>
                     <div>
-                        <h2>Repositories</h2>
-                        <div id="repos"></div>
+                        <div id="RepositoryPlaceHolder">
+                        </div>
+                        <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Repository.addRepo(undefined,false)"
+                           style="width:200px;height:32px">Add New Repository</a>
                     </div>
                 </div>
             </div>

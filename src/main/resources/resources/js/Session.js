@@ -42,7 +42,7 @@ function logout() {
 class MenuPanel {
     static parentButtonHtml =
         '<div style="margin-bottom:5px;"> ' +
-        '<a href="#"  class="easyui-linkbutton" style="width: 100%; text-align: left;';
+        '<a href="#"  class="easyui-linkbutton" style="width: 100%; text-align: left;"';
     static defaultButtonHtml =
         '<div style="margin-bottom:5px;"> ' +
         '<a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;"';

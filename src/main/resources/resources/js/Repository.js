@@ -3,21 +3,37 @@ class Repository {
 
     static removed = [];
 
-    static removeRepository(id) {
-        $(`#Repo${id}-panel`).hide();
-        Repository.removed.push(id);
+    static removeRepository(id,createProject) {
+        if (createProject) {
+            $(`#Repo${id}-panel`).hide();
+            Repository.removed.push(id);
+        }else {
+            $.messager.confirm('Confirm', 'Are you sure you want to delete?', function (r) {
+                if (r) {
+                    $(`#Repo${id}-panel`).hide();
+                    Repository.removed.push(id);
+                }
+            });
+        }
     }
 
-    static addRepo(after) {
+    static addRepo(after, createProject) {
         $.get("/resources/Repository.html", function (data) {
             const currRepo = Repository.counter;
-            $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID", currRepo));
+            $("#RepositoryPlaceHolder").append(data
+                .replaceAll("REPOIDCreateProject", createProject)
+                .replaceAll("REPOID", currRepo));
             $.parser.parse(`#Repo${Repository.counter}-panel`);
             if (typeof after !== "undefined") {
                 after(currRepo);
             }
-            Repository.counter += 1;
+            if (createProject) {
+                $(`#Repo${currRepo}-update`).hide();
 
+            } else {
+                $(`#Repo${currRepo}-check`).hide();
+            }
+            Repository.counter += 1;
         });
 
     }

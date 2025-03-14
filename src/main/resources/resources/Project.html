@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
     <script type="text/javascript" src="ui/jquery.min.js"></script>
     <script type="text/javascript" src="js/Session.js"></script>
-    <script type="text/javascript" src="js/Repository.js.js"></script>
+    <script type="text/javascript" src="js/Repository.js"></script>
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
         let urlParams = new URLSearchParams(window.location.search);
@@ -50,30 +50,6 @@
 
         }
 
-        function processRepos(repos) {
-            for (repo of repos) {
-                Repository.addRepo((repoId) => {
-                    $(`#Repo${repoId}-name`).textbox("setValue", repo.repoName);
-                    $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");
-                });
-            }
-        }
-
-        function editProject() {
-            $("#Title").text("Edit project");
-            $("#ProjectAction").text("Edit project");
-            $.get({
-                "url": `/rest/projects/${urlParams.get("id")}`,
-                "success": function (response) {
-                    if (response.error) {
-                        showNotes(response.message)
-                    } else {
-                        $('#name').textbox('setValue', response.projectName);
-                        processRepos(response.repos);
-                    }
-                }
-            })
-        }
     </script>
 </head>
 <body style="  min-height: 100vh;margin: 0">
@@ -98,8 +74,8 @@
             <div>
                 <div id="RepositoryPlaceHolder">
                 </div>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Repository.addRepo()"
-                   style="width:150px;height:32px">Add Repository</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Repository.addRepo(undefined,true)"
+                   style="width:200px;height:32px">Add New Repository</a>
             </div>
             <br/>
             <div>

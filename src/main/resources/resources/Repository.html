@@ -1,4 +1,5 @@
 <div id="RepoREPOID-panel">
+    <input id="RepoREPOID-original" value="OriginalNameREPOID" style="display: none">
     <input class="easyui-textbox" id="RepoREPOID-name"
            labelWidth="150" label="Repository name:" labelPosition="left"
            data-options="prompt:'Enter a your repository name'"
@@ -61,12 +62,15 @@
 
     </div>
     <br/>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-man" onclick="Repository.checkRepo(REPOID)"
-       style="width:200px">Check Credentials</a>
+
+    <a id="RepoREPOID-update" href="#" class="easyui-linkbutton" onclick="Repository.updateRepo(REPOID)"
+       style="width:200px">Update Repository</a>
+    <a id="RepoREPOID-check"  href="#" class="easyui-linkbutton" iconCls="icon-man"
+       onclick="Repository.checkRepo(REPOID)"  style="width:200px">Check Credentials</a>
     <span id="RepoREPOID-status"></span>
     <br/>
     <br/>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="Repository.removeRepository(REPOID)"
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="Repository.removeRepository(REPOID,REPOIDCreateProject)"
        style="width:200px">Remove Repository</a>
     <br/>
     <br/>
