@@ -39,13 +39,12 @@ function parseEntries(type, entryId, entryName, entries) {
             break;
     }
     function parseEntry(entry) {
-        let defaultButtonHtml =  '<div style="margin-bottom:5px;"> <a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;"';
-        let entryText= '<div style="margin-bottom:5px;">\n' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
+        let defaultButtonHtml =
+            '<div style="margin-bottom:5px;"> ' +
+            '<a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;"';
+        let entryText= defaultButtonHtml +
             ` id="${entryId}-${entry[entryId]}" ` +
-            ' style="width: 100%; text-align: left;"\n' +
             ` onclick="navigateTo('${details + entry[entryId]}')"> `+
-
             entry[entryName] + '</a>\n</div>' ;
 
         if (type  == "project" && typeof projectId !== "undefined" && entry[entryId] == projectId) {
