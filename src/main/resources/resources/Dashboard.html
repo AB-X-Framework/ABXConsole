@@ -12,7 +12,7 @@
     <script>
 
         $(document).ready(function() {
-            loadLeftPanel(()=>{
+            MenuPanel.loadLeftPanel(()=>{
                 $('#Section').accordion('select', 'Dashboards');
                 $('#NewDashboard').linkbutton({toggle: true, selected: true});
             });

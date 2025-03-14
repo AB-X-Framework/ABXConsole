@@ -11,7 +11,7 @@
     <script>
         let projectId = new URLSearchParams(window.location.search).get("projectId");
         $(document).ready(function () {
-            loadLeftPanel(() => {
+            MenuPanel.loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
                 $(`#commit-projectId-${projectId}`).linkbutton({toggle: true, selected: true});
                 $.get(`/rest/projects/${projectId}`, (projectData) => {
