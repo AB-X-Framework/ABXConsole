@@ -84,22 +84,6 @@ public class ProjectsController {
         }
     }
 
-
-    @Secured("Persistence")
-    @GetMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getProject(HttpServletRequest request,
-                             @PathVariable long projectId) throws Exception {
-        String username = request.getUserPrincipal().getName();
-        String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("Persistence"));
-        try {
-            return servicesClient.get("persistence",
-                    "/persistence/projects/" + projectId).jwt(token).process().asString();
-        } catch (Exception e) {
-            return CustomErrorController.errorString("Cannot get dashboard data for project " + projectId);
-        }
-    }
-
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteProject(HttpServletRequest request,

@@ -38,7 +38,7 @@
         function RenameProject() {
             $.ajax({
                 "method":"PATCH",
-                "url": `/rest/projects/${projectId}/name`,
+                "url": `/gateway/postit`,
                 "data": {"projectName":$('#name').textbox('getValue')},
                 "success": function (response) {
                     if (response.error) {

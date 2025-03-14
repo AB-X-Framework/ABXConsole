@@ -14,7 +14,7 @@ import java.io.IOException;
 public class CustomErrorController implements ErrorController {
 
     @GetMapping("/error")
-    public String handleError(HttpServletRequest request) {
+    public String handleError() {
         return "redirect:/resources/Welcome.html";
     }
 

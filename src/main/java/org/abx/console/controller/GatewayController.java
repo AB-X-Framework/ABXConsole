@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,10 +48,29 @@ public class GatewayController {
             return outputStream.toByteArray();
         }
     }
+    private byte[] cacheRequestBody(HttpServletRequest request) throws IOException {
+        InputStream inputStream = request.getInputStream();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+        return outputStream.toByteArray();
+    }
+
+    @PreAuthorize("permitAll()")
+    @RequestMapping("/postit")
+    public String postit(HttpServletRequest request) throws Exception{
+        String data= new String(cacheRequestBody(request));
+        return data;
+    }
+
 
     @RequestMapping(value = "/**")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<byte[]> gateway(final HttpServletRequest request) throws Exception {
+    public ResponseEntity<byte[]> gateway(HttpServletRequest request) throws Exception {
+        byte[] data = getRequestBody(request);
         HttpHeaders headers = new HttpHeaders();
         if (request.getUserPrincipal() == null) {
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json"); // Change as needed
@@ -86,7 +106,11 @@ public class GatewayController {
                 case "POST":
                 case "PUT":
                 case "PATCH":
-                    req.setBody(getRequestBody(request));
+                    String out=new String(data);
+                    req.setBody(data);
+            }
+            if (request.getHeader(HttpHeaders.CONTENT_TYPE)!=null){
+                req.addHeader(HttpHeaders.CONTENT_TYPE,request.getHeader(HttpHeaders.CONTENT_TYPE));
             }
             ServiceResponse res = req.process();
             List<String> contentType = res.headers().get(HttpHeaders.CONTENT_TYPE);
