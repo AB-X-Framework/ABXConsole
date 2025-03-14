@@ -23,24 +23,10 @@ function showNotes(note) {
 }
 
 
-function parseEntries(type, entryId, entryName, entries) {
-    let details;
-    let editor;
-    let commit;
-    switch (type) {
-        case "dashboard":
-            details = "DashboardDetails.html?id=";
-            editor = "DashboardEditor.html?id=";
-            commit = "DashboardCommit.html?id=";
-            break;
-        case "project":
-            details = "ProjectDetails.html?projectId=";
-            editor = "ProjectEditor.html?projectId=";
-            commit = "ProjectCommit.html?projectId=";
-            execution = "ProjectCommit.html?projectId=";
-            break;
-    }
-
+function parseDashboardEntries( entryId, entryName, entries) {
+    let details= "DashboardDetails.html?id=";;
+    let editor= "DashboardEditor.html?id=";
+    let commit= "DashboardCommit.html?id=";
     function parseEntry(entry) {
         let defaultButtonHtml =
             '<div style="margin-bottom:5px;"> ' +
@@ -50,25 +36,6 @@ function parseEntries(type, entryId, entryName, entries) {
             ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
             entry[entryName] + '</a>\n</div>';
 
-        if (type == "project" && typeof projectId !== "undefined" && entry[entryId] == projectId) {
-            entryText += defaultButtonHtml +
-                ` id="details-${entryId}-${entry[entryId]}" ` +
-                ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
-                'Details </a>\n</div>' +
-                defaultButtonHtml +
-                ` id="editor-${entryId}-${entry[entryId]}" ` +
-                ` onclick="navigateTo('${editor + entry[entryId]}')"> ` +
-                'Editor </a>\n</div>' +
-                defaultButtonHtml +
-                ` id="commit-${entryId}-${entry[entryId]}" ` +
-                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-                ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
-                'Commit </a>\n</div>' +
-                defaultButtonHtml +
-                ` id="commit-${entryId}-${entry[entryId]}" ` +
-                ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
-                'Executions </a>';
-        }
         entryText += "\n</div>";
         return entryText;
     }
@@ -130,10 +97,8 @@ function loadLeftPanel(after) {
                     showNotes(menuData.message);
                 } else {
                     $('#Dashboards').append(
-                        parseEntries("dashboard", "dashboardId", "dashboardName", menuData.dashboards));
+                        parseDashboardEntries("dashboardId", "dashboardName", menuData.dashboards));
                     $('#Projects').append(parseProjectEntries(menuData.projects));
-                    $('#Executions').append(
-                        parseEntries("Dashboard.html?id=", "execId", "execName", menuData.execs));
                 }
                 $.parser.parse('#panel'); // Re-initialize EasyUI components
                 if (after !== undefined) {
