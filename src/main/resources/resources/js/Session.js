@@ -6,9 +6,11 @@ $.get({
         }
     }
 });
+
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
 function hideNotes() {
     $('#notes').hide();
     $('#main').resize()
@@ -25,7 +27,7 @@ function parseEntries(type, entryId, entryName, entries) {
     let details;
     let editor;
     let commit;
-    switch (type){
+    switch (type) {
         case "dashboard":
             details = "DashboardDetails.html?id=";
             editor = "DashboardEditor.html?id=";
@@ -38,17 +40,18 @@ function parseEntries(type, entryId, entryName, entries) {
             execution = "ProjectCommit.html?projectId=";
             break;
     }
+
     function parseEntry(entry) {
         let defaultButtonHtml =
             '<div style="margin-bottom:5px;"> ' +
             '<a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;"';
-        let entryText= defaultButtonHtml +
+        let entryText = defaultButtonHtml +
             ` id="${entryId}-${entry[entryId]}" ` +
-            ` onclick="navigateTo('${details + entry[entryId]}')"> `+
-            entry[entryName] + '</a>\n</div>' ;
+            ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
+            entry[entryName] + '</a>\n</div>';
 
-        if (type  == "project" && typeof projectId !== "undefined" && entry[entryId] == projectId) {
-            entryText+= defaultButtonHtml+
+        if (type == "project" && typeof projectId !== "undefined" && entry[entryId] == projectId) {
+            entryText += defaultButtonHtml +
                 ` id="details-${entryId}-${entry[entryId]}" ` +
                 ` onclick="navigateTo('${details + entry[entryId]}')"> ` +
                 'Details </a>\n</div>' +
@@ -61,12 +64,12 @@ function parseEntries(type, entryId, entryName, entries) {
                 ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
                 ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
                 'Commit </a>\n</div>' +
-                defaultButtonHtml+
+                defaultButtonHtml +
                 ` id="commit-${entryId}-${entry[entryId]}" ` +
                 ` onclick="navigateTo('${commit + entry[entryId]}')"> ` +
                 'Executions </a>';
         }
-        entryText+="\n</div>";
+        entryText += "\n</div>";
         return entryText;
     }
 
@@ -78,44 +81,35 @@ function parseEntries(type, entryId, entryName, entries) {
     return result;
 }
 
-function parseProjectEntries( entries) {
+function parseProjectEntries(entries) {
     function parseEntry(entry) {
+        let defaultButtonHtml =
+            '<div style="margin-bottom:5px;"> ' +
+            '<a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;" ';
         let entryId = entry["projectId"];
-        let entryText= '<div style="margin-bottom:5px;">\n' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
+        let entryText = defaultButtonHtml +
             ` id="${entryId}-${entry[entryId]}" ` +
-            ' style="width: 100%; text-align: left;"\n' +
-            ` onclick="navigateTo('ProjectDetails.html?projectId=${entryId}')"> `+
-
-            entry["projectName"] + '</a>\n</div>' ;
-
+            ` onclick="navigateTo('ProjectDetails.html?projectId=${entryId}')"> ` +
+            entry["projectName"] + '</a>\n</div>';
         if (typeof projectId !== "undefined" && entryId == projectId) {
-            entryText+= '<div style="margin-bottom:5px;">' +
-                ' <a href="#"  class="easyui-linkbutton" ' +
+            entryText += defaultButtonHtml +
                 ` id="details-projectId-${entryId}" ` +
-                ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-                ` onclick="navigateTo('ProjectDetails.html?projectId=${ entryId}')"> ` +
+                ` onclick="navigateTo('ProjectDetails.html?projectId=${entryId}')"> ` +
                 'Details </a>\n</div>' +
-                '<div style="margin-bottom:5px;">' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="editor-projectId-${entryId}" ` +
-            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('ProjectEditor.html?projectId=${entryId}')"> ` +
-            'Editor </a>\n</div>' +
-            '<div style="margin-bottom:5px;">' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="commit-projectId-${entryId}" ` +
-            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('ProjectCommit.html?projectId=${entryId}')"> ` +
-            'Commit </a>\n</div>' +
-            '<div style="margin-bottom:5px;">' +
-            ' <a href="#"  class="easyui-linkbutton" ' +
-            ` id="executions-projectId-${entryId}" ` +
-            ' style="margin-left: 5%; width: 95%; text-align: left;"\n' +
-            ` onclick="navigateTo('ProjectExecutions.html?projectId=${entryId}')"> ` +
-            'Executions </a>';
+                defaultButtonHtml +
+                ` id="editor-projectId-${entryId}" ` +
+                ` onclick="navigateTo('ProjectEditor.html?projectId=${entryId}')"> ` +
+                'Editor </a>\n</div>' +
+                defaultButtonHtml +
+                ` id="commit-projectId-${entryId}" ` +
+                ` onclick="navigateTo('ProjectCommit.html?projectId=${entryId}')"> ` +
+                'Commit </a>\n</div>' +
+                defaultButtonHtml +
+                ` id="executions-projectId-${entryId}" ` +
+                ` onclick="navigateTo('ProjectExecutions.html?projectId=${entryId}')"> ` +
+                'Executions </a>';
         }
-        entryText+="\n</div>";
+        entryText += "\n</div>";
         return entryText;
     }
 
@@ -137,7 +131,7 @@ function loadLeftPanel(after) {
                 } else {
                     $('#Dashboards').append(
                         parseEntries("dashboard", "dashboardId", "dashboardName", menuData.dashboards));
-                    $('#Projects').append( parseProjectEntries( menuData.projects));
+                    $('#Projects').append(parseProjectEntries(menuData.projects));
                     $('#Executions').append(
                         parseEntries("Dashboard.html?id=", "execId", "execName", menuData.execs));
                 }
@@ -178,7 +172,7 @@ class Repository {
             const currRepo = Repository.counter;
             $("#RepositoryPlaceHolder").append(data.replaceAll("REPOID", currRepo));
             $.parser.parse(`#Repo${Repository.counter}-panel`);
-            if (typeof after !== "undefined"){
+            if (typeof after !== "undefined") {
                 after(currRepo);
             }
             Repository.counter += 1;
@@ -188,7 +182,7 @@ class Repository {
     }
 
     static getRepos() {
-        let repos =[];
+        let repos = [];
         for (let i = 0; i < Repository.counter; ++i) {
             if (i in Repository.removed) {
                 continue;
@@ -202,18 +196,18 @@ class Repository {
         return repos;
     }
 
-    static checkRepo(repoId){
+    static checkRepo(repoId) {
         $(`#Repo${repoId}-status`).html("Checking credentials.");
         $.post({
-            "url":"/rest/repo/validate",
-            "data":{"repoData":JSON.stringify(Repository.collectRepoData(repoId))},
+            "url": "/rest/repo/validate",
+            "data": {"repoData": JSON.stringify(Repository.collectRepoData(repoId))},
             "success": function (response) {
                 if (response.error) {
                     showNotes(response.message)
                 } else {
-                    if (response.valid){
+                    if (response.valid) {
                         $(`#Repo${repoId}-status`).html("Repository credentials are valid.");
-                    }else {
+                    } else {
                         $(`#Repo${repoId}-status`).html("Repository credentials are invalid.");
                     }
                 }
@@ -221,21 +215,21 @@ class Repository {
         });
     }
 
-    static collectRepoData(repoId){
+    static collectRepoData(repoId) {
         let repo = {};
-        let creds={};
+        let creds = {};
         repo.engine = $(`#TypeRepo${repoId}-engine`).combobox("getValue");
         repo.url = $(`#Repo${repoId}-URL`).textbox("getValue");
         repo.branch = $(`#Repo${repoId}-branch`).textbox("getValue");
-        if (repo.engine === "Git"){
+        if (repo.engine === "Git") {
             let credsType = $(`#Repo${repoId}-creds`).combobox("getValue");
-            if (credsType!== "public"){
-                creds.type= credsType;
-                if (credsType==="username"){
-                    creds.username =  $(`#Repo${repoId}-username`).textbox("getValue");
-                    creds.password =  $(`#Repo${repoId}-password`).passwordbox("getValue");
-                }else{
-                    creds.ssh =  $(`#Repo${repoId}-ssh`).textbox("getValue");
+            if (credsType !== "public") {
+                creds.type = credsType;
+                if (credsType === "username") {
+                    creds.username = $(`#Repo${repoId}-username`).textbox("getValue");
+                    creds.password = $(`#Repo${repoId}-password`).passwordbox("getValue");
+                } else {
+                    creds.ssh = $(`#Repo${repoId}-ssh`).textbox("getValue");
                 }
             }
             repo.engine = $(`#TypeRepo${repoId}-type`).combobox("getValue");
