@@ -48,20 +48,15 @@ class MenuPanel {
         '<a href="#"  class="easyui-linkbutton"  style="margin-left: 5%; width: 95%; text-align: left;"';
 
     static parseDashboardEntries(entries) {
-        let details = "DashboardDetails.html?id=";
-        let editor = "DashboardEditor.html?id=";
-        let commit = "DashboardCommit.html?id=";
-
         function parseEntry(entry) {
             let entryId = entry.dashboardId;
             let entryText = MenuPanel.defaultButtonHtml +
-                ` onclick="navigateTo('${details + entryId}')"> ` +
+                ` onclick="navigateTo('DashboardDetails.html?id=${ entryId}')"> ` +
                 entry.dashboardName + '</a>\n</div>';
 
             entryText += "\n</div>";
             return entryText;
         }
-
         let result = "";
         for (let entry of entries) {
             result += parseEntry(entry);
