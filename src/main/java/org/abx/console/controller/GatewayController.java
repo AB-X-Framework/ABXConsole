@@ -59,13 +59,6 @@ public class GatewayController {
         return outputStream.toByteArray();
     }
 
-    @PreAuthorize("permitAll()")
-    @RequestMapping("/postit")
-    public String postit(HttpServletRequest request) throws Exception{
-        String data= new String(cacheRequestBody(request));
-        return data;
-    }
-
 
     @RequestMapping(value = "/**")
     @PreAuthorize("permitAll()")
