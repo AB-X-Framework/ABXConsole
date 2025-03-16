@@ -6,6 +6,7 @@ import org.abx.services.ServiceRequest;
 import org.abx.services.ServiceResponse;
 import org.abx.services.ServicesClient;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,11 @@ class ABXConsoleTest {
 		req.addPart("username","admin@abx.com");
 		req.addPart("password","test");
 		ServiceResponse res = servicesClient.process(req);
-		System.out.println(res.toString());
+		System.out.println(res.asString());
+		req = servicesClient.patch("console", "/gateway/ping").
+				setBody("datalike".getBytes());
+		res = servicesClient.process(req);
+		Assertions.assertEquals("datalike",res.asString());
 	}
 
 	@AfterAll

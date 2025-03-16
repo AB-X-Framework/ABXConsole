@@ -37,6 +37,13 @@ public class GatewayController {
 
     private final int init = "/gateway/".length();
 
+    @PreAuthorize("permitAll()")
+    @RequestMapping("/ping")
+    public String ping(HttpServletRequest request) throws Exception{
+        String data= new String(cacheRequestBody(request));
+        return data;
+    }
+
     private byte[] getRequestBody(HttpServletRequest request) throws IOException {
         try (InputStream inputStream = request.getInputStream();
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
