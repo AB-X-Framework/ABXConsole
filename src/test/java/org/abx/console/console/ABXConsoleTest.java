@@ -2,6 +2,8 @@ package org.abx.console.console;
 
 import org.abx.console.spring.ABXConsoleEntry;
 import org.abx.jwt.JWTUtils;
+import org.abx.services.ServiceRequest;
+import org.abx.services.ServiceResponse;
 import org.abx.services.ServicesClient;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,9 +16,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootTest(classes = ABXConsoleEntry.class)
 class ABXConsoleTest {
-
-	@Autowired
-	JWTUtils jwtUtils;
 
 	private static ConfigurableApplicationContext context;
 	@Autowired
@@ -31,7 +30,12 @@ class ABXConsoleTest {
 	}
 
 	@Test
-	public void doBasicTest() {
+	public void doBasicTest() throws Exception {
+		ServiceRequest req = servicesClient.post("console", "/session/login");
+		req.addPart("username","admin@abx.com");
+		req.addPart("password","test");
+		ServiceResponse res = servicesClient.process(req);
+		System.out.println(res.toString());
 	}
 
 	@AfterAll
