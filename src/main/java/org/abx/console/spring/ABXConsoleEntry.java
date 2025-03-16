@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "org.abx.console.spring",
         "org.abx.console.creds",
         "org.abx.services",
+        "org.abx.jwt",
         "org.abx.console.controller"})
 public class ABXConsoleEntry {
 
