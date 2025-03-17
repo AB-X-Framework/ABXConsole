@@ -28,6 +28,23 @@ class Repository {
         }
     }
 
+    static updateRepo(id){
+        let repo = Repository.collectRepoData(id);
+        let repoName =  $(`#Repo${id}-original`).val();
+        repo.name = $(`#Repo${i}-name`).textbox("getValue");
+        $.post({
+            "headers": {   "Method": "PATCH"  },
+            "url":  `/gateway/persistence/persistence/projects/${projectId}/repo/${repoName}`,
+            "success": function (response) {
+                if (response.error) {
+                    showNotes(response.message)
+                } else {
+                    $(`#Repo${repoId}-status`).html("Repository credentials updated.");
+                }
+            }
+        });
+    }
+
     /**
      * Add repo
      * @param id
