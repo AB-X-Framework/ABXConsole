@@ -55,7 +55,7 @@
                 if (r) {
                     $.ajax({
                         "type": "DELETE",
-                        "url": `/rest/projects/${projectId}`,
+                        "url": `/gateway/persistence/persistence/projects/${projectId}`,
                         "success": function (response) {
                             if (response.error) {
                                 showNotes(response.message)
