@@ -102,7 +102,7 @@ class MenuPanel {
         hideNotes();
         $('#panel').load('LeftPanel.html', function () {
             $.get({
-                url: "/rest/menu",
+                url: "/gateway/persistence/persistence/menu",
                 success: function (menuData) {
                     if (menuData.error) {
                         showNotes(menuData.message);

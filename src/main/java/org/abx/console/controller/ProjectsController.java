@@ -25,20 +25,6 @@ public class ProjectsController {
     @Autowired
     ServicesClient servicesClient;
 
-
-    protected JSONObject getProjects(String username) throws Exception {
-        String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("Persistence"));
-        JSONObject result = new JSONObject();
-        try {
-            return result.put("projects", servicesClient.get("persistence",
-                    "/persistence/projects").jwt(token).process().asJSONArray());
-        } catch (Exception e) {
-            return ErrorMessage.error("Cannot collect user projects.");
-        }
-    }
-
-
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured("UseABX")
     public String createProject(HttpServletRequest request,
