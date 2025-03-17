@@ -103,13 +103,13 @@ class Repository {
     static checkRepo(repoId) {
         $(`#Repo${repoId}-status`).html("Checking credentials.");
         $.post({
-            "url": "/rest/repo/validate",
-            "data": {"repoData": JSON.stringify(Repository.collectRepoData(repoId))},
+            "url": "/gateway/repository/repository/validate",
+            "data":Repository.collectRepoData(repoId),
             "success": function (response) {
                 if (response.error) {
                     showNotes(response.message)
                 } else {
-                    if (response.valid) {
+                    if (response) {
                         $(`#Repo${repoId}-status`).html("Repository credentials are valid.");
                     } else {
                         $(`#Repo${repoId}-status`).html("Repository credentials are invalid.");
