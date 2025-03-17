@@ -3,9 +3,8 @@ package org.abx.console.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
-import org.abx.services.ServiceRequest;
 import org.abx.services.ServicesClient;
-import org.json.JSONArray;
+import org.abx.spring.ErrorMessage;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +42,7 @@ public class DashboardsController {
             return result.put("id", servicesClient.post("persistence",
                     "/persistence/dashboards").jwt(token).addPart("dashboardName",name).process().asLong()).toString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot create "+name+" dashboard."+e.getMessage());
+            return ErrorMessage.errorString("Cannot create "+name+" dashboard."+e.getMessage());
         }
     }
 
@@ -55,7 +54,7 @@ public class DashboardsController {
             return result.put("dashboards", servicesClient.get("persistence",
                     "/persistence/dashboards").jwt(token).process().asJSONArray());
         }catch (Exception e){
-            return CustomErrorController.error("Cannot collect user dashboards.");
+            return ErrorMessage.error("Cannot collect user dashboards.");
         }
     }
 
@@ -70,7 +69,7 @@ public class DashboardsController {
             return servicesClient.get("persistence",
                     "/persistence/dashboards/"+dashboardId).jwt(token).process().asString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot get dashboard data for"+dashboardId);
+            return ErrorMessage.errorString("Cannot get dashboard data for"+dashboardId);
         }
     }
 
@@ -88,7 +87,7 @@ public class DashboardsController {
             result.put("success",success);
             return result.toString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot get dashboard data for "+dashboardId);
+            return ErrorMessage.errorString("Cannot get dashboard data for "+dashboardId);
         }
     }
 

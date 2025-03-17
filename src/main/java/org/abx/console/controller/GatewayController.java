@@ -6,6 +6,7 @@ import org.abx.jwt.JWTUtils;
 import org.abx.services.ServiceRequest;
 import org.abx.services.ServiceResponse;
 import org.abx.services.ServicesClient;
+import org.abx.spring.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -76,7 +77,7 @@ public class GatewayController {
         if (request.getUserPrincipal() == null) {
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json"); // Change as needed
             return new ResponseEntity<>(
-                    CustomErrorController.errorString("Please log in").getBytes(),
+                    ErrorMessage.errorString("Please log in").getBytes(),
                     headers,
                     HttpStatus.UNAUTHORIZED);
         }
@@ -125,7 +126,7 @@ public class GatewayController {
             return new ResponseEntity<>(res.asByteArray(), headers, HttpStatus.resolve(res.statusCode()));
         } catch (Exception e) {
             return new ResponseEntity<>(
-                    CustomErrorController.errorString(e.getMessage()).getBytes(),
+                    ErrorMessage.errorString(e.getMessage()).getBytes(),
                     headers,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }

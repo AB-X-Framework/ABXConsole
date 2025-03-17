@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
 import org.abx.services.ServicesClient;
+import org.abx.spring.ErrorMessage;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +45,7 @@ public class RepoController {
                     addPart("creds",jsonRepoData.getString("creds")).
                     process().asBoolean()).toString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot validate repository."+e.getMessage());
+            return ErrorMessage.errorString("Cannot validate repository."+e.getMessage());
         }
     }
 

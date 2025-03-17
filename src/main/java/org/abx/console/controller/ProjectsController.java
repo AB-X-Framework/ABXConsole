@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
 import org.abx.services.ServicesClient;
+import org.abx.spring.ErrorMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class ProjectsController {
             return result.put("projects", servicesClient.get("persistence",
                     "/persistence/projects").jwt(token).process().asJSONArray());
         } catch (Exception e) {
-            return CustomErrorController.error("Cannot collect user projects.");
+            return ErrorMessage.error("Cannot collect user projects.");
         }
     }
 
@@ -58,7 +59,7 @@ public class ProjectsController {
                     addPart("creds", jsonRepoData.getString("creds")).
                     process().asBoolean();
             if (!valid) {
-                JSONObject error = CustomErrorController.error("Invalid project");
+                JSONObject error = ErrorMessage.error("Invalid project");
                 error.put("type", "repos");
                 JSONArray errors = new JSONArray();
                 JSONObject jsonRepo = new JSONObject();
@@ -75,7 +76,7 @@ public class ProjectsController {
             return result.put("id", servicesClient.post("persistence",
                     "/persistence/projects").jwt(token).addPart("projectData", projectData).process().asLong()).toString();
         } catch (Exception e) {
-            return CustomErrorController.errorString("Cannot create " + new JSONObject(projectData).getString("name") + " project." + e.getMessage());
+            return ErrorMessage.errorString("Cannot create " + new JSONObject(projectData).getString("name") + " project." + e.getMessage());
         }
     }
 
@@ -83,7 +84,7 @@ public class ProjectsController {
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repos/{repoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteRepository(HttpServletRequest request,
-                                @PathVariable long projectId,
+                                   @PathVariable long projectId,
                                    @PathVariable long repoId) throws Exception {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
@@ -91,11 +92,11 @@ public class ProjectsController {
         JSONObject result = new JSONObject();
         try {
             boolean success = servicesClient.delete("persistence",
-                    "/persistence/projects/" + projectId+"/repos/"+repoId).jwt(token).process().asBoolean();
+                    "/persistence/projects/" + projectId + "/repos/" + repoId).jwt(token).process().asBoolean();
             result.put("success", success);
             return result.toString();
         } catch (Exception e) {
-            return CustomErrorController.errorString("Cannot get project data for " + projectId);
+            return ErrorMessage.errorString("Cannot get project data for " + projectId);
         }
     }
 }

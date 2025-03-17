@@ -1,7 +1,7 @@
 package org.abx.console.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.console.spring.CustomErrorController;
+import org.abx.spring.ErrorMessage;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,7 +38,7 @@ public class UserController {
             jsonMenu.put("projects",jsonProjects.get("projects"));
             return jsonMenu.toString();
         }catch (Exception e){
-            return CustomErrorController.errorString("Cannot get user information");
+            return ErrorMessage.errorString("Cannot get user information");
         }
     }
 }

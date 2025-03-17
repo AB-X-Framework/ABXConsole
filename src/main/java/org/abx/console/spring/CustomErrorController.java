@@ -23,14 +23,4 @@ public class CustomErrorController implements ErrorController {
         response.sendRedirect("/resources/icons/favicon.ico");
     }
 
-    public static JSONObject error(String message) {
-        JSONObject obj = new JSONObject();
-        obj.put("error", true);
-        obj.put("message", message);
-        return obj;
-    }
-
-    public static String errorString(String message) {
-        return error(message).toString();
-    }
 }
