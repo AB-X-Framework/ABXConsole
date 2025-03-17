@@ -36,9 +36,9 @@
         });
 
         function RenameProject() {
-            $.ajax({
-                "method":"PATCH",
-                "url": `/gateway/postit`,
+            $.post({
+                "headers": {   "Method": "PATCH"  },
+                "url": `/gateway/persistence/persistence/projects/${projectId}/name`,
                 "data": {"projectName":$('#name').textbox('getValue')},
                 "success": function (response) {
                     if (response.error) {

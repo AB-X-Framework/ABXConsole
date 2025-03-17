@@ -39,8 +39,8 @@ public class GatewayController {
 
     @PreAuthorize("permitAll()")
     @RequestMapping("/ping")
-    public String ping(HttpServletRequest request) throws Exception{
-        String data= new String(cacheRequestBody(request));
+    public String ping(HttpServletRequest request) throws Exception {
+        String data = new String(cacheRequestBody(request));
         return data;
     }
 
@@ -55,6 +55,7 @@ public class GatewayController {
             return outputStream.toByteArray();
         }
     }
+
     private byte[] cacheRequestBody(HttpServletRequest request) throws IOException {
         InputStream inputStream = request.getInputStream();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -97,20 +98,21 @@ public class GatewayController {
         }
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 authorities);
-
-
+        String method = request.getHeader("Method");
+        if (method == null || method.isEmpty()) {
+            method = request.getMethod();
+        }
         try {
             ServiceRequest req = servicesClient.withJWT(token).
-                    create(request.getMethod(), serviceName, serviceReq);
-            switch (request.getMethod()) {
+                    create(method, serviceName, serviceReq);
+            switch (method) {
                 case "POST":
                 case "PUT":
                 case "PATCH":
-                    String out=new String(data);
                     req.setBody(data);
             }
-            if (request.getHeader(HttpHeaders.CONTENT_TYPE)!=null){
-                req.addHeader(HttpHeaders.CONTENT_TYPE,request.getHeader(HttpHeaders.CONTENT_TYPE));
+            if (request.getHeader(HttpHeaders.CONTENT_TYPE) != null) {
+                req.addHeader(HttpHeaders.CONTENT_TYPE, request.getHeader(HttpHeaders.CONTENT_TYPE));
             }
             ServiceResponse res = req.process();
             List<String> contentType = res.headers().get(HttpHeaders.CONTENT_TYPE);
