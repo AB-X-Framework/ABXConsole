@@ -17,7 +17,7 @@
                     $(`#Repo${repoId}-name`).textbox("setValue", repo.repoName);
                     $(`#Repo${repoId}-original`).val(repo.repoName);
                     $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");
-                });
+                },'update');
             }
         }
         $(document).ready(function () {
@@ -109,7 +109,7 @@
                     <div>
                         <div id="RepositoryPlaceHolder">
                         </div>
-                        <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Repository.addRepo(undefined,false)"
+                        <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Repository.addRepo(undefined,'add')"
                            style="width:200px;height:32px">Add New Repository</a>
                     </div>
                 </div>

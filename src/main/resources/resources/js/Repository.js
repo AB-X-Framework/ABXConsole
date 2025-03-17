@@ -3,8 +3,8 @@ class Repository {
 
     static removed = [];
 
-    static removeRepository(id,createProject) {
-        if (createProject) {
+    static removeRepo(id, repoActionType) {
+        if (repoActionType === 'new') {
             $(`#Repo${id}-panel`).hide();
             Repository.removed.push(id);
         }else {
@@ -28,21 +28,40 @@ class Repository {
         }
     }
 
-    static addRepo(after, createProject) {
+    /**
+     * Add repo
+     * @param id
+     */
+    static addNewRepo(id){
+
+    }
+
+    static addRepo(after, repoActionType) {
         $.get("/resources/Repository.html", function (data) {
             const currRepo = Repository.counter;
             $("#RepositoryPlaceHolder").append(data
-                .replaceAll("REPOIDCreateProject", createProject)
+                .replaceAll("REPOIDCreateProject", repoActionType)
                 .replaceAll("REPOID", currRepo));
             $.parser.parse(`#Repo${Repository.counter}-panel`);
             if (typeof after !== "undefined") {
                 after(currRepo);
             }
-            if (createProject) {
-                $(`#Repo${currRepo}-update`).hide();
-
-            } else {
-                $(`#Repo${currRepo}-check`).hide();
+            switch (repoActionType){
+                case 'new':{
+                    $(`#Repo${currRepo}-update`).hide();
+                    $(`#Repo${currRepo}-add`).hide();
+                    break;
+                }
+                case 'add':{
+                    $(`#Repo${currRepo}-check`).hide();
+                    $(`#Repo${currRepo}-update`).hide();
+                    break;
+                }
+                case 'update':{
+                    $(`#Repo${currRepo}-check`).hide();
+                    $(`#Repo${currRepo}-add`).hide();
+                    break;
+                }
             }
             Repository.counter += 1;
         });
