@@ -15,6 +15,7 @@
             for (repo of repos) {
                 Repository.addRepo((repoId) => {
                     $(`#Repo${repoId}-name`).textbox("setValue", repo.repoName);
+                    $(`#Repo${repoId}-original`).val(repo.repoName);
                     $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");
                 });
             }

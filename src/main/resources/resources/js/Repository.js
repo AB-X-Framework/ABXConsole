@@ -10,8 +10,19 @@ class Repository {
         }else {
             $.messager.confirm('Confirm', 'Are you sure you want to delete?', function (r) {
                 if (r) {
-                    $(`#Repo${id}-panel`).hide();
-                    Repository.removed.push(id);
+                    let repoName =  $(`#Repo${id}-original`).val();
+                    $.ajax({
+                        "type": "DELETE",
+                        "url":  `/gateway/persistence/persistence/projects/${projectId}/repo/${repoName}`,
+                        "success": function (response) {
+                            if (response.error) {
+                                showNotes(response.message)
+                            } else {
+                                $(`#Repo${id}-panel`).hide();
+                                Repository.removed.push(id);
+                            }
+                        }
+                    });
                 }
             });
         }
