@@ -24,11 +24,6 @@ public class ProjectsController {
     @Autowired
     ServicesClient servicesClient;
 
-    @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured("UseABX")
-    public String projects(final HttpServletRequest request) throws Exception {
-        return getProjects(request.getUserPrincipal().getName()).toString();
-    }
 
     protected JSONObject getProjects(String username) throws Exception {
         String token = JWTUtils.generateToken(username, privateKey, 60,

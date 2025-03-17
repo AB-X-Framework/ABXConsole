@@ -13,19 +13,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/execs")
 public class ExecutionsController {
 
-    @GetMapping(value = "/execs", produces =  MediaType.APPLICATION_JSON_VALUE)
-    @Secured("UseABX")
-    public String executions(final HttpServletRequest request) {
-        return getExecutions(request.getUserPrincipal().getName()).toString();
-    }
 
-    protected JSONArray getExecutions(String user) {
-        JSONArray jsonExecutions = new JSONArray();
-        JSONObject jsonExecution = new JSONObject();
-        jsonExecutions.put(jsonExecution);
-        jsonExecution.put("id", 1);
-        jsonExecution.put("name", "Working session");
-        return jsonExecutions;
-
-    }
 }

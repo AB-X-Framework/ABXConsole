@@ -31,7 +31,6 @@ public class UserController {
                 return jsonDashboards.toString();
             }
             jsonMenu.put("dashboards",jsonDashboards.get("dashboards"));
-            jsonMenu.put("execs", executionsController.getExecutions(user));
             JSONObject jsonProjects =  projectsController.getProjects(user);
             if (jsonProjects.has("error")){
                 return jsonProjects.toString();
