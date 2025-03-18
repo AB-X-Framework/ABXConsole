@@ -57,6 +57,20 @@ public class ProjectsController {
             }
         }
 
+
+        for (int i = 0; i < repositories.length(); ++i) {
+            JSONObject jsonRepoData = repositories.getJSONObject(i);
+            String name = jsonRepoData.getString("name");
+            servicesClient.post("repository",
+                            "/repository/update").jwt(token).
+                    addPart("url", jsonRepoData.getString("url")).
+                    addPart("name", jsonRepoData.getString("name")).
+                    addPart("branch", jsonRepoData.getString("branch")).
+                    addPart("engine", jsonRepoData.getString("engine")).
+                    addPart("creds", jsonRepoData.getString("creds")).
+                    process().asBoolean();
+        }
+
         JSONObject result = new JSONObject();
         try {
             return result.put("id", servicesClient.post("persistence",
