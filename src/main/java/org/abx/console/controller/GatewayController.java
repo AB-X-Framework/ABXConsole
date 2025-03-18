@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,8 +74,8 @@ public class GatewayController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<byte[]> gateway(HttpServletRequest request) throws Exception {
         byte[] data = getRequestBody(request);
-        HttpHeaders headers = new HttpHeaders();
         if (request.getUserPrincipal() == null) {
+            HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json"); // Change as needed
             return new ResponseEntity<>(
                     ErrorMessage.errorString("Please log in").getBytes(),
@@ -117,6 +118,7 @@ public class GatewayController {
             }
             ServiceResponse res = req.process();
             List<String> contentType = res.headers().get(HttpHeaders.CONTENT_TYPE);
+            HttpHeaders headers = new HttpHeaders();
             if (contentType != null) {
                 for (String value : contentType) {
                     headers.add(HttpHeaders.CONTENT_TYPE, value);
@@ -125,10 +127,20 @@ public class GatewayController {
             // Set custom content type (e.g., PDF, JSON, or any other MIME type)
             return new ResponseEntity<>(res.asByteArray(), headers, HttpStatus.resolve(res.statusCode()));
         } catch (Exception e) {
+            String message = e.getMessage();
+            if (message == null){
+                if (e instanceof ConnectException){
+                    message = "Service seems down";
+                }else {
+                    message = "Error " + e.toString();
+                }
+            }
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/json"); // Change as needed
             return new ResponseEntity<>(
-                    ErrorMessage.errorString(e.getMessage()).getBytes(),
+                    ErrorMessage.errorString(message).getBytes(),
                     headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.OK);
         }
 
     }
