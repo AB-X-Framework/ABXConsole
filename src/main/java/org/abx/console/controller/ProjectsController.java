@@ -102,4 +102,17 @@ public class ProjectsController {
             return ErrorMessage.errorString("Cannot get project data for " + projectId);
         }
     }
+
+    @Secured("Persistence")
+    @GetMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getProject(HttpServletRequest request,
+                             @PathVariable long projectId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        String token = JWTUtils.generateToken(username, privateKey, 60,
+                List.of("Repository","Persistence"));
+        JSONObject repository =  servicesClient.get("persistence",
+                        "/persistence/projects/"+projectId).jwt(token).process().asJSONObject();
+        return repository.toString();
+
+    }
 }
