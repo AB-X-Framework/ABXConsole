@@ -32,7 +32,7 @@ public class ProjectsController {
         //First verify repos
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("Repository","Persistence"));
+                List.of("Repository", "Persistence"));
         JSONObject jsonData = new JSONObject(projectData);
         JSONArray repositories = jsonData.getJSONArray("repos");
         for (int i = 0; i < repositories.length(); ++i) {
@@ -110,21 +110,43 @@ public class ProjectsController {
                              @PathVariable long projectId) throws Exception {
         String username = request.getUserPrincipal().getName();
         String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("Repository","Persistence"));
-        JSONObject repository =  servicesClient.get("persistence",
-                        "/persistence/projects/"+projectId).jwt(token).process().asJSONObject();
+                List.of("Repository", "Persistence"));
+        JSONObject repository = servicesClient.get("persistence",
+                "/persistence/projects/" + projectId).jwt(token).process().asJSONObject();
         JSONArray repos = repository.getJSONArray("repos");
-        String projectName = Project+projectId;
+        String projectName = Project + projectId;
         token = JWTUtils.generateToken(projectName, privateKey, 60,
                 List.of("Repository"));
         JSONObject status = servicesClient.get("repository",
                 "/repository/status").jwt(token).process().asJSONObject();
-        for (int i = 0; i < repos.length();++i){
+        for (int i = 0; i < repos.length(); ++i) {
             JSONObject repo = repos.getJSONObject(i);
             JSONObject singleRepoStatus = status.getJSONObject(repo.getString("repoName"));
-            repo.put("status",singleRepoStatus);
+            repo.put("status", singleRepoStatus.getString("status"));
         }
         return repository.toString();
 
+    }
+
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/projects/{projectId}/repo/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteRepo(HttpServletRequest request,
+                              @PathVariable long projectId,
+                              @PathVariable String repoName) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        String token = JWTUtils.generateToken(username, privateKey, 60,
+                List.of("Repository", "Persistence"));
+        String deletedString = servicesClient.delete("persistence",
+                "/persistence/projects/" + projectId + "/repos/" + repoName).jwt(token).process().asString();
+        boolean deleted = Boolean.parseBoolean(deletedString);
+        if (!deleted) {
+            return ErrorMessage.errorString("Cannot delete repository.");
+        }
+        String projectName = Project + projectId;
+        token = JWTUtils.generateToken(projectName, privateKey, 60,
+                List.of("Repository"));
+        return servicesClient.delete("repository",
+                "/repository/remove").addPart("reposit").jwt(token).process().asString();
     }
 }
