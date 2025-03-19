@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/rest")
 public class ProjectsController {
+    private final static String Project = "Project-";
 
     @Value("${jwt.private}")
     private String privateKey;
@@ -63,7 +64,7 @@ public class ProjectsController {
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create " + new JSONObject(projectData).getString("name") + " project." + e.getMessage());
         }
-        token = JWTUtils.generateToken("Project-" + projectId, privateKey, 60,
+        token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
                 List.of("Repository"));
         //Add repos
         for (int i = 0; i < repositories.length(); ++i) {
@@ -112,6 +113,17 @@ public class ProjectsController {
                 List.of("Repository","Persistence"));
         JSONObject repository =  servicesClient.get("persistence",
                         "/persistence/projects/"+projectId).jwt(token).process().asJSONObject();
+        JSONArray repos = repository.getJSONArray("repos");
+        String projectName = Project+projectId;
+        token = JWTUtils.generateToken(projectName, privateKey, 60,
+                List.of("Repository"));
+        JSONObject status = servicesClient.get("repository",
+                "/repository/status").jwt(token).process().asJSONObject();
+        for (int i = 0; i < repos.length();++i){
+            JSONObject repo = repos.getJSONObject(i);
+            JSONObject singleRepoStatus = status.getJSONObject(repo.getString("repoName"));
+            repo.put("status",singleRepoStatus);
+        }
         return repository.toString();
 
     }
