@@ -1,7 +1,6 @@
 package org.abx.console.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
 import org.abx.services.ServicesClient;
 import org.abx.spring.ErrorMessage;
@@ -29,10 +28,10 @@ public class ProjectsController {
     @Secured("UseABX")
     public String createProject(HttpServletRequest request,
                                 @RequestParam String projectData) throws Exception {
+        //First verify repos
         String username = request.getUserPrincipal().getName();
-
         String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("Persistence", "Repository"));
+                List.of("Repository","Persistence"));
         JSONObject jsonData = new JSONObject(projectData);
         JSONArray repositories = jsonData.getJSONArray("repos");
         for (int i = 0; i < repositories.length(); ++i) {
@@ -56,11 +55,19 @@ public class ProjectsController {
                 return error.toString();
             }
         }
-
-
+        //Add project
+        long projectId;
+        try {
+            projectId = servicesClient.post("persistence",
+                    "/persistence/projects").jwt(token).addPart("projectData", projectData).process().asLong();
+        } catch (Exception e) {
+            return ErrorMessage.errorString("Cannot create " + new JSONObject(projectData).getString("name") + " project." + e.getMessage());
+        }
+        token = JWTUtils.generateToken("Project-" + projectId, privateKey, 60,
+                List.of("Repository"));
+        //Add repos
         for (int i = 0; i < repositories.length(); ++i) {
             JSONObject jsonRepoData = repositories.getJSONObject(i);
-            String name = jsonRepoData.getString("name");
             servicesClient.post("repository",
                             "/repository/update").jwt(token).
                     addPart("url", jsonRepoData.getString("url")).
@@ -72,12 +79,8 @@ public class ProjectsController {
         }
 
         JSONObject result = new JSONObject();
-        try {
-            return result.put("id", servicesClient.post("persistence",
-                    "/persistence/projects").jwt(token).addPart("projectData", projectData).process().asLong()).toString();
-        } catch (Exception e) {
-            return ErrorMessage.errorString("Cannot create " + new JSONObject(projectData).getString("name") + " project." + e.getMessage());
-        }
+        return result.put("id", projectId).toString();
+
     }
 
 
