@@ -70,9 +70,8 @@ public class ProjectsController {
         for (int i = 0; i < repositories.length(); ++i) {
             JSONObject jsonRepoData = repositories.getJSONObject(i);
             servicesClient.post("repository",
-                            "/repository/update").jwt(token).
+                            "/repository/update/"+ jsonRepoData.getString("name")).jwt(token).
                     addPart("url", jsonRepoData.getString("url")).
-                    addPart("name", jsonRepoData.getString("name")).
                     addPart("branch", jsonRepoData.getString("branch")).
                     addPart("engine", jsonRepoData.getString("engine")).
                     addPart("creds", jsonRepoData.getString("creds")).
