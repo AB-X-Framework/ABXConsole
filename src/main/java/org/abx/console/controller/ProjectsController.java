@@ -147,6 +147,6 @@ public class ProjectsController {
         token = JWTUtils.generateToken(projectName, privateKey, 60,
                 List.of("Repository"));
         return servicesClient.delete("repository",
-                "/repository/remove").addPart("reposit").jwt(token).process().asString();
+                "/repository/remove/"+repoName).jwt(token).process().asString();
     }
 }
