@@ -84,24 +84,7 @@ public class ProjectsController {
     }
 
 
-    @Secured("Persistence")
-    @DeleteMapping(value = "/projects/{projectId}/repos/{repoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteRepository(HttpServletRequest request,
-                                   @PathVariable long projectId,
-                                   @PathVariable long repoId) throws Exception {
-        String username = request.getUserPrincipal().getName();
-        String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("Persistence"));
-        JSONObject result = new JSONObject();
-        try {
-            boolean success = servicesClient.delete("persistence",
-                    "/persistence/projects/" + projectId + "/repos/" + repoId).jwt(token).process().asBoolean();
-            result.put("success", success);
-            return result.toString();
-        } catch (Exception e) {
-            return ErrorMessage.errorString("Cannot get project data for " + projectId);
-        }
-    }
+
 
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -129,7 +112,7 @@ public class ProjectsController {
 
 
     @Secured("Persistence")
-    @DeleteMapping(value = "/projects/{projectId}/repo/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteRepo(HttpServletRequest request,
                               @PathVariable long projectId,
                               @PathVariable String repoName) throws Exception {
@@ -148,5 +131,14 @@ public class ProjectsController {
         String result = servicesClient.delete("repository",
                 "/repository/remove/"+repoName).jwt(token).process().asString();
         return result;
+    }
+
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteProject(HttpServletRequest request,
+                             @PathVariable long projectId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        throw new RuntimeException("not implemented");
     }
 }

@@ -13,7 +13,7 @@ class Repository {
                     let repoName =  $(`#Repo${id}-original`).val();
                     $.ajax({
                         "type": "DELETE",
-                        "url":  `/rest/projects/${projectId}/repo/${repoName}`,
+                        "url":  `/rest/projects/${projectId}/repos/${repoName}`,
                         "success": function (response) {
                             if (response.error) {
                                 showNotes(response.message)
