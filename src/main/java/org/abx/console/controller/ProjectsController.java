@@ -148,6 +148,17 @@ public class ProjectsController {
             String username = request.getUserPrincipal().getName();
             String token = JWTUtils.generateToken(username, privateKey, 60,
                     List.of("Repository", "Persistence"));
+
+            JSONObject repository = servicesClient.get("persistence",
+                    "/persistence/projects/" + projectId).jwt(token).process().asJSONObject();
+            JSONArray repos = repository.getJSONArray("repos");
+            for (int i = 0; i < repos.length(); ++i) {
+                JSONObject repo = repos.getJSONObject(i);
+                servicesClient.delete("repository",
+                        "/repository/remove/" + repo.getString("repoName")).jwt(token).process().asString();
+            }
+
+
             String result = servicesClient.delete("persistence",
                     "/persistence/projects/" + projectId ).jwt(token).process().asString();
            boolean deleted = Boolean.parseBoolean(result);
