@@ -144,8 +144,17 @@ public class ProjectsController {
     public String deleteProject(HttpServletRequest request,
                                 @PathVariable long projectId) {
         try {
+
             String username = request.getUserPrincipal().getName();
-            throw new RuntimeException("not implemented");
+            String token = JWTUtils.generateToken(username, privateKey, 60,
+                    List.of("Repository", "Persistence"));
+            String result = servicesClient.delete("persistence",
+                    "/persistence/projects/" + projectId ).jwt(token).process().asString();
+           boolean deleted = Boolean.parseBoolean(result);
+            if (!deleted) {
+                return ErrorMessage.errorString("Cannot delete project.");
+            }
+            return result;
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot delete project " + projectId + ". " + e.getMessage());
         }
