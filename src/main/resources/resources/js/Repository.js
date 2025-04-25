@@ -50,7 +50,9 @@ class Repository {
      * @param id
      */
     static addNewRepo(id){
+        $.post({
 
+        })
     }
 
     static addRepo(after, repoActionType) {

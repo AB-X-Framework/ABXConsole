@@ -112,6 +112,33 @@ public class ProjectsController {
     }
 
 
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteRepo(HttpServletRequest request,
+                             @PathVariable long projectId,
+                             @PathVariable String repoName) {
+        try {
+            String username = request.getUserPrincipal().getName();
+            String token = JWTUtils.generateToken(username, privateKey, 60,
+                    List.of("Repository", "Persistence"));
+            String deletedString = servicesClient.delete("persistence",
+                    "/persistence/projects/" + projectId + "/repos/" + repoName).jwt(token).process().asString();
+            boolean deleted = Boolean.parseBoolean(deletedString);
+            if (!deleted) {
+                return ErrorMessage.errorString("Cannot delete repository.");
+            }
+            String projectName = Project + projectId;
+            token = JWTUtils.generateToken(projectName, privateKey, 60,
+                    List.of("Repository"));
+            String result = servicesClient.delete("repository",
+                    "/repository/remove/" + repoName).jwt(token).process().asString();
+            return result;
+        } catch (Exception e) {
+            return ErrorMessage.errorString("Cannot delete repo " + repoName + " on project " + projectId + ". " + e.getMessage());
+        }
+    }
+
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteRepo(HttpServletRequest request,
