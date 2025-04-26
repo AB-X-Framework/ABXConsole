@@ -154,6 +154,50 @@ public class ProjectsController {
         }
     }
 
+
+    /**
+     * First validate user can add repositories, then create a repository live
+     * @param request
+     * @param projectId
+     * @param repoData
+     * @return
+     */
+    @Secured("Persistence")
+    @PatchMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateRepo(HttpServletRequest request,
+                          @PathVariable long projectId,
+                             @PathVariable String repoName,
+                          @RequestParam String repoData) {
+        try {
+            JSONObject jsonRepoData = new JSONObject(repoData);
+            String newName = jsonRepoData.getString("repoName");
+            String username = request.getUserPrincipal().getName();
+            String token = JWTUtils.generateToken(username, privateKey, 60,
+                    List.of( "Persistence"));
+            boolean added = servicesClient.post("persistence","/persistence/projects/" + projectId+"/repo").
+                    jwt(token).
+                    addPart("newName", newName).
+                    addPart("engine", jsonRepoData.getString("engine")).
+                    addPart("url", jsonRepoData.getString("url")).
+                    addPart("branch", jsonRepoData.getString("branch")).
+                    addPart("creds", jsonRepoData.getString("creds")).
+                    process().asBoolean();
+            if (!added) {
+                return ErrorMessage.errorString("Cannot create repo " + repoName + " on project " + projectId + ". " );
+            }
+            token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
+                    List.of("Repository"));
+            if (!repoName.equals(repoName) ){
+                servicesClient.delete("persistence",
+                        "/persistence/projects/" + projectId + "/repos/" + repoName).jwt(token).process().asString();
+            }
+            addNewRepository(jsonRepoData, token);
+            return "success";
+        } catch (Exception e) {
+            return ErrorMessage.errorString("Cannot create repo  on project " + projectId + ". " + e.getMessage());
+        }
+    }
+
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteRepo(HttpServletRequest request,

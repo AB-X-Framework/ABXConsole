@@ -29,12 +29,13 @@ class Repository {
     }
 
     static updateRepo(id){
-        let repo = Repository.collectRepoData(id);
+        let repoData = Repository.collectRepoData(id);
         let repoName =  $(`#Repo${id}-original`).val();
-        repo.name = $(`#Repo${id}-name`).textbox("getValue");
-        $.post({
-            "headers": {   "Method": "PATCH"  },
-            "url":  `/gateway/persistence/persistence/projects/${projectId}/repo/${repoName}`,
+        repoData.newName = $(`#Repo${id}-name`).textbox("getValue");
+        $.ajax({
+            "method": "PATCH",
+            "data": {"repoData":JSON.stringify(repoData)},
+            "url":  `/rest/projects/${projectId}/repos/${repoName}`,
             "success": function (response) {
                 if (response.error) {
                     showNotes(response.message)
@@ -66,7 +67,7 @@ class Repository {
         });
     }
 
-    static addRepo(after, repoActionType) {
+    static addRepoUI(after, repoActionType) {
         $.get("/resources/Repository.html", function (data) {
             const currRepo = Repository.counter;
             $("#RepositoryPlaceHolder").append(data
