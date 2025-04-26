@@ -12,8 +12,9 @@
     <script>
         let projectId = new URLSearchParams(window.location.search).get("projectId");
         function processRepos(repos) {
-            for (repo of repos) {
+            for (const _ of repos) {
                 Repository.addRepo((repoId) => {
+                    var repo = repos[repoId];
                     $(`#Repo${repoId}-name`).textbox("setValue", repo.repoName);
                     $(`#Repo${repoId}-original`).val(repo.repoName);
                     $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");

@@ -67,13 +67,7 @@ public class ProjectsController {
             //Add repos
             for (int i = 0; i < repositories.length(); ++i) {
                 JSONObject jsonRepoData = repositories.getJSONObject(i);
-                servicesClient.post("repository",
-                                "/repository/update/" + jsonRepoData.getString("name")).jwt(token).
-                        addPart("url", jsonRepoData.getString("url")).
-                        addPart("branch", jsonRepoData.getString("branch")).
-                        addPart("engine", jsonRepoData.getString("engine")).
-                        addPart("creds", jsonRepoData.getString("creds")).
-                        process().asBoolean();
+                addNewRepository(jsonRepoData, token);
             }
 
             JSONObject result = new JSONObject();
@@ -81,6 +75,16 @@ public class ProjectsController {
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create " + new JSONObject(projectData).getString("name") + " project." + e.getMessage());
         }
+    }
+
+    private void addNewRepository(JSONObject jsonRepoData, String token) throws Exception {
+        servicesClient.post("repository",
+                        "/repository/update/" + jsonRepoData.getString("repoName")).jwt(token).
+                addPart("url", jsonRepoData.getString("url")).
+                addPart("branch", jsonRepoData.getString("branch")).
+                addPart("engine", jsonRepoData.getString("engine")).
+                addPart("creds", jsonRepoData.getString("creds")).
+                process().asBoolean();
     }
 
 
@@ -112,30 +116,41 @@ public class ProjectsController {
     }
 
 
-
+    /**
+     * First validate user can add repositories, then create a repository live
+     * @param request
+     * @param projectId
+     * @param repoData
+     * @return
+     */
     @Secured("Persistence")
-    @DeleteMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteRepo(HttpServletRequest request,
-                             @PathVariable long projectId,
-                             @PathVariable String repoName) {
+    @PostMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String addRepo(HttpServletRequest request,
+                          @PathVariable long projectId,
+                          @RequestParam String repoData) {
         try {
+            JSONObject jsonRepoData = new JSONObject(repoData);
             String username = request.getUserPrincipal().getName();
             String token = JWTUtils.generateToken(username, privateKey, 60,
-                    List.of("Repository", "Persistence"));
-            String deletedString = servicesClient.delete("persistence",
-                    "/persistence/projects/" + projectId + "/repos/" + repoName).jwt(token).process().asString();
-            boolean deleted = Boolean.parseBoolean(deletedString);
-            if (!deleted) {
-                return ErrorMessage.errorString("Cannot delete repository.");
+                    List.of( "Persistence"));
+            String repoName =jsonRepoData.getString("repoName");
+            boolean added = servicesClient.post("persistence","/persistence/projects/" + projectId+"/repo").
+                    jwt(token).
+                    addPart("repoName", repoName).
+                    addPart("engine", jsonRepoData.getString("engine")).
+                    addPart("url", jsonRepoData.getString("url")).
+                    addPart("branch", jsonRepoData.getString("branch")).
+                    addPart("creds", jsonRepoData.getString("creds")).
+                    process().asBoolean();
+            if (!added) {
+                return ErrorMessage.errorString("Cannot create repo " + repoName + " on project " + projectId + ". " );
             }
-            String projectName = Project + projectId;
-            token = JWTUtils.generateToken(projectName, privateKey, 60,
+             token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
                     List.of("Repository"));
-            String result = servicesClient.delete("repository",
-                    "/repository/remove/" + repoName).jwt(token).process().asString();
-            return result;
+            addNewRepository(jsonRepoData, token);
+            return "success";
         } catch (Exception e) {
-            return ErrorMessage.errorString("Cannot delete repo " + repoName + " on project " + projectId + ". " + e.getMessage());
+            return ErrorMessage.errorString("Cannot create repo  on project " + projectId + ". " + e.getMessage());
         }
     }
 
@@ -187,8 +202,8 @@ public class ProjectsController {
 
 
             String result = servicesClient.delete("persistence",
-                    "/persistence/projects/" + projectId ).jwt(token).process().asString();
-           boolean deleted = Boolean.parseBoolean(result);
+                    "/persistence/projects/" + projectId).jwt(token).process().asString();
+            boolean deleted = Boolean.parseBoolean(result);
             if (!deleted) {
                 return ErrorMessage.errorString("Cannot delete project.");
             }

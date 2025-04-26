@@ -31,7 +31,7 @@ class Repository {
     static updateRepo(id){
         let repo = Repository.collectRepoData(id);
         let repoName =  $(`#Repo${id}-original`).val();
-        repo.name = $(`#Repo${i}-name`).textbox("getValue");
+        repo.name = $(`#Repo${id}-name`).textbox("getValue");
         $.post({
             "headers": {   "Method": "PATCH"  },
             "url":  `/gateway/persistence/persistence/projects/${projectId}/repo/${repoName}`,
@@ -50,9 +50,20 @@ class Repository {
      * @param id
      */
     static addNewRepo(id){
+        let repoData = Repository.collectRepoData(id);
+        repoData.repoName = $(`#Repo${id}-name`).textbox("getValue");
         $.post({
-
-        })
+            "headers": {   "Method": "POST"  },
+            "url":  `/rest/projects/${projectId}/repos`,
+            "data": {"repoData":JSON.stringify(repoData)},
+            "success": function (response) {
+                if (response.error) {
+                    showNotes(response.message)
+                } else {
+                    $(`#Repo${repoId}-status`).html("Repository added");
+                }
+            }
+        });
     }
 
     static addRepo(after, repoActionType) {
@@ -96,7 +107,7 @@ class Repository {
             $(`#Repo${i}-status`).html("");
             let repo = Repository.collectRepoData(i);
             repo.id = i;
-            repo.name = $(`#Repo${i}-name`).textbox("getValue");
+            repo.repoName = $(`#Repo${i}-name`).textbox("getValue");
             repos.push(repo);
         }
         return repos;
