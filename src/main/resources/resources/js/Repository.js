@@ -54,14 +54,13 @@ class Repository {
         let repoData = Repository.collectRepoData(id);
         repoData.repoName = $(`#Repo${id}-name`).textbox("getValue");
         $.post({
-            "headers": {   "Method": "POST"  },
             "url":  `/rest/projects/${projectId}/repos`,
             "data": {"repoData":JSON.stringify(repoData)},
             "success": function (response) {
                 if (response.error) {
                     showNotes(response.message)
                 } else {
-                    $(`#Repo${repoId}-status`).html("Repository added");
+                    $(`#Repo${id}-status`).html(response);
                 }
             }
         });

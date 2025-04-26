@@ -147,8 +147,8 @@ public class ProjectsController {
             }
              token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
                     List.of("Repository"));
-            addNewRepository(jsonRepoData, token);
-            return "success";
+            return servicesClient.get("repository",
+                    "/repository/status/"+repoName).jwt(token).process().asString();
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create repo  on project " + projectId + ". " + e.getMessage());
         }
@@ -187,12 +187,13 @@ public class ProjectsController {
             }
             token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
                     List.of("Repository"));
-            if (!repoName.equals(repoName) ){
+            if (!repoName.equals(newName) ){
                 servicesClient.delete("persistence",
                         "/persistence/projects/" + projectId + "/repos/" + repoName).jwt(token).process().asString();
             }
             addNewRepository(jsonRepoData, token);
-            return "success";
+            return servicesClient.get("repository",
+                            "/repository/" + newName+"/status").jwt(token).process().asString();
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create repo  on project " + projectId + ". " + e.getMessage());
         }
