@@ -60,7 +60,7 @@ class Repository {
                 if (response.error) {
                     showNotes(response.message)
                 } else {
-                    $(`#Repo${id}-status`).html(response);
+                    $(`#Repo${id}-status`).html(response.status+"");
                 }
             }
         });

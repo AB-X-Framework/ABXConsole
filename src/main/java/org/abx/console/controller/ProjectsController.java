@@ -147,6 +147,7 @@ public class ProjectsController {
             }
              token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
                     List.of("Repository"));
+            addNewRepository(jsonRepoData, token);
             return servicesClient.get("repository",
                     "/repository/status/"+repoName).jwt(token).process().asString();
         } catch (Exception e) {
