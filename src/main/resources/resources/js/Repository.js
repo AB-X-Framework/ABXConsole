@@ -61,6 +61,8 @@ class Repository {
                     showNotes(response.message)
                 } else {
                     $(`#Repo${id}-status`).html(response.status+"");
+                    $(`#Repo${id}-add`).hide();
+                    $(`#Repo${id}-update`).show();
                 }
             }
         });
