@@ -2,11 +2,8 @@ package org.abx.console.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.jwt.JWTUtils;
-import org.abx.services.ServicesClient;
 import org.abx.spring.ErrorMessage;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest")
-public class DashboardsController {
+public class DashboardsController extends ServicesClientController{
 
-    @Value("${jwt.private}")
-    private String privateKey;
-
-    @Autowired
-    ServicesClient servicesClient;
 
     @GetMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured("UseABX")
@@ -34,18 +26,15 @@ public class DashboardsController {
     public String createDashboard(HttpServletRequest request,
                                   @RequestParam String name) throws Exception {
         try {
-            String username = request.getUserPrincipal().getName();
-            String token = JWTUtils.generateToken(username, privateKey, 60,
-                    List.of("Persistence"));
             JSONObject result = new JSONObject();
-            return result.put("id", servicesClient.post("persistence",
-                    "/persistence/dashboards").jwt(token).addPart("dashboardName", name).process().asLong()).toString();
+            return result.put("id", persistence(request).post(  "/persistence/dashboards").
+                    addPart("dashboardName", name).process().asLong()).toString();
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create " + name + " dashboard." + e.getMessage());
         }
     }
 
-    protected JSONObject getDashboards(String username)  {
+    protected JSONObject getDashboards(String username) {
         try {
             String token = JWTUtils.generateToken(username, privateKey, 60,
                     List.of("Persistence"));
