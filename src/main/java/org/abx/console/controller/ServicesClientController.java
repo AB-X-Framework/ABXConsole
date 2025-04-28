@@ -12,30 +12,31 @@ import java.util.List;
 public abstract class ServicesClientController {
 
     public class ReqHolder {
-        private String service;
-        private String username;
+        private final String service;
+        private final String username;
 
-        public ReqHolder(String service, String username) {
+        private final String permission;
+        public ReqHolder(String service, String permission,String username) {
             this.service = service;
+            this.permission = permission;
             this.username = username;
         }
 
+        private String token()throws Exception{
+            return JWTUtils.generateToken(username, privateKey, 60,
+                    List.of(permission));
+        }
+
         public ServiceRequest delete(String url) throws Exception {
-            String token = JWTUtils.generateToken(username, privateKey, 60,
-                    List.of(service));
-            return servicesClient.delete(service, url).jwt(token);
+            return servicesClient.delete(service, url).jwt(token());
         }
 
         public ServiceRequest post(String url) throws Exception {
-            String token = JWTUtils.generateToken(username, privateKey, 60,
-                    List.of(service));
-            return servicesClient.post(service, url).jwt(token);
+            return servicesClient.post(service, url).jwt(token());
         }
 
         public ServiceRequest get(String url) throws Exception {
-            String token = JWTUtils.generateToken(username, privateKey, 60,
-                    List.of(service));
-            return servicesClient.get(service, url).jwt(token);
+            return servicesClient.get(service, url).jwt(token());
         }
     }
 
@@ -47,11 +48,11 @@ public abstract class ServicesClientController {
 
     public ReqHolder persistence(HttpServletRequest request) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return new ReqHolder("Persistence", username);
+        return new ReqHolder("persistence","Persistence", username);
     }
 
     public ReqHolder repository(HttpServletRequest request) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return new ReqHolder("Repository", username);
+        return new ReqHolder("repository", "Repository",username);
     }
 }
