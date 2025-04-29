@@ -39,7 +39,7 @@ class Repository {
             "url":  `/rest/projects/${projectId}/repos/${repoName}`,
             "success": function (response) {
                 if (response.error) {
-                    showNotes(response.message)
+                    $(`#Repo${repoId}-status`).html(response.message)
                 } else {
                     $(`#Repo${repoId}-status`).html("Repository credentials updated.");
                 }
