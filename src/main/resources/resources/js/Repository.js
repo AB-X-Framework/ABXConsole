@@ -62,6 +62,7 @@ class Repository {
                 if (response.error) {
                     showNotes(response.message)
                 } else {
+                    $(`#Repo${id}-original`).val(repoData.repoName);
                     $(`#Repo${id}-status`).html(response.status+"");
                     $(`#Repo${id}-add`).hide();
                     $(`#Repo${id}-update`).show();
