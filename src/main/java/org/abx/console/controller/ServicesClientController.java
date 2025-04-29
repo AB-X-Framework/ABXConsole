@@ -16,19 +16,24 @@ public abstract class ServicesClientController {
         private final String username;
 
         private final String permission;
-        public ReqHolder(String service, String permission,String username) {
+
+        public ReqHolder(String service, String permission, String username) {
             this.service = service;
             this.permission = permission;
             this.username = username;
         }
 
-        private String token()throws Exception{
+        private String token() throws Exception {
             return JWTUtils.generateToken(username, privateKey, 60,
                     List.of(permission));
         }
 
         public ServiceRequest delete(String url) throws Exception {
             return servicesClient.delete(service, url).jwt(token());
+        }
+
+        public ServiceRequest patch(String url) throws Exception {
+            return servicesClient.patch(service, url).jwt(token());
         }
 
         public ServiceRequest post(String url) throws Exception {
@@ -48,11 +53,11 @@ public abstract class ServicesClientController {
 
     public ReqHolder persistence(HttpServletRequest request) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return new ReqHolder("persistence","Persistence", username);
+        return new ReqHolder("persistence", "Persistence", username);
     }
 
     public ReqHolder repository(HttpServletRequest request) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return new ReqHolder("repository", "Repository",username);
+        return new ReqHolder("repository", "Repository", username);
     }
 }

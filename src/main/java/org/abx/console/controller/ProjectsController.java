@@ -124,15 +124,15 @@ public class ProjectsController extends ServicesClientController {
         try {
             JSONObject jsonRepoData = new JSONObject(repoData);
             String repoName = jsonRepoData.getString("repoName");
-            boolean added = persistence(request).post("/persistence/projects/" + projectId + "/repo").
+            JSONObject addedStatus = persistence(request).post("/persistence/projects/" + projectId + "/repos").
                     addPart("repoName", repoName).
                     addPart("engine", jsonRepoData.getString("engine")).
                     addPart("url", jsonRepoData.getString("url")).
                     addPart("branch", jsonRepoData.getString("branch")).
                     addPart("creds", jsonRepoData.getString("creds")).
-                    process().asBoolean();
-            if (!added) {
-                return ErrorMessage.errorString("Cannot create repo " + repoName + " on project " + projectId + ". ");
+                    process().asJSONObject();
+            if (addedStatus.getBoolean("error") ) {
+                return addedStatus.toString();
             }
             String token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
                     List.of("Repository"));
@@ -161,16 +161,16 @@ public class ProjectsController extends ServicesClientController {
                              @RequestParam String repoData) {
         try {
             JSONObject jsonRepoData = new JSONObject(repoData);
-            String newName = jsonRepoData.getString("repoName");
-            boolean added = persistence(request).post("/persistence/projects/" + projectId + "/repo").
+            String newName = jsonRepoData.getString("newName");
+            JSONObject addedStatus = persistence(request).patch("/persistence/projects/" + projectId + "/repos/"+repoName).
                     addPart("newName", newName).
                     addPart("engine", jsonRepoData.getString("engine")).
                     addPart("url", jsonRepoData.getString("url")).
                     addPart("branch", jsonRepoData.getString("branch")).
                     addPart("creds", jsonRepoData.getString("creds")).
-                    process().asBoolean();
-            if (!added) {
-                return ErrorMessage.errorString("Cannot create repo " + repoName + " on project " + projectId + ". ");
+                    process().asJSONObject();
+            if (addedStatus.getBoolean("error")) {
+                return addedStatus.toString();
             }
             String token = JWTUtils.generateToken(Project + projectId, privateKey, 60,
                     List.of("Repository"));
@@ -178,9 +178,12 @@ public class ProjectsController extends ServicesClientController {
                 servicesClient.delete("persistence",
                         "/persistence/projects/" + projectId + "/repos/" + repoName).jwt(token).process().asString();
             }
+            jsonRepoData.remove("newName");
+            jsonRepoData.put("repoName", newName);
             addNewRepository(jsonRepoData, token);
-            return servicesClient.get("repository",
-                    "/repository/" + newName + "/status").jwt(token).process().asString();
+            String status= servicesClient.get("repository",
+                    "/repository/status/" + newName ).jwt(token).process().asString();
+            return status;
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create repo  on project " + projectId + ". " + e.getMessage());
         }

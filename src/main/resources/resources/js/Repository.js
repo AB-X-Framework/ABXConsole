@@ -3,14 +3,14 @@ class Repository {
 
     static removed = [];
 
-    static removeRepo(id, repoActionType) {
+    static removeRepo(repoId, repoActionType) {
         if (repoActionType === 'new') {
-            $(`#Repo${id}-panel`).hide();
-            Repository.removed.push(id);
+            $(`#Repo${repoId}-panel`).hide();
+            Repository.removed.push(repoId);
         }else {
             $.messager.confirm('Confirm', 'Are you sure you want to delete?', function (r) {
                 if (r) {
-                    let repoName =  $(`#Repo${id}-original`).val();
+                    let repoName =  $(`#Repo${repoId}-original`).val();
                     $.ajax({
                         "type": "DELETE",
                         "url":  `/rest/projects/${projectId}/repos/${repoName}`,
@@ -18,8 +18,8 @@ class Repository {
                             if (response.error) {
                                 showNotes(response.message)
                             } else {
-                                $(`#Repo${id}-panel`).hide();
-                                Repository.removed.push(id);
+                                $(`#Repo${repoId}-panel`).hide();
+                                Repository.removed.push(repoId);
                             }
                         }
                     });
@@ -28,10 +28,11 @@ class Repository {
         }
     }
 
-    static updateRepo(id){
-        let repoData = Repository.collectRepoData(id);
-        let repoName =  $(`#Repo${id}-original`).val();
-        repoData.newName = $(`#Repo${id}-name`).textbox("getValue");
+    static updateRepo(repoId){
+        let repoData = Repository.collectRepoData(repoId);
+        let repoName =  $(`#Repo${repoId}-original`).val();
+        repoData.newName = $(`#Repo${repoId}-name`).textbox("getValue");
+        hideNotes();
         $.ajax({
             "method": "PATCH",
             "data": {"repoData":JSON.stringify(repoData)},
@@ -53,6 +54,7 @@ class Repository {
     static addNewRepo(id){
         let repoData = Repository.collectRepoData(id);
         repoData.repoName = $(`#Repo${id}-name`).textbox("getValue");
+        hideNotes();
         $.post({
             "url":  `/rest/projects/${projectId}/repos`,
             "data": {"repoData":JSON.stringify(repoData)},
@@ -116,6 +118,7 @@ class Repository {
     }
 
     static checkRepo(repoId) {
+        hideNotes();
         $(`#Repo${repoId}-status`).html("Checking credentials.");
         $.post({
             "url": "/gateway/repository/repository/validate",
