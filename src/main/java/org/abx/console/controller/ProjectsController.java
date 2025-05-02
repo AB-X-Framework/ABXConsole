@@ -2,12 +2,9 @@ package org.abx.console.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.jwt.JWTUtils;
-import org.abx.services.ServicesClient;
 import org.abx.spring.ErrorMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -82,7 +79,6 @@ public class ProjectsController extends ServicesClientController {
                 process().asBoolean();
     }
 
-
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getProjectRepos(HttpServletRequest request,
@@ -111,10 +107,10 @@ public class ProjectsController extends ServicesClientController {
     /**
      * First validate user can add repositories, then create a repository live
      *
-     * @param request
-     * @param projectId
-     * @param repoData
-     * @return
+     * @param request The full HTTP request
+     * @param projectId The project Id
+     * @param repoData The repo data in json
+     * @return A json object if error:true if it cannot be added
      */
     @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -148,10 +144,10 @@ public class ProjectsController extends ServicesClientController {
     /**
      * First validate user can add repositories, then create a repository live
      *
-     * @param request
-     * @param projectId
-     * @param repoData
-     * @return
+     * @param request The full HTTP request
+     * @param projectId The project Id
+     * @param repoData The repo data in json
+     * @return A json object if error:true if it cannot be added
      */
     @Secured("Persistence")
     @PatchMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -181,9 +177,8 @@ public class ProjectsController extends ServicesClientController {
             jsonRepoData.remove("newName");
             jsonRepoData.put("repoName", newName);
             addNewRepository(jsonRepoData, token);
-            String status= servicesClient.get("repository",
+            return servicesClient.get("repository",
                     "/repository/status/" + newName ).jwt(token).process().asString();
-            return status;
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create repo  on project " + projectId + ". " + e.getMessage());
         }
@@ -204,9 +199,8 @@ public class ProjectsController extends ServicesClientController {
             String projectName = Project + projectId;
             String token = JWTUtils.generateToken(projectName, privateKey, 60,
                     List.of("Repository"));
-            String result = servicesClient.delete("repository",
+            return servicesClient.delete("repository",
                     "/repository/remove/" + repoName).jwt(token).process().asString();
-            return result;
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot delete repo " + repoName + " on project " + projectId + ". " + e.getMessage());
         }
