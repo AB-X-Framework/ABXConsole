@@ -84,8 +84,8 @@ public class ProjectsController extends ServicesClientController {
 
 
     @Secured("Persistence")
-    @GetMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getProject(HttpServletRequest request,
+    @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getProjectRepos(HttpServletRequest request,
                              @PathVariable long projectId) {
         try {
             JSONObject repository = persistence(request).get(
