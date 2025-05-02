@@ -1,7 +1,6 @@
 package org.abx.console.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.console.spring.CustomErrorController;
 import org.abx.jwt.JWTUtils;
 import org.abx.services.ServicesClient;
 import org.abx.spring.ErrorMessage;
@@ -24,7 +23,6 @@ public class RepoController {
 
     @Autowired
     ServicesClient servicesClient;
-
 
     @PostMapping(value = "/repo/validate", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured("UseABX")
