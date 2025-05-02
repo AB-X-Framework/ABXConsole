@@ -103,7 +103,7 @@ public class ProjectsController extends ServicesClientController {
             }
             return repository.toString();
         } catch (Exception e) {
-            return ErrorMessage.errorString("Cannot get project " + projectId + ". " + e.getMessage());
+            return ErrorMessage.errorString("Cannot get repos for project " + projectId + ". " + e.getMessage());
         }
     }
 
