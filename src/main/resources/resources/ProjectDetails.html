@@ -26,13 +26,34 @@
             MenuPanel.loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
                 $(`#details-projectId-${projectId}`).linkbutton({toggle: true, selected: true});
-                $.get(`/rest/projects/${projectId}`, (projectData) => {
-                    if (projectData.error) {
-                        showNotes(projectData.message)
-                    } else {
-                        $('#name').textbox("setValue", projectData.projectName);
-                        processRepos(projectData.repos);
-
+                $.get({
+                    "url": `/gateway/persistence/persistence/projects/${projectId}/name`,
+                    "success": function (response) {
+                        if (response.error) {
+                            showNotes(response.message)
+                        } else {
+                            $('#name').textbox("setValue", response.projectName);
+                        }
+                    }
+                });
+                $('#tabs').tabs({
+                    onSelect: function(title, index){
+                        if (title === "Enrollment"){
+                            $.get({
+                                "url": `/gateway/persistence/persistence/projects/${projectId}/enrollment`,
+                                "success": function (response) {
+                                    console.log(JSON.stringify(response));
+                                }
+                            });
+                        }else if (title === "Repositories"){
+                            $.get(`/rest/projects/${projectId}/repos`, (projectData) => {
+                                if (projectData.error) {
+                                    showNotes(projectData.message)
+                                } else {
+                                    processRepos(projectData.repos);
+                                }
+                            });
+                        }
                     }
                 });
             });

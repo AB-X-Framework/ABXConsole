@@ -89,7 +89,7 @@ public class ProjectsController extends ServicesClientController {
                              @PathVariable long projectId) {
         try {
             JSONObject repository = persistence(request).get(
-                    "/persistence/projects/" + projectId).process().asJSONObject();
+                    "/persistence/projects/" + projectId+"/repos").process().asJSONObject();
             JSONArray repos = repository.getJSONArray("repos");
             String projectName = Project + projectId;
             String token = JWTUtils.generateToken(projectName, privateKey, 60,
