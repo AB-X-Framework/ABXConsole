@@ -20,4 +20,5 @@ public class CustomErrorController implements ErrorController {
         response.sendRedirect("/resources/icons/favicon.ico");
     }
 
+
 }
