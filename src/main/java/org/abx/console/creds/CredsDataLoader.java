@@ -39,7 +39,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
 
 
     @Transactional
-    public User createUserIfNotFound(final String username, final String password,
+    public void createUserIfNotFound(final String username, final String password,
                                      final String role) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -49,8 +49,7 @@ public class CredsDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setEnabled(true);
         }
         user.setRole(role);
-        user = userRepository.save(user);
-        return user;
+        userRepository.save(user);
     }
 
 }
