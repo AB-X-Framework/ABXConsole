@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest")
-public class DashboardsController extends ServicesClientController{
+public class DashboardsController extends ServicesClientController {
 
 
     @GetMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,10 +24,10 @@ public class DashboardsController extends ServicesClientController{
     @PostMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured("UseABX")
     public String createDashboard(HttpServletRequest request,
-                                  @RequestParam String name) throws Exception {
+                                  @RequestParam String name) {
         try {
             JSONObject result = new JSONObject();
-            return result.put("id", persistence(request).post(  "/persistence/dashboards").
+            return result.put("id", persistence(request).post("/persistence/dashboards").
                     addPart("dashboardName", name).process().asLong()).toString();
         } catch (Exception e) {
             return ErrorMessage.errorString("Cannot create " + name + " dashboard." + e.getMessage());
