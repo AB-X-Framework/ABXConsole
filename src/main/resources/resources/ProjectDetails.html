@@ -145,7 +145,16 @@
             <div title="Enrollment" id="enrollment">
                 <div>
                     <h2>Project Enrollment</h2>
-
+                    <select class="easyui-combobox" id="RoleId" name="state"
+                            label="Role:" labelWidth="150" labelPosition="left"
+                            data-options="editable:false"
+                            style="width:500px;">
+                        <option value="Owner">Owner</option>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                        <option value="CI">CI</option>
+                        <option value="Visitor">Visitor</option>
+                    </select>
                 </div>
             </div>
         </div>

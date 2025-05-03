@@ -7,7 +7,7 @@
     <br/>
     <select class="easyui-combobox" id="TypeRepoREPOID-engine" name="state"
             label="Engine Type:" labelWidth="150" labelPosition="left"
-            data-options="onChange: onChangeTypeRepoREPOID"
+            data-options="onChange: onChangeTypeRepoREPOID,editable:false"
             style="width:500px;">
         <option value="git">Git</option>
         <option value="local">Local</option>
@@ -28,7 +28,7 @@
         <br/>
         <select class="easyui-combobox" id="RepoREPOID-creds" name="state"
                 label="Credential Type:" labelWidth="150" labelPosition="left"
-                data-options="onChange: onChangeRepoREPOID"
+                data-options="onChange: onChangeRepoREPOID,editable:false"
                 style="width:500px;">
             <option value="username">Username & Password</option>
             <option value="ssh">SSH Key</option>
