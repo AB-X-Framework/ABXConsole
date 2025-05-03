@@ -71,6 +71,11 @@ class Repository {
         });
     }
 
+    static clearUI(){
+        Repository.counter =0;
+        $("#RepositoryPlaceHolder").html("");
+    }
+
     static addRepoUI(after, repoActionType) {
         $.get("/resources/Repository.html", function (data) {
             const currRepo = Repository.counter;

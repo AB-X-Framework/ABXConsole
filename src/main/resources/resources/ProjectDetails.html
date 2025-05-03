@@ -13,6 +13,7 @@
         let projectId = new URLSearchParams(window.location.search).get("projectId");
 
         function processRepos(repos) {
+            Repository.clearUI();
             for (const _ of repos) {
                 Repository.addRepoUI((repoId) => {
                     var repo = repos[repoId];
