@@ -17,6 +17,12 @@ public class ProjectsController extends ServicesClientController {
     private final static String Project = "Project-";
 
 
+    /**
+     * Creates a new project
+     * @param request The full HTTP request
+     * @param projectData The Project Data in JSON with repos
+     * @return A JSON Object with error true is failure and the message, otherwise, project id in id
+     */
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured("UseABX")
     public String createProject(HttpServletRequest request,
