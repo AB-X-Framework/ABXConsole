@@ -11,6 +11,7 @@
     <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
     <script>
         let projectId = new URLSearchParams(window.location.search).get("projectId");
+
         function processRepos(repos) {
             for (const _ of repos) {
                 Repository.addRepoUI((repoId) => {
@@ -19,9 +20,10 @@
                     $(`#Repo${repoId}-original`).val(repo.repoName);
                     $(`#TypeRepo${repoId}-engine`).combobox("setValue", "local");
                     $(`#Repo${repoId}-status`).html(repo.status);
-                },'update');
+                }, 'update');
             }
         }
+
         $(document).ready(function () {
             MenuPanel.loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
@@ -37,15 +39,15 @@
                     }
                 });
                 $('#tabs').tabs({
-                    onSelect: function(title){
-                        if (title === "Enrollment"){
+                    onSelect: function (title) {
+                        if (title === "Enrollment") {
                             $.get({
                                 "url": `/gateway/persistence/persistence/projects/${projectId}/enrollment`,
                                 "success": function (response) {
                                     console.log(JSON.stringify(response));
                                 }
                             });
-                        }else if (title === "Repositories"){
+                        } else if (title === "Repositories") {
                             $.get(`/rest/projects/${projectId}/repos`, (projectData) => {
                                 if (projectData.error) {
                                     showNotes(projectData.message)
@@ -61,9 +63,9 @@
 
         function RenameProject() {
             $.post({
-                "headers": {   "Method": "PATCH"  },
+                "headers": {"Method": "PATCH"},
                 "url": `/gateway/persistence/persistence/projects/${projectId}/name`,
-                "data": {"projectName":$('#name').textbox('getValue')},
+                "data": {"projectName": $('#name').textbox('getValue')},
                 "success": function (response) {
                     if (response.error) {
                         handleProjectError(response);
@@ -132,7 +134,8 @@
                     <div>
                         <div id="RepositoryPlaceHolder">
                         </div>
-                        <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Repository.addRepoUI(undefined,'add')"
+                        <a href="#" class="easyui-linkbutton" iconCls="icon-add"
+                           onclick="Repository.addRepoUI(undefined,'add')"
                            style="width:200px;height:32px">Add New Repository</a>
                     </div>
                 </div>

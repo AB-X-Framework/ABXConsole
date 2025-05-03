@@ -106,8 +106,16 @@ public class ProjectsController extends ServicesClientController {
                     "/repository/status").jwt(token).process().asJSONObject();
             for (int i = 0; i < repos.length(); ++i) {
                 JSONObject repo = repos.getJSONObject(i);
-                JSONObject singleRepoStatus = status.getJSONObject(repo.getString("repoName"));
-                repo.put("status", singleRepoStatus.getString("status"));
+                String repoName = repo.getString("repoName");
+                if (status.isNull(repoName)){
+                    String repoToken = JWTUtils.generateToken(Project + projectId, privateKey, 60,
+                            List.of("Repository"));
+                    addNewRepository(repo, repoToken);
+                    repo.put("status","Loading");
+                }else {
+                    JSONObject singleRepoStatus = status.getJSONObject(repo.getString("repoName"));
+                    repo.put("status", singleRepoStatus.getString("status"));
+                }
             }
             return repository.toString();
         } catch (Exception e) {
