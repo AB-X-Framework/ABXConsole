@@ -75,6 +75,12 @@ public class ProjectsController extends ServicesClientController {
         }
     }
 
+    /**
+     * Adds new repository creds to repository microservice
+     * @param jsonRepoData The Repo data in JSON
+     * @param token The Auth token
+     * @throws Exception if repo couldn't be created
+     */
     private void addNewRepository(JSONObject jsonRepoData, String token) throws Exception {
         servicesClient.post("repository",
                         "/repository/update/" + jsonRepoData.getString("repoName")).jwt(token).
@@ -190,6 +196,13 @@ public class ProjectsController extends ServicesClientController {
         }
     }
 
+    /**
+     * Deletes a repo from a project
+     * @param request The full HTTP request
+     * @param projectId The project Id
+     * @param repoName The repo which will be deleted
+     * @return a JSON object with error if there is a failure
+     */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteRepo(HttpServletRequest request,
