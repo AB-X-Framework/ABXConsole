@@ -37,7 +37,7 @@
                     }
                 });
                 $('#tabs').tabs({
-                    onSelect: function(title, index){
+                    onSelect: function(title){
                         if (title === "Enrollment"){
                             $.get({
                                 "url": `/gateway/persistence/persistence/projects/${projectId}/enrollment`,
@@ -140,7 +140,7 @@
 
             <div title="Enrollment" id="enrollment">
                 <div>
-                    <h3>Repositories</h3>
+                    <h3>Enrollment</h3>
                     <div id="repos"></div>
                 </div>
             </div>

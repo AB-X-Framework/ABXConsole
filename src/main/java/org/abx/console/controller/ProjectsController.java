@@ -201,7 +201,7 @@ public class ProjectsController extends ServicesClientController {
      * @param request The full HTTP request
      * @param projectId The project Id
      * @param repoName The repo which will be deleted
-     * @return a JSON object with error if there is a failure
+     * @return A JSON object with error if there is a failure
      */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -226,16 +226,20 @@ public class ProjectsController extends ServicesClientController {
     }
 
 
+    /**
+     * Deletes whole project
+     * @param request The full HTTP request
+     * @param projectId The project id to be deleted
+     * @return A JSON object with error if there is a failure
+     */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteProject(HttpServletRequest request,
                                 @PathVariable long projectId) {
         try {
-
             String username = request.getUserPrincipal().getName();
             String token = JWTUtils.generateToken(username, privateKey, 60,
                     List.of("Repository", "Persistence"));
-
             JSONObject repository = servicesClient.get("persistence",
                     "/persistence/projects/" + projectId).jwt(token).process().asJSONObject();
             JSONArray repos = repository.getJSONArray("repos");
@@ -257,4 +261,5 @@ public class ProjectsController extends ServicesClientController {
             return ErrorMessage.errorString("Cannot delete project " + projectId + ". " + e.getMessage());
         }
     }
+
 }
