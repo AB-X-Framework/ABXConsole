@@ -25,6 +25,23 @@
             }
         }
 
+        function showEnrollment() {
+            $.get("/resources/Role.html", function (data) {
+                $("#UserEnrollment").html(data
+                    .replaceAll("ROLEID", "Id"));
+                $.get({
+                    "url": `/gateway/persistence/persistence/projects/${projectId}/enrollment`,
+                    "success": function (response) {
+                        $("#NewUserEnrollment").html(data
+                            .replaceAll("ROLEID", "Ids"));
+                        $.parser.parse(`#enrollment`);
+                        $(`#RoleId`).combobox("setValue", response.role);
+                    }
+                });
+            });
+
+        }
+
         $(document).ready(function () {
             MenuPanel.loadLeftPanel(() => {
                 $('#Section').accordion('select', 'Projects');
@@ -42,12 +59,7 @@
                 $('#tabs').tabs({
                     onSelect: function (title) {
                         if (title === "Enrollment") {
-                            $.get({
-                                "url": `/gateway/persistence/persistence/projects/${projectId}/enrollment`,
-                                "success": function (response) {
-                                    $(`#RoleId`).combobox("setValue",response.role);
-                                }
-                            });
+                            showEnrollment();
                         } else if (title === "Repositories") {
                             $.get(`/rest/projects/${projectId}/repos`, (projectData) => {
                                 if (projectData.error) {
@@ -145,18 +157,22 @@
             <div title="Enrollment" id="enrollment">
                 <div>
                     <h2>Project Enrollment</h2>
-                    <select class="easyui-combobox" id="RoleId" name="state"
-                            label="Role:" labelWidth="150" labelPosition="left"
-                            data-options="editable:false"
-                            style="width:500px;">
-                        <option value="Admin">Admin</option>
-                        <option value="Owner">Owner</option>
-                        <option value="User">User</option>
-                        <option value="CI">CI</option>
-                        <option value="Visitor">Visitor</option>
-                    </select>
+                    <div id="UserEnrollment"></div>
                 </div>
+                <br/>
+                <br/>
+                <input class="easyui-textbox" id="RepoREPOID-branch"
+                       labelWidth="150" label="Username:" labelPosition="left"
+                       data-options="prompt:'Add user'"
+                       style="width:500px;">
+                <br/>
+                <div id="NewUserEnrollment"></div>
+                <a id="addRole" href="#" class="easyui-linkbutton" iconCls="icon-man"
+                   onclick="" style="width:200px">Add User</a>
+
             </div>
+
+
         </div>
 
 
